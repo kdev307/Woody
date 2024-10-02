@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.tagLine {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 0.8rem;
+    color: #560000;
+    letter-spacing: 2px;
+}
+.bottom {
+    margin-bottom: 0.2rem;
+    margin-top: -0.6rem;
+}
+
+.top {
+    margin-top: 0.2rem;
+    margin-bottom: -0.8rem;
+}
+
+.brand-name {
+    font-family: "Playfair Display", serif;
+    font-size: 4rem;
+    font-weight: 100;
+    color: #014210;
+}
