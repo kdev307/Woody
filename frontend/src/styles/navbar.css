@@ -1,0 +1,37 @@
+.head {
+    display: flex;
+    /* gap: 2.4rem; */
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #738678;
+    background-color: #aed1b7;
+}
+
+.main-nav-list,
+.user-nav-list {
+    display: flex;
+    gap: 1.6rem;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.main-nav {
+    font-size: 1.2rem;
+    color: #000;
+    font-weight: 500;
+}
+
+.main-nav-link:link,
+.main-nav-link:visited {
+    color: #000;
+    transition: all 0.3s;
+}
+
+.main-nav-link:hover,
+.main-nav-link:active {
+    color: #006000;
+    text-decoration: underline;
+    transition: all 0.3s;
+}

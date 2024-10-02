@@ -1,13 +1,16 @@
 import React from "react";
+import Logo from "./Logo";
+import StoreIcon from "@mui/icons-material/Store";
+import PersonIcon from "@mui/icons-material/Person";
+import "../styles/navbar.css";
+import "../styles/common.css";
 
 function Navbar() {
     let isHome = true;
     return (
         <div>
             <header className="head">
-                <a href="#" className="logo">
-                    <h2>space resrved for Logo</h2>
-                </a>
+                <Logo />
                 {isHome && (
                     <nav className="main-nav">
                         <ul className="main-nav-list">
@@ -16,11 +19,11 @@ function Navbar() {
                                     Home
                                 </a>
                             </li>
-                            <li>
+                            {/* <li>
                                 <a href="" className="main-nav-link">
                                     About
                                 </a>
-                            </li>
+                            </li> */}
                             <li>
                                 <a href="" className="main-nav-link">
                                     Category
@@ -31,11 +34,11 @@ function Navbar() {
                                     Products
                                 </a>
                             </li>
-                            <li>
+                            {/* <li>
                                 <a href="" className="main-nav-link">
                                     Benefits
                                 </a>
-                            </li>
+                            </li> */}
                             <li>
                                 <a href="" className="main-nav-link">
                                     Testimonials
@@ -53,11 +56,13 @@ function Navbar() {
                     <ul className="user-nav-list">
                         <li>
                             <button className="main-nav-link profile-btn">
-                                Profile Button Icon
+                                <PersonIcon style={{ fontSize: "2rem" }} />
                             </button>
                         </li>
                         <li>
-                            <button className="main-nav-link profile-btn">Cart Button Icon</button>
+                            <button className="main-nav-link profile-btn">
+                                <StoreIcon style={{ fontSize: "2rem" }} />
+                            </button>
                         </li>
                     </ul>
                 </nav>
