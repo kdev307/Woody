@@ -1,3 +1,16 @@
+/* Colour theme of the Project */
+
+/* Primary Colors: Rich Chestnut (#95572A), Deep Forest Green (#014421)
+Accent Colors: Brass Gold (#B78628), Olive Green (#738678)
+Background: Soft Cream (#F5F2D0)
+Feel: A balance between earthy richness and luxurious accents, giving a premium feel. */
+
+#root {
+    /* background-color: #dfb594ac; */
+    /* background-color: #ffc499db; */
+    background-color: #f2d3bdc6;
+}
+
 li {
     list-style: none;
 }
@@ -9,4 +22,36 @@ a {
 button {
     background-color: transparent;
     border: none;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 100rem;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transition: all 0.3s ease;
+}
+
+/* Scroll Bar */
+
+/* width */
+::-webkit-scrollbar {
+    width: 0.3rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #014221;
+    border-radius: 1rem;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #560000;
+    border-radius: 1rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #560000;
 }

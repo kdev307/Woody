@@ -10,6 +10,8 @@
 
 .footer {
     background-color: #738678;
+    /* background-color: #95572a; */
+    /* color: #000; */
     color: #fff;
     padding: 1rem;
     padding-bottom: 0;
@@ -93,6 +95,11 @@
     grid-area: newsletter;
 }
 
+.newsletter > .footer-heading {
+    /* font-size: 1.4rem;
+    letter-spacing: 0.2rem; */
+}
+
 .newsletter-form {
     display: flex;
     align-items: center;
@@ -107,24 +114,20 @@
     border: none;
     background-color: #ffffffd8;
     color: #000;
+    border: 0.1rem solid #000;
 }
 
 .newsletter-form button {
-    padding: 0.6rem;
-    font-size: 1rem;
     background-color: #fff;
-    font-weight: 700;
     color: #738678;
-    border: 2px solid #fff;
-    border-radius: 100rem;
-    transition: all 0.3s ease;
+    border: 0.1rem solid #000;
 }
 
 .newsletter-form button:hover {
-    background-color: #738678;
-    color: #000;
-    border: 2px solid #000;
-    transition: all 0.3s ease;
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #fff;
+    /* border: 2px solid #000; */
 }
 
 .credit {
@@ -147,13 +150,14 @@
 
 .footer-link:link,
 .footer-link:visited {
-    text-decoration: none;
     color: #fff;
+    transition: all 0.3s;
 }
 
 .footer-link:hover,
 .footer-link:active {
     color: #000;
+    transition: all 0.3s;
 }
 
 .credit {

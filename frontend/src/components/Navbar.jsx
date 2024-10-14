@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "./Logo";
-import { Person, Store } from "@mui/icons-material";
+import { Person, ShoppingCart } from "@mui/icons-material";
 import "../styles/navbar.css";
 import "../styles/common.css";
 
@@ -60,7 +60,7 @@ function Navbar() {
                         </li>
                         <li>
                             <button className="main-nav-link profile-btn">
-                                <Store style={{ fontSize: "2rem" }} />
+                                <ShoppingCart style={{ fontSize: "2rem" }} />
                             </button>
                         </li>
                     </ul>
