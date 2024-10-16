@@ -1,0 +1,213 @@
+.popular-products {
+    padding: 2rem;
+}
+
+.popular-btn {
+    font-size: 1.2rem;
+    border-radius: 100rem;
+    border: 2px solid #014210;
+    font-weight: 700;
+    /* background-color: #fff; */
+    color: #014210;
+}
+
+.popular-btn:hover {
+    color: #560000;
+    border: 2px solid #560000;
+    /* background-color: ; */
+}
+
+.image-layout-card {
+    border: 2px solid #000;
+    border-radius: 2rem;
+    padding: 1rem;
+}
+
+img {
+    /* width: 100%;
+    height: 25rem; */
+}
+
+/* Carousel */
+
+.slides {
+    display: flex;
+    transition: transform 1s ease;
+}
+
+.slide {
+    flex: 1 0 100%;
+    /* height: 700px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: opacity 1s ease;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.prev,
+.next {
+    position: absolute;
+    top: 150%;
+    transform: translateY(-150%);
+    cursor: pointer;
+    /* background-color: transparent; */
+    /* background-color: rgba(47, 46, 46, 0.733);
+    color: #fff; */
+    /* height: 80vh;
+    width: 6rem; */
+    color: #560000;
+    border: none;
+    padding: 1rem;
+    font-size: 2rem;
+    z-index: 1;
+    border-radius: 50%;
+    /* display: none; */
+}
+
+.prev {
+    /* left: 4.6rem; */
+    right: 8rem;
+}
+
+.next {
+    right: 4.6rem;
+}
+
+/* Carousel content */
+
+.product-carousel-container {
+    overflow: hidden;
+    /* height: 80vh; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+    /* background-color: #fff; */
+    margin: auto;
+}
+
+.slide-container {
+    /* width: 95rem; */
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.slide1 {
+    /* display: flex;
+    flex-direction: column; */
+    /* flex-wrap: wrap; */
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-areas:
+        "bed1 bed1 tables chair3"
+        "chair2 nursery sofa1 sofa1";
+}
+
+.bed1 {
+    grid-area: bed1;
+}
+.table {
+    grid-area: tables;
+}
+.chair3 {
+    grid-area: chair3;
+}
+.chair2 {
+    grid-area: chair2;
+}
+.nursery {
+    grid-area: nursery;
+}
+.sofa1 {
+    grid-area: sofa1;
+}
+
+.slide2 {
+    display: grid;
+    grid-template-areas:
+        "wardrobe sofa2 sofa2 workstation"
+        "wardrobe dining2 dining2 workstation";
+}
+
+.wardrobe {
+    grid-area: wardrobe;
+}
+.sofa2 {
+    grid-area: sofa2;
+}
+.workstation {
+    grid-area: workstation;
+}
+.dining2 {
+    grid-area: dining2;
+}
+
+.slide3 {
+    display: grid;
+    grid-template-areas:
+        "cabinet kidTable tvUnit tvUnit"
+        "cabinet bed2 bed2 kidChair";
+}
+
+.cabinet {
+    grid-area: cabinet;
+}
+.kidTable {
+    grid-area: kidTable;
+}
+.tvUnit {
+    grid-area: tvUnit;
+}
+.bed2 {
+    grid-area: bed2;
+}
+.kidChair {
+    grid-area: kidChair;
+}
+
+.slide4 {
+    display: grid;
+    grid-template-areas:
+        "dining1 dining1 dining1 outdoorDining outdoorDining outdoorDining"
+        "outdoorChair outdoorChair drawer drawer chair1 chair1";
+}
+
+.dining1 {
+    grid-area: dining1;
+}
+.outdoorDining {
+    grid-area: outdoorDining;
+}
+.outdoorChair {
+    grid-area: outdoorChair;
+}
+.drawer {
+    grid-area: drawer;
+}
+.chair1 {
+    grid-area: chair1;
+}
+
+.img-info {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.img-title,
+.img-price {
+    padding: 0.4rem;
+    margin: 0;
+}
+
+/* .img-title {
+    width: 20rem;
+} */
