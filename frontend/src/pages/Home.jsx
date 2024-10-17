@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
 import PopularProduct from "../components/PopularProduct";
+import Benefits from "../components/Benefits";
 
 function Home() {
     return (
@@ -10,6 +11,7 @@ function Home() {
             <Navbar />
             <Hero />
             <PopularProduct />
+            <Benefits />
             <Footer />
         </div>
     );
