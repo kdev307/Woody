@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"); */
 
 .brand-name {
     font-size: 4.8rem;
@@ -162,7 +162,7 @@
 
 .credit {
     font-size: 1.6rem;
-    font-family: "Playfair Display", cursive;
+    font-family: "Merriweather", cursive;
     font-weight: 600;
     padding: 1.2rem;
     letter-spacing: 2px;

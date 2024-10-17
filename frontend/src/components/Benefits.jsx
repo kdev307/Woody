@@ -61,18 +61,6 @@ function Benefits() {
             <div className="benefits-section">
                 <h2 className="sub-heading">Benefits for your Expendiency</h2>
                 <div className="benefits">
-                    {/* {benefitsList.map((benefit, index) => (
-                        <div
-                            key={index}
-                            style={{ display: "flex", alignItems: "center", marginBottom: "16px" }}
-                        >
-                            <div style={{ marginRight: "8px" }}>{benefit.icon}</div>
-                            <div>
-                                <h4>{benefit.title}</h4>
-                                <p>{benefit.description}</p>
-                            </div>
-                        </div>
-                    ))} */}
                     {benefitsList.map((benefit, index) => {
                         return (
                             <div className="benefit" key={index}>
