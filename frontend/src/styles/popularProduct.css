@@ -54,8 +54,10 @@
 .prev,
 .next {
     position: absolute;
-    top: 160%;
-    transform: translateY(-65%);
+    /* bottom: -200%;
+    transform: translateY(-100%); */
+    top: 270%;
+    transform: translateY(70%);
     cursor: pointer;
     /* background-color: transparent; */
     /* background-color: rgba(47, 46, 46, 0.733);
