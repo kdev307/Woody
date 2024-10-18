@@ -11,12 +11,12 @@ function PopularProduct() {
                 <div className="slide-container slide1">
                     {/* <div className="pl-box"> */}
                     <ImageLayout
-                        imgPath={`/images/popular-products/bed1.png`}
-                        imgAlt={`Medium Brown Bed Frame with 2 Storage Boxes`}
-                        imgPrice={13500}
+                        imgPath={`/images/popular-products/dining2.png`}
+                        imgAlt={`Gunnared Brown-Grey 8-seater Dining Set`}
+                        imgPrice={100000}
                         height="12rem"
                         width="25rem"
-                        className="bed1"
+                        className="dining2"
                         backgroundColor=""
                         color=""
                     />
@@ -63,12 +63,12 @@ function PopularProduct() {
                         color=""
                     />
                     <ImageLayout
-                        imgPath={`/images/popular-products/sofa2.png`}
-                        imgAlt={`Grey 3-seater Sofa`}
-                        imgPrice={18500}
+                        imgPath={`/images/popular-products/tvUnit.png`}
+                        imgAlt={`Black-Brown Oak TV Bench with Storage`}
+                        imgPrice={19000}
                         height="12rem"
                         width="25rem"
-                        className="sofa1"
+                        className="tvUnit"
                         backgroundColor=""
                         color=""
                     />
@@ -89,13 +89,14 @@ function PopularProduct() {
                         backgroundColor=""
                         color=""
                     />
+
                     <ImageLayout
-                        imgPath={`/images/popular-products/dining2.png`}
-                        imgAlt={`Gunnared Brown-Grey 8-seater Dining Set`}
-                        imgPrice={100000}
+                        imgPath={`/images/popular-products/bed2.png`}
+                        imgAlt={`Tallmyra Black-Blue Bed Frame`}
+                        imgPrice={49000}
                         height="12rem"
                         width="25rem"
-                        className="dining2"
+                        className="bed2"
                         backgroundColor=""
                         color=""
                     />
@@ -165,13 +166,14 @@ function PopularProduct() {
                         backgroundColor=""
                         color=""
                     />
+
                     <ImageLayout
-                        imgPath={`/images/popular-products/tvUnit.png`}
-                        imgAlt={`Black-Brown Oak TV Bench with Storage`}
-                        imgPrice={19000}
+                        imgPath={`/images/popular-products/sofa2.png`}
+                        imgAlt={`Grey 3-seater Sofa`}
+                        imgPrice={18500}
                         height="12rem"
                         width="25rem"
-                        className="tvUnit"
+                        className="sofa1"
                         backgroundColor=""
                         color=""
                     />
@@ -185,13 +187,14 @@ function PopularProduct() {
                         backgroundColor=""
                         color=""
                     />
+
                     <ImageLayout
-                        imgPath={`/images/popular-products/bed2.png`}
-                        imgAlt={`Tallmyra Black-Blue Bed Frame`}
-                        imgPrice={49000}
+                        imgPath={`/images/popular-products/bed1.png`}
+                        imgAlt={`Medium Brown Bed Frame with 2 Storage Boxes`}
+                        imgPrice={13500}
                         height="12rem"
                         width="25rem"
-                        className="bed2"
+                        className="bed1"
                         backgroundColor=""
                         color=""
                     />

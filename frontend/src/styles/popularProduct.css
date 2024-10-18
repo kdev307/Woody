@@ -134,13 +134,10 @@
     align-items: center;
     justify-content: center;
     grid-template-areas:
-        "bed1 bed1 tables chair3"
-        "chair2 nursery sofa1 sofa1";
+        "dining2 dining2 nursery chair3"
+        "tables chair2 tvUnit tvUnit";
 }
 
-.bed1 {
-    grid-area: bed1;
-}
 .table {
     grid-area: tables;
 }
@@ -153,15 +150,18 @@
 .nursery {
     grid-area: nursery;
 }
-.sofa1 {
-    grid-area: sofa1;
+.dining2 {
+    grid-area: dining2;
+}
+.tvUnit {
+    grid-area: tvUnit;
 }
 
 .slide2 {
     display: grid;
     grid-template-areas:
         "wardrobe sofa2 sofa2 workstation"
-        "wardrobe dining2 dining2 workstation";
+        "wardrobe bed2 bed2 workstation";
 }
 
 .wardrobe {
@@ -173,15 +173,15 @@
 .workstation {
     grid-area: workstation;
 }
-.dining2 {
-    grid-area: dining2;
+.bed2 {
+    grid-area: bed2;
 }
 
 .slide3 {
     display: grid;
     grid-template-areas:
-        "cabinet kidTable tvUnit tvUnit"
-        "cabinet bed2 bed2 kidChair";
+        "cabinet kidTable sofa1 sofa1"
+        "cabinet bed1 bed1 kidChair";
 }
 
 .cabinet {
@@ -190,14 +190,14 @@
 .kidTable {
     grid-area: kidTable;
 }
-.tvUnit {
-    grid-area: tvUnit;
-}
-.bed2 {
-    grid-area: bed2;
+.bed1 {
+    grid-area: bed1;
 }
 .kidChair {
     grid-area: kidChair;
+}
+.sofa1 {
+    grid-area: sofa1;
 }
 
 .slide4 {

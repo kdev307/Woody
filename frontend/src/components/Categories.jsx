@@ -110,7 +110,7 @@ function Categories() {
                             );
                         })}
 
-                        <button className="category-btn">All Categories</button>
+                        <button className="category-btn">All Categories &rarr;</button>
                     </ul>
                     <div className="category-images">
                         {selectedCategory.images.map((image, index) => {

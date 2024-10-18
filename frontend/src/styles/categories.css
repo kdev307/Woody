@@ -32,6 +32,10 @@
     transition: background-color 1s;
 }
 
+.category:hover {
+    background-color: #e8f6e8;
+}
+
 .category.active {
     font-weight: 700;
     background-color: #e8f6e8;
