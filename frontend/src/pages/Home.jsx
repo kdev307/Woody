@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import PopularProduct from "../components/PopularProduct";
 import Benefits from "../components/Benefits";
 import Categories from "../components/Categories";
+import Testimonials from "../components/Testimonials";
 
 function Home() {
     return (
@@ -14,6 +15,7 @@ function Home() {
             <Categories />
             <PopularProduct />
             <Benefits />
+            <Testimonials />
             <Footer />
         </div>
     );
