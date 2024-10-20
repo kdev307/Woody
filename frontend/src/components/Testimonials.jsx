@@ -8,29 +8,30 @@ function Testimonials() {
         {
             image: "/images/testimonials/customer-1.jpg",
             name: "Tia Sen",
-            review: "Absolutely love this sofa! It’s comfortable and fits perfectly in my living room.",
+            review: "Absolutely love this sofa! It’s incredibly comfortable and fits perfectly in my living room. The fabric is soft and durable, making it ideal for cozy family movie nights. I couldn't have asked for a better addition to my home.",
         },
         {
             image: "/images/testimonials/customer-4.jpg",
             name: "Ivan Hughes",
-            review: "Delivery was quick and the bed frame looks amazing in our bedroom.",
+            review: "Delivery was quick, and the bed frame looks amazing in our bedroom. It has a modern design and is very sturdy. I appreciate the attention to detail in the craftsmanship, and it really elevates the look of our space.",
         },
         {
             image: "/images/testimonials/customer-2.jpg",
             name: "Yuna Cho",
-            review: "The dining table is stunning and very sturdy. Great value for the price!",
+            review: "The dining table is stunning and very sturdy. It seats six comfortably and has become the centerpiece of our family gatherings. The quality is exceptional, and I feel like I got great value for the price!",
         },
         {
             image: "/images/testimonials/customer-5.jpg",
             name: "Dave Bryson",
-            review: "I was skeptical at first, but the quality of this furniture is excellent. Very happy!",
+            review: "I was skeptical at first, but the quality of this furniture is excellent. The design is both stylish and functional. I’m very happy with my purchase and would highly recommend it to anyone looking for quality pieces.",
         },
         {
             image: "/images/testimonials/customer-3.jpg",
             name: "Sophia Watson",
-            review: "This chair is not only stylish but also super comfortable. Highly recommend!",
+            review: "This chair is not only stylish but also super comfortable. It provides excellent support, making it perfect for long reading sessions. I highly recommend it to anyone looking to add a touch of elegance to their space.",
         },
     ];
+
     return (
         <>
             <div className="testimonials-section">
