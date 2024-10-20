@@ -52,7 +52,7 @@ function Footer() {
                             <br /> All Rights Reserved
                         </p>
                     </div>
-                    <nav className="nav-col account">
+                    <nav className="nav-col account-links">
                         <p className="footer-heading">My Account</p>
                         <ul className="footer-nav">
                             <li>
@@ -77,7 +77,7 @@ function Footer() {
                             </li> */}
                         </ul>
                     </nav>
-                    <nav className="nav-col category">
+                    <nav className="nav-col category-links">
                         <p className="footer-heading">Top Categories</p>
                         <ul className="footer-nav">
                             <li>
@@ -102,7 +102,7 @@ function Footer() {
                             </li>
                         </ul>
                     </nav>
-                    <nav className="nav-col info">
+                    <nav className="nav-col info-links">
                         <p className="footer-heading">Information</p>
                         <ul className="footer-nav">
                             <li>
@@ -125,7 +125,7 @@ function Footer() {
                             </li> */}
                         </ul>
                     </nav>
-                    <nav className="nav-col need-help">
+                    <nav className="nav-col help-links">
                         <p className="footer-heading">Need Help ?</p>
                         <ul className="footer-nav">
                             {/* <li>

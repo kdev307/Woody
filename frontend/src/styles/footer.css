@@ -67,7 +67,7 @@
 
 .footer-info {
     grid-template-areas:
-        "main-info main-info account category info need-help"
+        "main-info main-info account-links category-links info-links help-links"
         "main-info main-info newsletter newsletter credit credit";
 }
 
@@ -75,20 +75,20 @@
     grid-area: main-info;
 }
 
-.account {
-    grid-area: account;
+.account-links {
+    grid-area: account-links;
 }
 
-.category {
-    grid-area: category;
+.category-links {
+    grid-area: category-links;
 }
 
-.info {
-    grid-area: info;
+.info-links {
+    grid-area: info-links;
 }
 
-.help {
-    grid-area: need-help;
+.help-links {
+    grid-area: help-links;
 }
 
 .newsletter {
@@ -108,7 +108,7 @@
 }
 
 .newsletter input[type="email"] {
-    padding: 1rem;
+    padding: 0.72rem;
     border-radius: 100rem;
     font-size: 1rem;
     border: none;
