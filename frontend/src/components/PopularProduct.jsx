@@ -169,7 +169,7 @@ function PopularProduct() {
 
                     <ImageLayout
                         imgPath={`/images/popular-products/sofa2.png`}
-                        imgAlt={`Grey 3-seater Sofa`}
+                        imgAlt={`Gunarred Grey 3-seater Sofa`}
                         imgPrice={18500}
                         height="12rem"
                         width="25rem"
