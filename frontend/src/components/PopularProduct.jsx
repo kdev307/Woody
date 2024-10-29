@@ -1,6 +1,5 @@
-import React from "react";
-import PopularProductCard from "./PopularProductCard";
-import ImageLayout from "./ImageLayout";
+import React, { useState, useEffect } from "react";
+// import ImageLayout from "./ImageLayout";
 import "../styles/common.css";
 import "../styles/popularProduct.css";
 import { Link } from "react-router-dom";
@@ -246,6 +245,65 @@ function PopularProduct() {
                 </Link>
             </div>
         </>
+    );
+}
+
+function PopularProductCard({ slides }) {
+    const [currSlide, setCurrSlide] = useState(0);
+    function nextSlide() {
+        const next = currSlide + 1 >= slides.length ? 0 : currSlide + 1;
+        setCurrSlide(next);
+    }
+    function prevSlide() {
+        const prev = currSlide - 1 < 0 ? slides.length - 1 : currSlide - 1;
+        setCurrSlide(prev);
+    }
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            nextSlide();
+        }, 5000);
+        return () => {
+            clearInterval(interval);
+        };
+    }, [currSlide, nextSlide]);
+    return (
+        <>
+            <div className="slides" style={{ transform: `translateX(-${currSlide * 100}%)` }}>
+                {slides.map((slide, index) => (
+                    <div key={index} className="slide">
+                        {slide.content}
+                    </div>
+                ))}
+            </div>
+            <button className="prev" onClick={prevSlide}>
+                &#10094;
+            </button>
+            <button className="next" onClick={nextSlide}>
+                &#10095;
+            </button>
+        </>
+    );
+}
+
+function ImageLayout({
+    imgPath,
+    imgAlt,
+    height,
+    width,
+    className,
+    backgroundColor,
+    color,
+    imgPrice,
+}) {
+    return (
+        <div className={`image-layout-card ${className}`} style={{ backgroundColor, color }}>
+            <img src={imgPath} alt={imgAlt} style={{ height, width }} />
+            <div className="img-info">
+                <h3 className="img-title">{imgAlt}</h3>
+                <h4 className="img-price">₹ {imgPrice}</h4>
+            </div>
+        </div>
     );
 }
 

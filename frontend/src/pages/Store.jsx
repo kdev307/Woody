@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import ProductFilters from "../components/ProductFilters";
-import Products from "../components/Products";
+import { Star } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 import "../styles/common.css";
 import "../styles/store.css";
 
 export default function Store() {
     const productFilters = [
+        "Accessories",
         "Bedroom",
-        "Baby Room",
-        "Chairs",
         "Dining Room",
-        "Outdoor",
+        "Hallway",
         "Living Room",
-        "Tables",
+        "Nursery",
+        "Outdoor",
         "Workspace",
     ];
     const productsList = [
@@ -75,29 +75,107 @@ export default function Store() {
     ];
 
     const [selectedCategory, setSelectedCategory] = useState("All");
+    const [searchQuery, setSearchQuery] = useState("");
 
     const handleCategoryFilter = (category) => {
         setSelectedCategory((prevCategory) => (prevCategory === category ? "All" : category));
     };
 
-    const filteredProducts =
-        selectedCategory === "All"
-            ? productsList
-            : productsList.filter((product) => product.category === selectedCategory);
+    // const handleSearch = () => {};
+    // const filteredProducts =
+    //     selectedCategory === "All"
+    //         ? productsList
+    //         : productsList.filter((product) => product.category === selectedCategory);
+
+    const filteredProducts = productsList
+        .filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
+        .filter((product) => selectedCategory === "All" || product.category === selectedCategory);
 
     return (
         <>
             <Navbar />
             <div className="store-container">
-                {/* <h1>Hello World ! This hello is from store page.</h1> */}
-                <ProductFilters
-                    productFilters={productFilters}
-                    selectedCategory={selectedCategory}
-                    handleCategoryFilter={handleCategoryFilter}
-                />
-                <Products productsList={filteredProducts} />
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        placeholder="Search for products..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="search"
+                    />
+                    {/* <Search style={{ fontSize: "3.6rem", color: "#014210" }} /> */}
+                    {/* <button onClick={handleSearch} className="search-button">
+                        <Search style={{ fontSize: "3.6rem", color: "#014210" }} />
+                    </button> */}
+                </div>
+                <div className="products-section">
+                    <ProductFilters
+                        productFilters={productFilters}
+                        selectedCategory={selectedCategory}
+                        handleCategoryFilter={handleCategoryFilter}
+                    />
+                    <Products productsList={filteredProducts} />
+                </div>
             </div>
             <Footer />
         </>
+    );
+}
+
+function ProductFilters({ productFilters, selectedCategory, handleCategoryFilter }) {
+    return (
+        <>
+            <ul className="filters-list">
+                {productFilters.map((category) => (
+                    <li
+                        key={category}
+                        className={`category ${selectedCategory === category ? "active" : ""}`}
+                        onClick={() => handleCategoryFilter(category)}
+                    >
+                        {category}
+                    </li>
+                ))}
+            </ul>
+        </>
+    );
+}
+
+function Products({ productsList }) {
+    return (
+        <>
+            <ul className="products-list">
+                {productsList.map((product) => {
+                    return (
+                        <li key={product.id}>
+                            <ProductCard product={product} />
+                        </li>
+                    );
+                })}
+            </ul>
+        </>
+    );
+}
+
+function ProductCard({ product }) {
+    const { name, image, price, rating, description } = product;
+
+    return (
+        <div className="product-card">
+            <div className="rating">
+                <h3>{rating}</h3>
+                <Star style={{ textAlign: "center", verticalAlign: "center" }} />
+            </div>
+            <img src={image} alt={name} className="product-img" />
+            <div className="product-info">
+                <h3 className="product-name">{name}</h3>
+                <p className="product-desc">{description}</p>
+                <div>
+                    <Link to="/product-detail" element className="detail-btn">
+                        View Details
+                    </Link>
+                    <h3 className="product-price">₹ {price}</h3>
+                </div>
+            </div>
+        </div>
     );
 }

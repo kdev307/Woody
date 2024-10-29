@@ -30,6 +30,11 @@ function Testimonials() {
             name: "Sophia Watson",
             review: "This chair is not only stylish but also super comfortable. It provides excellent support, making it perfect for long reading sessions. I highly recommend it to anyone looking to add a touch of elegance to their space.",
         },
+        {
+            image: "/images/testimonials/customer-6.jpg",
+            name: "Kwame Mensah",
+            review: "I adore my new bookshelf! It’s not only functional but also adds a touch of warmth to my study. The wood finish is gorgeous, and it holds all my books with ease. Highly recommend!",
+        },
     ];
 
     return (
@@ -51,13 +56,7 @@ function Testimonials() {
                     {testimonialList.map((testimonial, index) => {
                         return (
                             <li className="testimonial-item" key={index}>
-                                <div className="testimonial-image">
-                                    <img src={testimonial.image} alt={testimonial.name} />
-                                </div>
-                                <div className="testimonial-info">
-                                    <p className="testimonial-review">{testimonial.review}</p>
-                                    <h3 className="testimonial-name">{testimonial.name}</h3>
-                                </div>
+                                <Testimonial testimonial={testimonial} />
                             </li>
                         );
                     })}
@@ -72,6 +71,20 @@ function Testimonials() {
                         }}
                     />
                 </p>
+            </div>
+        </>
+    );
+}
+
+function Testimonial({ testimonial }) {
+    return (
+        <>
+            <div className="testimonial-image">
+                <img src={testimonial.image} alt={testimonial.name} />
+            </div>
+            <div className="testimonial-info">
+                <p className="testimonial-review">{testimonial.review}</p>
+                <h3 className="testimonial-name">{testimonial.name}</h3>
             </div>
         </>
     );
