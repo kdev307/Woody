@@ -25,12 +25,12 @@ function Navbar() {
                                 </NavLink>
                             </li> */}
                         <li>
-                            <NavLink to="#c" className="main-nav-link">
+                            <NavLink to="" className="main-nav-link">
                                 Category
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="#p" className="main-nav-link">
+                            <NavLink to="" className="main-nav-link">
                                 Products
                             </NavLink>
                         </li>
@@ -40,7 +40,7 @@ function Navbar() {
                                 </NavLink>
                             </li> */}
                         <li>
-                            <NavLink to="/#t" className="main-nav-link">
+                            <NavLink to="" className="main-nav-link">
                                 Testimonials
                             </NavLink>
                         </li>

@@ -233,7 +233,7 @@ function PopularProduct() {
     ];
     return (
         <>
-            <div className="popular-products-section" id="p">
+            <div className="popular-products-section">
                 <h2 className="sub-heading">Popular Products</h2>
                 <div className="product-carousel-container">
                     {/* <PopularProductCard countImages={6} />

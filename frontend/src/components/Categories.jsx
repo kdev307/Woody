@@ -93,7 +93,7 @@ function Categories() {
 
     return (
         <>
-            <div className="categories-section" id="c">
+            <div className="categories-section">
                 <h2 className="sub-heading">Explore By Category</h2>
                 <div className="category-container">
                     <ul className="category-options">
