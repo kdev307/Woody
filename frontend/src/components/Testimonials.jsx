@@ -34,7 +34,7 @@ function Testimonials() {
 
     return (
         <>
-            <div className="testimonials-section">
+            <div className="testimonials-section" id="t">
                 <h2 className="sub-heading">Testimonials</h2>
                 {/* <p className="quote">&ldquo;</p> */}
                 <FormatQuote

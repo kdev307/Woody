@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/common.css";
 import "../styles/categories.css";
+import { Link } from "react-router-dom";
 
 function Categories() {
     const categoriesData = [
@@ -92,7 +93,7 @@ function Categories() {
 
     return (
         <>
-            <div className="categories-section">
+            <div className="categories-section" id="c">
                 <h2 className="sub-heading">Explore By Category</h2>
                 <div className="category-container">
                     <ul className="category-options">
@@ -110,7 +111,9 @@ function Categories() {
                             );
                         })}
 
-                        <button className="category-btn">All Categories &rarr;</button>
+                        <Link to="/store" className="category-btn">
+                            All Categories &rarr;
+                        </Link>
                     </ul>
                     <div className="category-images">
                         {selectedCategory.images.map((image, index) => {

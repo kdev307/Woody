@@ -3,6 +3,7 @@ import PopularProductCard from "./PopularProductCard";
 import ImageLayout from "./ImageLayout";
 import "../styles/common.css";
 import "../styles/popularProduct.css";
+import { Link } from "react-router-dom";
 
 function PopularProduct() {
     const slides = [
@@ -17,8 +18,6 @@ function PopularProduct() {
                         height="12rem"
                         width="25rem"
                         className="dining2"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/table.png`}
@@ -27,8 +26,6 @@ function PopularProduct() {
                         height="12rem"
                         width="12rem"
                         className="table"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/chair3.png`}
@@ -37,8 +34,6 @@ function PopularProduct() {
                         height="12rem"
                         width="12rem"
                         className="chair3"
-                        backgroundColor=""
-                        color=""
                     />
                     {/* </div> */}
                     {/* <div className="pl-box"> */}
@@ -49,8 +44,6 @@ function PopularProduct() {
                         height="12rem"
                         width="12rem"
                         className="chair2"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/nursery.png`}
@@ -59,8 +52,6 @@ function PopularProduct() {
                         height="12rem"
                         width="12rem"
                         className="nursery"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/tvUnit.png`}
@@ -69,8 +60,6 @@ function PopularProduct() {
                         height="12rem"
                         width="25rem"
                         className="tvUnit"
-                        backgroundColor=""
-                        color=""
                     />
                     {/* </div> */}
                 </div>
@@ -86,8 +75,6 @@ function PopularProduct() {
                         height="30rem"
                         width="12rem"
                         className="wardrobe"
-                        backgroundColor=""
-                        color=""
                     />
 
                     <ImageLayout
@@ -97,8 +84,6 @@ function PopularProduct() {
                         height="12rem"
                         width="25rem"
                         className="bed2"
-                        backgroundColor=""
-                        color=""
                     />
                     {/* <ImageLayout
                         imgPath={`/images/popular-products/chair1.png`}
@@ -107,8 +92,6 @@ function PopularProduct() {
                         height="12rem"
                         width="12rem"
                         className="chair1"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/drawer.png`}
@@ -117,8 +100,6 @@ function PopularProduct() {
                         height="12rem"
                         width="12rem"
                         className="drawer"
-                        backgroundColor=""
-                        color=""
                     /> */}
                     <ImageLayout
                         imgPath={`/images/popular-products/sofa4.png`}
@@ -127,8 +108,6 @@ function PopularProduct() {
                         height="12rem"
                         width="25rem"
                         className="sofa2"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/workstation.png`}
@@ -137,8 +116,6 @@ function PopularProduct() {
                         height="30rem"
                         width="12rem"
                         className="workstation"
-                        backgroundColor=""
-                        color=""
                     />
                 </div>
             ),
@@ -153,8 +130,6 @@ function PopularProduct() {
                         height="30rem"
                         width="12rem"
                         className="cabinet"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/kidTable.png`}
@@ -163,8 +138,6 @@ function PopularProduct() {
                         height="12rem"
                         width="12rem"
                         className="kidTable"
-                        backgroundColor=""
-                        color=""
                     />
 
                     <ImageLayout
@@ -174,8 +147,6 @@ function PopularProduct() {
                         height="12rem"
                         width="25rem"
                         className="sofa1"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/kidChair.png`}
@@ -184,8 +155,6 @@ function PopularProduct() {
                         height="12rem"
                         width="12rem"
                         className="kidChair"
-                        backgroundColor=""
-                        color=""
                     />
 
                     <ImageLayout
@@ -195,8 +164,6 @@ function PopularProduct() {
                         height="12rem"
                         width="25rem"
                         className="bed1"
-                        backgroundColor=""
-                        color=""
                     />
                 </div>
             ),
@@ -211,8 +178,6 @@ function PopularProduct() {
                         height="12rem"
                         width="25rem"
                         className="sofa3"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/sofa4.png`}
@@ -221,8 +186,6 @@ function PopularProduct() {
                         height="12rem"
                         width="25rem"
                         className="sofa4"
-                        backgroundColor=""
-                        color=""
                     /> */}
                     <ImageLayout
                         imgPath={`/images/popular-products/dining1.png`}
@@ -231,8 +194,6 @@ function PopularProduct() {
                         height="12rem"
                         width="25rem"
                         className="dining1"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/outdoorDining.png`}
@@ -241,8 +202,6 @@ function PopularProduct() {
                         height="12rem"
                         width="25rem"
                         className="outdoorDining"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/chair1.png`}
@@ -251,8 +210,6 @@ function PopularProduct() {
                         height="12rem"
                         width="12rem"
                         className="chair1"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/drawer.png`}
@@ -261,8 +218,6 @@ function PopularProduct() {
                         height="12rem"
                         width="12rem"
                         className="drawer"
-                        backgroundColor=""
-                        color=""
                     />
                     <ImageLayout
                         imgPath={`/images/popular-products/outdoorChair.png`}
@@ -271,8 +226,6 @@ function PopularProduct() {
                         height="12rem"
                         width="25rem"
                         className="outdoorChair"
-                        backgroundColor=""
-                        color=""
                     />
                 </div>
             ),
@@ -280,7 +233,7 @@ function PopularProduct() {
     ];
     return (
         <>
-            <div className="popular-products-section">
+            <div className="popular-products-section" id="p">
                 <h2 className="sub-heading">Popular Products</h2>
                 <div className="product-carousel-container">
                     {/* <PopularProductCard countImages={6} />
@@ -288,7 +241,9 @@ function PopularProduct() {
                     <PopularProductCard countImages={5} /> */}
                     <PopularProductCard slides={slides} />
                 </div>
-                <button className="popular-btn">Go to Store</button>
+                <Link to="/store" className="popular-btn">
+                    Go to Store
+                </Link>
             </div>
         </>
     );

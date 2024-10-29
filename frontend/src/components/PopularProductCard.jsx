@@ -6,7 +6,6 @@ function PopularProductCard({ slides }) {
         const next = currSlide + 1 >= slides.length ? 0 : currSlide + 1;
         setCurrSlide(next);
     }
-
     function prevSlide() {
         const prev = currSlide - 1 < 0 ? slides.length - 1 : currSlide - 1;
         setCurrSlide(prev);

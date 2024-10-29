@@ -1,0 +1,86 @@
+.product {
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 5rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.image-container {
+    max-height: 35rem;
+    border: 2px solid #000;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.info-btns {
+    display: flex;
+    border: 2px solid #560000;
+    border-radius: 4rem;
+    background-color: #ddd;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 0;
+    transition: all ease 1s;
+}
+
+.info-btns .active {
+    background-color: #fff;
+    transition: all ease 1s;
+}
+
+.content {
+    padding: 0 2rem;
+    text-align: left;
+    max-height: 35rem;
+    overflow-y: scroll;
+}
+
+.add-to-cart-btn {
+    border: 3px solid #560000;
+    border-radius: 0.4rem;
+    color: #560000;
+    box-shadow: 5px 5px 10px rgba(86, 0, 0, 0.3);
+    transition: all ease 0.3s;
+    font-weight: 600;
+}
+
+.add-to-cart-btn:hover {
+    border: 3px solid #014210;
+    color: #014210;
+    box-shadow: 5px 5px 10px rgba(1, 66, 16, 0.3);
+    transition: all ease 0.3s;
+}
+
+/* Scroll Bar */
+
+/* width */
+.content::-webkit-scrollbar {
+    width: 0.24rem;
+}
+
+/* Track */
+.content::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #014221;
+    border-radius: 1rem;
+}
+
+/* Handle */
+.content::-webkit-scrollbar-thumb {
+    background: #014210;
+    border-radius: 1rem;
+}
+
+/* Handle on hover */
+.content::-webkit-scrollbar-thumb:hover {
+    background: #014210;
+}
