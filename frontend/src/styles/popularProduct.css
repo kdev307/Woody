@@ -14,6 +14,7 @@
     color: #014210;
     box-shadow: 5px 5px 10px rgba(1, 66, 16, 0.3);
     transition: all 0.3s ease;
+    padding: 0.6rem;
 }
 
 .popular-btn:hover {
@@ -59,7 +60,7 @@
 .prev,
 .next {
     position: absolute;
-    bottom: -265%;
+    bottom: -263%;
     /* transform: translateY(100%); */
     /* top: 270%;
     transform: translateY(70%); */

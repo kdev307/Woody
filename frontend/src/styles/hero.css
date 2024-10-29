@@ -23,7 +23,7 @@
     /* margin-right: 9.6rem; */
     font-size: 1.4rem;
     color: #fff;
-    background-color: #000;
+    background-color: #560000;
     padding: 1rem;
     border-radius: 0.6rem;
     width: 12%;
@@ -33,5 +33,5 @@
 .hero-btn:hover {
     transition: all 1s ease;
     background-color: #fff;
-    color: #000;
+    color: #560000;
 }

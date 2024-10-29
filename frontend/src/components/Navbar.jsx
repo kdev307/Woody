@@ -3,54 +3,54 @@ import Logo from "./Logo";
 import { Person, ShoppingCart } from "@mui/icons-material";
 import "../styles/navbar.css";
 import "../styles/common.css";
+import { NavLink } from "react-router-dom";
 
 function Navbar() {
-    let isHome = true;
     return (
         <div>
             <header className="head">
-                <Logo />
-                {isHome && (
-                    <nav className="main-nav">
-                        <ul className="main-nav-list">
-                            <li>
-                                <a href="" className="main-nav-link">
-                                    Home
-                                </a>
-                            </li>
-                            {/* <li>
-                                <a href="" className="main-nav-link">
+                <NavLink to="/">
+                    <Logo />
+                </NavLink>
+                <nav className="main-nav">
+                    <ul className="main-nav-list">
+                        <li>
+                            <NavLink to="/" className="main-nav-link">
+                                Home
+                            </NavLink>
+                        </li>
+                        {/* <li>
+                                <NavLink to="#" className="main-nav-link">
                                     About
-                                </a>
+                                </NavLink>
                             </li> */}
-                            <li>
-                                <a href="" className="main-nav-link">
-                                    Category
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" className="main-nav-link">
-                                    Products
-                                </a>
-                            </li>
-                            {/* <li>
-                                <a href="" className="main-nav-link">
+                        <li>
+                            <NavLink to="#c" className="main-nav-link">
+                                Category
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="#p" className="main-nav-link">
+                                Products
+                            </NavLink>
+                        </li>
+                        {/* <li>
+                                <NavLink to="#" className="main-nav-link">
                                     Benefits
-                                </a>
+                                </NavLink>
                             </li> */}
-                            <li>
-                                <a href="" className="main-nav-link">
-                                    Testimonials
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" className="main-nav-link">
-                                    Store
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                )}
+                        <li>
+                            <NavLink to="/#t" className="main-nav-link">
+                                Testimonials
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/store" className="main-nav-link">
+                                Store
+                            </NavLink>
+                        </li>
+                    </ul>
+                </nav>
                 <nav className="user-nav">
                     <ul className="user-nav-list">
                         <li>
