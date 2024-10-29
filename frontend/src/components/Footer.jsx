@@ -46,11 +46,6 @@ function Footer() {
                             </li>
                         </ul>
                         <br />
-                        <p className="copyright">
-                            {/* Copyright © 2024 by Woody. All rights are reserved. */}©{" "}
-                            {new Date().getFullYear()} <strong>Woody</strong>
-                            <br /> All Rights Reserved
-                        </p>
                     </div>
                     <nav className="nav-col account-links">
                         <p className="footer-heading">My Account</p>
@@ -156,6 +151,11 @@ function Footer() {
                         </form>
                     </div>
                     <div className="credit">Crafted by KD</div>
+                    <p className="copyright">
+                        {/* Copyright © 2024 by Woody. All rights are reserved. */}©{" "}
+                        {new Date().getFullYear()} <strong>Woody</strong>
+                        .All Rights Reserved
+                    </p>
                 </div>
             </footer>
         </>
