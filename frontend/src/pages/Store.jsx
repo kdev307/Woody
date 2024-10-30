@@ -26,6 +26,7 @@ export default function Store() {
             price: "15000",
             description: "A cozy bed with a stylish design for ultimate comfort.",
             rating: "4.5",
+            sales: 120,
         },
         {
             id: "2",
@@ -35,6 +36,7 @@ export default function Store() {
             price: "8000",
             description: "A safe and sturdy wooden crib for your little one.",
             rating: "4.8",
+            sales: 95,
         },
         {
             id: "3",
@@ -44,6 +46,7 @@ export default function Store() {
             price: "25000",
             description: "An elegant dining table that seats six comfortably.",
             rating: "4.7",
+            sales: 105,
         },
         {
             id: "4",
@@ -53,6 +56,7 @@ export default function Store() {
             price: "12000",
             description: "A stylish lounge chair perfect for your patio or garden.",
             rating: "4.6",
+            sales: 15,
         },
         {
             id: "5",
@@ -62,6 +66,7 @@ export default function Store() {
             price: "30000",
             description: "A modern sofa that adds elegance to your living space.",
             rating: "4.9",
+            sales: 79,
         },
         {
             id: "6",
@@ -71,11 +76,13 @@ export default function Store() {
             price: "10000",
             description: "An ergonomic chair designed for comfort during long hours of work.",
             rating: "4.4",
+            sales: 47,
         },
     ];
 
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
+    const [sortBy, setSortBy] = useState("none");
 
     const handleCategoryFilter = (category) => {
         setSelectedCategory((prevCategory) => (prevCategory === category ? "All" : category));
@@ -91,17 +98,54 @@ export default function Store() {
         .filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
         .filter((product) => selectedCategory === "All" || product.category === selectedCategory);
 
+    let sortedProducts = [...filteredProducts];
+    if (sortBy === "alphabetical") {
+        sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === "popularity") {
+        sortedProducts.sort((a, b) => b.sales - a.sales);
+    } else if (sortBy === "priceLowToHigh") {
+        sortedProducts.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (sortBy === "priceHighToLow") {
+        sortedProducts.sort((a, b) => Number(b.price) - Number(a.price));
+    }
+
     return (
         <>
             <Navbar />
             <div className="store-container">
-                <div className="search-bar">
+                <div className="nav-bar">
+                    <div className="sort-btns">
+                        <button
+                            className={`sort-btn ${sortBy === "alphabetical" ? "active" : ""}`}
+                            onClick={() => setSortBy("alphabetical")}
+                        >
+                            Alphabetical
+                        </button>
+                        <button
+                            className={`sort-btn ${sortBy === "popularity" ? "active" : ""}`}
+                            onClick={() => setSortBy("popularity")}
+                        >
+                            Popularity
+                        </button>
+                        <button
+                            className={`sort-btn ${sortBy === "priceLowToHigh" ? "active" : ""}`}
+                            onClick={() => setSortBy("priceLowToHigh")}
+                        >
+                            Price -- Low to High
+                        </button>
+                        <button
+                            className={`sort-btn ${sortBy === "priceHighToLow" ? "active" : ""}`}
+                            onClick={() => setSortBy("priceHighToLow")}
+                        >
+                            Price -- High to Low
+                        </button>
+                    </div>
                     <input
                         type="text"
                         placeholder="Search for products..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="search"
+                        className="search-bar"
                     />
                     {/* <Search style={{ fontSize: "3.6rem", color: "#014210" }} /> */}
                     {/* <button onClick={handleSearch} className="search-button">
@@ -114,7 +158,7 @@ export default function Store() {
                         selectedCategory={selectedCategory}
                         handleCategoryFilter={handleCategoryFilter}
                     />
-                    <Products productsList={filteredProducts} />
+                    <Products productsList={sortedProducts} />
                 </div>
             </div>
             <Footer />
