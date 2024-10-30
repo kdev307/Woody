@@ -58,6 +58,7 @@
     bottom: -0.2rem;
     height: 0.2rem;
     background-color: #014210;
+    color: #014210;
     transition: width 0.3s ease;
 }
 
