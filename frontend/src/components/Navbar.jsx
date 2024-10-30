@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
+import Cart from "./Cart";
 import Logo from "./Logo";
 import { Person, ShoppingCart } from "@mui/icons-material";
-import "../styles/navbar.css";
 import "../styles/common.css";
+import "../styles/navbar.css";
 import { NavLink } from "react-router-dom";
 
 function Navbar() {
+    const [isCartOpen, setIsCartOpen] = useState(false);
+    const handleCartToggle = () => {
+        setIsCartOpen((prev) => !prev);
+    };
     return (
         <div>
             <header className="head">
@@ -60,12 +65,18 @@ function Navbar() {
                         </li>
                         <li>
                             <button className="main-nav-link profile-btn">
-                                <ShoppingCart style={{ fontSize: "2rem" }} />
+                                <ShoppingCart
+                                    style={{ fontSize: "2rem" }}
+                                    onClick={handleCartToggle}
+                                />
                             </button>
                         </li>
                     </ul>
                 </nav>
             </header>
+            {isCartOpen && (
+                <Cart handleCartToggle={handleCartToggle} className={isCartOpen ? "open" : ""} />
+            )}
         </div>
     );
 }

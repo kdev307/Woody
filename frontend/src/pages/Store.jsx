@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Star } from "@mui/icons-material";
+import { Star, InfoOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import "../styles/common.css";
 import "../styles/store.css";
@@ -170,10 +170,10 @@ function ProductCard({ product }) {
                 <h3 className="product-name">{name}</h3>
                 <p className="product-desc">{description}</p>
                 <div>
-                    <Link to="/product-detail" element className="detail-btn">
-                        View Details
-                    </Link>
                     <h3 className="product-price">₹ {price}</h3>
+                    <Link to="/product-detail" element className="detail-btn">
+                        <InfoOutlined style={{ fontSize: "2.4rem" }} className="info-icon" />
+                    </Link>
                 </div>
             </div>
         </div>

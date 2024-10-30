@@ -13,10 +13,10 @@
 }
 
 .search-bar input {
-    width: 100vw;
+    width: 40vw;
     /* max-width: 40rem; */
     padding: 0.8rem 1.6rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
     border: 2px solid #014210;
     color: #014210;
     background-color: #e4efe4;
@@ -24,6 +24,7 @@
     border-radius: 0.4rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: border-color 1s ease;
+    transform: translateX(60%);
 }
 
 .search-bar input:focus {
@@ -65,18 +66,22 @@
     padding: 1rem;
     width: 100%;
     border-radius: 0.4rem;
-    transition: background-color 1s;
+    transition: all ease 1s;
 }
 
 .category:hover {
     background-color: #d0f4d0;
+    transform: scale(1.05);
+    border: 2px solid #014210;
+    transition: all ease 1s;
 }
 
 .category.active {
     font-weight: 700;
     background-color: #e8f6e8;
     color: #014210;
-    transition: background-color 1s;
+    border: 2px solid #014210;
+    transition: all ease 1s;
 }
 
 .products-list {
@@ -99,12 +104,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    color: #014210;
 }
 
 .product-card:hover {
-    /* border: 2px solid #014210; */
+    border: 2px solid #014210;
     transition: all ease 1s;
-    /* transform: scale(1.05); */
+    transform: scale(1.05);
     box-shadow: 5px 5px 10px rgba(1, 66, 16, 0.3);
     background-color: #fff;
 }
@@ -135,22 +141,38 @@
     font-size: 1rem;
     text-overflow: ellipsis;
     text-align: left;
+    color: #560000;
+}
+
+.info-icon {
+    outline: none;
+    border: none;
+    border-radius: 50%;
+    background-color: transparent;
 }
 
 .detail-btn {
     /* font-size: 1.4rem; */
-    color: #fff;
-    background-color: #014210;
-    padding: 0.8rem;
-    border-radius: 0.4rem;
-    /* width: 12%; */
+    display: inline-flex;
+    color: #014210;
+    padding: 0.4rem;
     text-align: center;
     font-weight: 400;
+    transition: all ease 0.5s;
+    border: none;
+    outline: none;
 }
 
-.detail-btn:hover {
-    transition: all 1s ease;
-    background-color: #ddd;
-    color: #014210;
-    border: 2px solid #014210;
+/* .info-icon {
+    transition: all 0.3s;
+    border-radius: 50%;
+    padding: 0;
+    } */
+
+.detail-btn:hover .info-icon {
+    background-color: #014210;
+    transition: all ease 0.5s;
+    border: none;
+    color: #fff;
+    outline: none;
 }
