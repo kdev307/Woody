@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Cart from "./Cart";
 import Logo from "./Logo";
+import Profile from "./Profile";
 import { Person, ShoppingCart } from "@mui/icons-material";
 import "../styles/common.css";
 import "../styles/navbar.css";
@@ -10,6 +11,10 @@ function Navbar() {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const handleCartToggle = () => {
         setIsCartOpen((prev) => !prev);
+    };
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const handleProfileToggle = () => {
+        setIsProfileOpen((prev) => !prev);
     };
     return (
         <div>
@@ -60,7 +65,10 @@ function Navbar() {
                     <ul className="user-nav-list">
                         <li>
                             <button className="main-nav-link profile-btn">
-                                <Person style={{ fontSize: "2rem" }} />
+                                <Person
+                                    style={{ fontSize: "2rem" }}
+                                    onClick={handleProfileToggle}
+                                />
                             </button>
                         </li>
                         <li>
@@ -76,6 +84,12 @@ function Navbar() {
             </header>
             {isCartOpen && (
                 <Cart handleCartToggle={handleCartToggle} className={isCartOpen ? "open" : ""} />
+            )}
+            {isProfileOpen && (
+                <Profile
+                    handleProfileToggle={handleProfileToggle}
+                    className={isProfileOpen ? "open" : ""}
+                />
             )}
         </div>
     );
