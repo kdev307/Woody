@@ -33,12 +33,24 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    margin: -1rem 0 0.4rem;
+}
+
+.info-container {
+    max-height: 20rem;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
 }
 
 .basic-info {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-top: 1rem;
     /* gap: 2rem; */
 }
 
@@ -55,7 +67,7 @@
     align-items: center;
     justify-content: flex-start;
     gap: 0;
-    margin: -1rem 0;
+    margin: 1rem 0 -1rem 0;
 }
 
 .endLine {
@@ -69,7 +81,7 @@
     align-items: flex-start;
     justify-content: center;
     text-align: left;
-    margin: -1rem 0;
+    /* margin: -1rem 0; */
 }
 
 .additional-info > div {
@@ -78,6 +90,18 @@
     justify-content: center;
     gap: 2rem;
 }
+
+.basic-info h3,
+.additional-info h4 {
+    margin: 1rem 0;
+}
+
+/* .edit-btn {
+    color: #560000;
+    cursor: pointer;
+    position: relative;
+    transform: translateX(600%);
+} */
 
 .profile-btns {
     display: flex;
@@ -100,26 +124,31 @@
     gap: 1rem;
 }
 
-.edit-btn {
+.history-btn,
+.reviews-btn {
     border: 3px solid #014210;
     color: #014210;
     background-color: #e4efe4;
     transition: all ease 1s;
 }
 
-.edit-btn:hover {
+.history-btn:hover,
+.reviews-btn:hover {
     background-color: #014210;
     color: #fff;
 }
 
-.history-btn {
+.edit-btn,
+.logout-btn {
     color: #560000;
     background-color: #efe4e4;
     border: 3px solid #560000;
     transition: all ease 1s;
+    /* margin-bottom: 0.4rem; */
 }
 
-.history-btn:hover {
+.edit-btn:hover,
+.logout-btn:hover {
     color: #fff;
     background-color: #560000;
 }
