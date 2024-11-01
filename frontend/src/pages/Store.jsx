@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Star, InfoOutlined } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Star } from "@mui/icons-material";
 import "../styles/common.css";
 import "../styles/store.css";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Store() {
     const productFilters = [
@@ -12,73 +13,22 @@ export default function Store() {
         "Bedroom",
         "Dining Room",
         "Hallway",
+        "Kid's Room",
         "Living Room",
-        "Nursery",
         "Outdoor",
+        "Storage",
         "Workspace",
     ];
-    const productsList = [
-        {
-            id: "1",
-            name: "Cozy Bed",
-            category: "Bedroom",
-            image: "https://example.com/images/cozy-bed.jpg",
-            price: "15000",
-            description: "A cozy bed with a stylish design for ultimate comfort.",
-            rating: "4.5",
-            sales: 120,
-        },
-        {
-            id: "2",
-            name: "Wooden Crib",
-            category: "Baby Room",
-            image: "https://example.com/images/wooden-crib.jpg",
-            price: "8000",
-            description: "A safe and sturdy wooden crib for your little one.",
-            rating: "4.8",
-            sales: 95,
-        },
-        {
-            id: "3",
-            name: "Elegant Dining Table",
-            category: "Dining Room",
-            image: "https://example.com/images/elegant-dining-table.jpg",
-            price: "25000",
-            description: "An elegant dining table that seats six comfortably.",
-            rating: "4.7",
-            sales: 105,
-        },
-        {
-            id: "4",
-            name: "Outdoor Lounge Chair",
-            category: "Outdoor",
-            image: "https://example.com/images/outdoor-lounge-chair.jpg",
-            price: "12000",
-            description: "A stylish lounge chair perfect for your patio or garden.",
-            rating: "4.6",
-            sales: 15,
-        },
-        {
-            id: "5",
-            name: "Modern Sofa",
-            category: "Living Room",
-            image: "https://example.com/images/modern-sofa.jpg",
-            price: "30000",
-            description: "A modern sofa that adds elegance to your living space.",
-            rating: "4.9",
-            sales: 79,
-        },
-        {
-            id: "6",
-            name: "Ergonomic Office Chair",
-            category: "Workspace",
-            image: "https://example.com/images/ergonomic-office-chair.jpg",
-            price: "10000",
-            description: "An ergonomic chair designed for comfort during long hours of work.",
-            rating: "4.4",
-            sales: 47,
-        },
-    ];
+    // const productsList = [];
+
+    const [products, setProducts] = useState([]);
+    useEffect(() => {
+        async function fetchProducts() {
+            const { data } = await axios.get("/api/products/");
+            setProducts(data);
+        }
+        fetchProducts();
+    }, []);
 
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
@@ -94,15 +44,18 @@ export default function Store() {
     //         ? productsList
     //         : productsList.filter((product) => product.category === selectedCategory);
 
-    const filteredProducts = productsList
-        .filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
-        .filter((product) => selectedCategory === "All" || product.category === selectedCategory);
+    const filteredProducts = products
+        .filter((product) => product.productName.toLowerCase().includes(searchQuery.toLowerCase()))
+        .filter(
+            (product) =>
+                selectedCategory === "All" || product.productCategory.includes(selectedCategory)
+        );
 
     let sortedProducts = [...filteredProducts];
     if (sortBy === "alphabetical") {
-        sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+        sortedProducts.sort((a, b) => a.productName.localeCompare(b.productName));
     } else if (sortBy === "popularity") {
-        sortedProducts.sort((a, b) => b.sales - a.sales);
+        sortedProducts.sort((a, b) => b.stockCount - a.stockCount && b.rating - a.rating);
     } else if (sortBy === "priceLowToHigh") {
         sortedProducts.sort((a, b) => Number(a.price) - Number(b.price));
     } else if (sortBy === "priceHighToLow") {
@@ -201,25 +154,37 @@ function Products({ productsList }) {
 }
 
 function ProductCard({ product }) {
-    const { name, image, price, rating, description } = product;
+    const { productName, productBrand, image, price, rating, description, category } = product;
 
     return (
-        <div className="product-card">
-            <div className="rating">
-                <h3>{rating}</h3>
-                <Star style={{ textAlign: "center", verticalAlign: "center" }} />
-            </div>
-            <img src={image} alt={name} className="product-img" />
-            <div className="product-info">
-                <h3 className="product-name">{name}</h3>
-                <p className="product-desc">{description}</p>
-                <div>
-                    <h3 className="product-price">₹ {price}</h3>
-                    <Link to="/product-detail" element className="detail-btn">
-                        <InfoOutlined style={{ fontSize: "2.4rem" }} className="info-icon" />
-                    </Link>
+        <Link to="/product-detail" element className="detail-btn">
+            <div className="product-card">
+                <div className="img-container">
+                    <img src={image} alt={productName} className="product-img" />
+                </div>
+                {/* <ul className="product-category-list">
+                    {categories.map((category) => {
+                        return (
+                            <li className="category-item" key={category}>
+                                {category}
+                            </li>
+                        );
+                    })}
+                </ul> */}
+                <div className="product-info">
+                    <h4 className="product-brand">{productBrand}</h4>
+                    <h3 className="product-name">{productName}</h3>
+                    <p className="product-desc">{description}</p>
+                    <div>
+                        <h3 className="product-price">₹ {price}</h3>
+                        {/* <InfoOutlined style={{ fontSize: "2.4rem" }} className="info-icon" /> */}
+                        <div className="rating">
+                            <h3>{rating}</h3>
+                            <Star style={{ textAlign: "center", verticalAlign: "center" }} />
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 }
