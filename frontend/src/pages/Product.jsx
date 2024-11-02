@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Star, AddShoppingCart } from "@mui/icons-material";
+import { Star, AddShoppingCart, ArrowBack } from "@mui/icons-material";
 import "../styles/common.css";
 import "../styles/product.css";
 
@@ -35,6 +35,9 @@ function Product({ params }) {
     return (
         <>
             <Navbar />
+            <Link to={`/store`} className="arrow-btn">
+                <ArrowBack style={{ fontSize: "2.4rem" }} />
+            </Link>
             <div className="product">
                 <div className="image-container">
                     <img src={image} alt={productName} />

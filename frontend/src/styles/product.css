@@ -7,6 +7,22 @@
     justify-content: space-between;
     font-size: 1.2rem;
     background-color: #e4efe4;
+    padding-top: 4rem;
+}
+
+.arrow-btn {
+    position: absolute;
+    left: 3%;
+    top: 15%;
+    padding: 2rem;
+    margin-bottom: 4rem;
+    color: #560000;
+    transition: all ease 1s;
+}
+
+.arrow-btn:hover {
+    color: #014210;
+    transition: all ease 1s;
 }
 
 .image-container {
