@@ -1,22 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Star, AddShoppingCart } from "@mui/icons-material";
 import "../styles/common.css";
 import "../styles/product.css";
 
-function Product() {
+function Product({ params }) {
+    const { id } = useParams();
+    const [product, setProduct] = useState([]);
+    useEffect(() => {
+        async function fetchProduct() {
+            const { data } = await axios.get(`/api/product/${id}`);
+            setProduct(data);
+        }
+        fetchProduct();
+    }, [id]);
     const [activeTab, setActiveTab] = useState("description");
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
+    const {
+        image,
+        productName,
+        productInfo,
+        numReviews,
+        price,
+        rating,
+        // stockCount,
+        productBrand,
+        // productCategory,
+    } = product;
     return (
         <>
             <Navbar />
             <div className="product">
                 <div className="image-container">
-                    <img src="" alt="Hello" />
+                    <img src={image} alt={productName} />
                 </div>
-                <div className="info-container">
+                <div className="product-info-container">
+                    <div className="product-main-info">
+                        <h4 className="product-brand">{productBrand}</h4>
+                        <h2 className="product-name">{productName}</h2>
+                    </div>
                     <ul className="info-btns">
                         <li>
                             <button
@@ -49,7 +76,7 @@ function Product() {
                     </ul>
                     <div className="content">
                         {activeTab === "description" && (
-                            <div className="description">This is the product description.</div>
+                            <div className="description">{productInfo}</div>
                         )}
                         {activeTab === "specification" && (
                             <div className="specification">This is the product specification.</div>
@@ -58,7 +85,19 @@ function Product() {
                             <div className="reviews">This is the product reviews.</div>
                         )}
                     </div>
-                    <button className="add-to-cart-btn">Add to Cart</button>
+                    <div className="product-action">
+                        <div className="rating">
+                            <h3>{rating}</h3>
+                            <Star style={{ textAlign: "center", verticalAlign: "center" }} />
+                            {` (${numReviews})`}
+                            {/* {`from ${numReviews} reviews`} */}
+                        </div>
+                        <button className="add-to-cart-btn">
+                            Add to Cart
+                            <AddShoppingCart />
+                        </button>
+                        <h3 className="product-price">₹ {price}</h3>
+                    </div>
                 </div>
             </div>
             <Footer />

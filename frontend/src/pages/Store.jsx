@@ -55,7 +55,10 @@ export default function Store() {
     if (sortBy === "alphabetical") {
         sortedProducts.sort((a, b) => a.productName.localeCompare(b.productName));
     } else if (sortBy === "popularity") {
-        sortedProducts.sort((a, b) => b.stockCount - a.stockCount && b.rating - a.rating);
+        sortedProducts.sort(
+            (a, b) =>
+                b.stockCount - a.stockCount && b.rating - a.rating && b.numReviews - a.numReviews
+        );
     } else if (sortBy === "priceLowToHigh") {
         sortedProducts.sort((a, b) => Number(a.price) - Number(b.price));
     } else if (sortBy === "priceHighToLow") {
@@ -154,10 +157,11 @@ function Products({ productsList }) {
 }
 
 function ProductCard({ product }) {
-    const { productName, productBrand, image, price, rating, description, category } = product;
+    const { productName, productBrand, image, price, rating, description, category, numReviews } =
+        product;
 
     return (
-        <Link to="/product-detail" element className="detail-btn">
+        <Link to={`/product/${product.id}`} element className="detail-btn">
             <div className="product-card">
                 <div className="img-container">
                     <img src={image} alt={productName} className="product-img" />
@@ -181,6 +185,8 @@ function ProductCard({ product }) {
                         <div className="rating">
                             <h3>{rating}</h3>
                             <Star style={{ textAlign: "center", verticalAlign: "center" }} />
+                            {` (${numReviews})`}
+                            {/* {`from ${numReviews} reviews`} */}
                         </div>
                     </div>
                 </div>
