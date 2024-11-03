@@ -2,9 +2,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: auto;
 }
 
 .loader {
+    margin: auto;
     border: 0.4rem solid #c2daba;
     border-top: 0.6rem solid #014210;
     border-radius: 50%;

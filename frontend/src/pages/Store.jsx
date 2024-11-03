@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
+import Error from "../components/Error";
+import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Star } from "@mui/icons-material";
 import "../styles/common.css";
 import "../styles/store.css";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { listProducts } from "../actions/productActions";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Store() {
     const productFilters = [
@@ -21,14 +24,14 @@ export default function Store() {
     ];
     // const productsList = [];
 
-    const [products, setProducts] = useState([]);
+    const dispatch = useDispatch();
+    const productsList = useSelector((state) => state.productsList);
+    const { error, loading, products } = productsList;
+
     useEffect(() => {
-        async function fetchProducts() {
-            const { data } = await axios.get("/api/products/");
-            setProducts(data);
-        }
-        fetchProducts();
-    }, []);
+        dispatch(listProducts());
+    }, [dispatch]);
+    console.log(products);
 
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
@@ -44,20 +47,27 @@ export default function Store() {
     //         ? productsList
     //         : productsList.filter((product) => product.category === selectedCategory);
 
-    const filteredProducts = products
-        .filter((product) => product.productName.toLowerCase().includes(searchQuery.toLowerCase()))
-        .filter(
-            (product) =>
-                selectedCategory === "All" || product.productCategory.includes(selectedCategory)
-        );
-
+    console.log(products);
+    const filteredProducts =
+        // products && products.length > 0
+        products
+            .filter((product) =>
+                product.productName.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            .filter(
+                (product) =>
+                    selectedCategory === "All" || product.productCategory.includes(selectedCategory)
+            );
+    console.log(filteredProducts);
     let sortedProducts = [...filteredProducts];
     if (sortBy === "alphabetical") {
         sortedProducts.sort((a, b) => a.productName.localeCompare(b.productName));
     } else if (sortBy === "popularity") {
         sortedProducts.sort(
             (a, b) =>
-                b.stockCount - a.stockCount && b.rating - a.rating && b.numReviews - a.numReviews
+                Number(a.stockCount - b.stockCount) &&
+                Number(b.rating - a.rating) &&
+                Number(b.numReviews - a.numReviews)
         );
     } else if (sortBy === "priceLowToHigh") {
         sortedProducts.sort((a, b) => Number(a.price) - Number(b.price));
@@ -70,32 +80,44 @@ export default function Store() {
             <Navbar />
             <div className="store-container">
                 <div className="nav-bar">
-                    <div className="sort-btns">
-                        <button
-                            className={`sort-btn ${sortBy === "alphabetical" ? "active" : ""}`}
-                            onClick={() => setSortBy("alphabetical")}
-                        >
-                            Alphabetical
-                        </button>
-                        <button
-                            className={`sort-btn ${sortBy === "popularity" ? "active" : ""}`}
-                            onClick={() => setSortBy("popularity")}
-                        >
-                            Popularity
-                        </button>
-                        <button
-                            className={`sort-btn ${sortBy === "priceLowToHigh" ? "active" : ""}`}
-                            onClick={() => setSortBy("priceLowToHigh")}
-                        >
-                            Price -- Low to High
-                        </button>
-                        <button
-                            className={`sort-btn ${sortBy === "priceHighToLow" ? "active" : ""}`}
-                            onClick={() => setSortBy("priceHighToLow")}
-                        >
-                            Price -- High to Low
-                        </button>
-                    </div>
+                    <ul className="sort-btns">
+                        <li>
+                            <button
+                                className={`sort-btn ${sortBy === "alphabetical" ? "active" : ""}`}
+                                onClick={() => setSortBy("alphabetical")}
+                            >
+                                Alphabetical
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                className={`sort-btn ${sortBy === "popularity" ? "active" : ""}`}
+                                onClick={() => setSortBy("popularity")}
+                            >
+                                Popularity
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                className={`sort-btn ${
+                                    sortBy === "priceLowToHigh" ? "active" : ""
+                                }`}
+                                onClick={() => setSortBy("priceLowToHigh")}
+                            >
+                                Price -- Low to High
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                className={`sort-btn ${
+                                    sortBy === "priceHighToLow" ? "active" : ""
+                                }`}
+                                onClick={() => setSortBy("priceHighToLow")}
+                            >
+                                Price -- High to Low
+                            </button>
+                        </li>
+                    </ul>
                     <input
                         type="text"
                         placeholder="Search for products..."
@@ -114,7 +136,7 @@ export default function Store() {
                         selectedCategory={selectedCategory}
                         handleCategoryFilter={handleCategoryFilter}
                     />
-                    <Products productsList={sortedProducts} />
+                    <Products productsList={sortedProducts} loading={loading} error={error} />
                 </div>
             </div>
             <Footer />
@@ -140,18 +162,29 @@ function ProductFilters({ productFilters, selectedCategory, handleCategoryFilter
     );
 }
 
-function Products({ productsList }) {
+function Products({ productsList, loading, error }) {
+    // if (!productsList.length) {
+    //     return <div>No products found.</div>;
+    // }
     return (
         <>
-            <ul className="products-list">
-                {productsList.map((product) => {
-                    return (
-                        <li key={product.id}>
-                            <ProductCard product={product} />
-                        </li>
-                    );
-                })}
-            </ul>
+            {loading ? (
+                <Loader />
+            ) : error ? (
+                <Error message={error} />
+            ) : (
+                <>
+                    <ul className="products-list">
+                        {productsList.map((product) => {
+                            return (
+                                <li key={product.id}>
+                                    <ProductCard product={product} />
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </>
+            )}
         </>
     );
 }
