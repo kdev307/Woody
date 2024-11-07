@@ -1,4 +1,4 @@
-.profile-section {
+.profile-container {
     padding: 1rem 2rem;
     background-color: #e4efe4;
     position: fixed;
@@ -12,7 +12,7 @@
     z-index: 1000;
 }
 
-.profile-section.open {
+.profile-container.open {
     transform: translateX(0);
 }
 
@@ -103,6 +103,7 @@
     transform: translateX(600%);
 } */
 
+.log-btns,
 .profile-btns {
     display: flex;
     flex-direction: column;
@@ -111,7 +112,12 @@
     margin-top: 1rem;
     justify-content: center;
 }
+.profile-btns {
+    margin: auto 0;
+    padding: auto 0;
+}
 
+.log-btn,
 .profile-btn {
     border-radius: 0.4rem;
     font-weight: 600;
@@ -124,6 +130,8 @@
     gap: 1rem;
 }
 
+.sign-up-btn,
+.log-in-btn,
 .history-btn,
 .reviews-btn {
     border: 3px solid #014210;
@@ -132,6 +140,8 @@
     transition: all ease 1s;
 }
 
+.sign-up-btn:hover,
+.log-in-btn:hover,
 .history-btn:hover,
 .reviews-btn:hover {
     background-color: #014210;

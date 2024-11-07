@@ -1,16 +1,11 @@
-import { Edit, Close, History, Person, Logout, Reviews } from "@mui/icons-material";
+import { Edit, History, Person, Logout, Reviews } from "@mui/icons-material";
 import React from "react";
 import "../styles/common.css";
 import "../styles/profile.css";
 
-function Profile({ handleProfileToggle, className }) {
+function Profile() {
     return (
-        <div className={`profile-section ${className}`}>
-            <Close
-                className="profile-close-btn"
-                style={{ fontSize: "2.4rem" }}
-                onClick={handleProfileToggle}
-            />
+        <div className={`profile-section`}>
             <div className="profile-heading">
                 <h1 className="profile-title">My Profile</h1>
                 <Person style={{ fontSize: "2.4rem", color: "#014210" }} />
@@ -51,14 +46,14 @@ function Profile({ handleProfileToggle, className }) {
                 </div>
                 {/* <p className="endLine">
                     <hr
-                        style={{
-                            width: "100%",
-                            margin: "auto",
-                            border: "0.1rem solid #014210",
-                            borderRadius: "100rem",
+                    style={{
+                        width: "100%",
+                        margin: "auto",
+                        border: "0.1rem solid #014210",
+                        borderRadius: "100rem",
                         }}
-                    />
-                </p> */}
+                        />
+                        </p> */}
             </div>
             <div className="profile-btns">
                 <button className="profile-btn history-btn">
