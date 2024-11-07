@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Cart from "./Cart";
 import Logo from "./Logo";
-import Profile from "./Profile";
+import ProfileContainer from "./ProfileContainer";
 import { Person, ShoppingCart } from "@mui/icons-material";
 import "../styles/common.css";
 import "../styles/navbar.css";
@@ -86,9 +86,10 @@ function Navbar() {
                 <Cart handleCartToggle={handleCartToggle} className={isCartOpen ? "open" : ""} />
             )}
             {isProfileOpen && (
-                <Profile
+                <ProfileContainer
                     handleProfileToggle={handleProfileToggle}
                     className={isProfileOpen ? "open" : ""}
+                    logInStatus={false}
                 />
             )}
         </div>
