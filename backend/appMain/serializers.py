@@ -24,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
         lastname = obj.last_name
         name = firstname + ' ' + lastname
         if name == '':
-            name = 'Please Enter Your Name'
+            name = obj.email[:5]
         return name
 
     def get__id(self, obj):
@@ -34,7 +34,7 @@ class UserSerializer(serializers.ModelSerializer):
         return obj.is_staff
 
 
-class UserSerializerWithToken(serializers.ModelSerializer):
+class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only=True)
 
     class Meta:

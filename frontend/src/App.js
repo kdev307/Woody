@@ -5,6 +5,7 @@ import "./App.css";
 import Store from "./pages/Store";
 import NotFound from "./pages/NotFound";
 import Product from "./pages/Product";
+import Profile from "./components/Profile";
 // import Categories from "./components/Categories";
 
 function App() {
@@ -16,6 +17,8 @@ function App() {
                     <Route path="/store" element={<Store />} />
                     {/* <Route path="/product-detail" element={<Product />} /> */}
                     <Route path="/product/:id" element={<Product />} />
+                    <Route path="/profile" element={<Profile />} />
+
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>

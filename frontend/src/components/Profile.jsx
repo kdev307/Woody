@@ -3,7 +3,7 @@ import React from "react";
 import "../styles/common.css";
 import "../styles/profile.css";
 
-function Profile() {
+function Profile({ user }) {
     return (
         <div className={`profile-section`}>
             <div className="profile-heading">
@@ -18,9 +18,9 @@ function Profile() {
                 <div className="basic-info">
                     <img src="" alt="Ethan Hunt" className="profile-img" />
                     <div className="main-info">
-                        <h2 className="name">Ethan Hunt</h2>
-                        <h3 className="mobile">787-456-3698</h3>
-                        <h3 className="mail">ethan.hunt@imf.us</h3>
+                        <h2 className="name">{user.name}</h2>
+                        <h3 className="mobile">####</h3>
+                        <h3 className="mail">{user.email}</h3>
                     </div>
                 </div>
                 <p className="endLine">
@@ -35,13 +35,14 @@ function Profile() {
                 </p>
                 <div className="additional-info">
                     <div>
-                        <h4 className="username">Username : Bravo Echo 11</h4>
-                        <h4 className="gender">Gender : Male</h4>
+                        <h4 className="username">Username : ####</h4>
+                        <h4 className="gender">Gender : ####</h4>
                     </div>
-                    <h4 className="dob">Birthday 🎂 : August 18, 1964</h4>
+                    <h4 className="dob">Birthday 🎂 : ####</h4>
                     <h4 className="res-addr">
-                        Address : 65C, Downtown, Manhattan, New York, United States of America -
-                        10013
+                        {/* Address : 65C, Downtown, Manhattan, New York, United States of America -
+                        10013 */}
+                        #####
                     </h4>
                 </div>
                 {/* <p className="endLine">

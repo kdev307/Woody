@@ -75,27 +75,30 @@ def getUsers(request):
 @api_view(['POST'])
 def registerUser(request):
     data = request.data
+    print(f"Received data: {data}")
     print(data)
     try:
-        user = User.objects.create(first_name=data['fname'], last_name=data['lname'], username=data['email'], email=data['email'], password=make_password(data['password']), is_active=False)
+        user = User.objects.create(first_name=data['firstName'], last_name=data['lastName'], username=data['email'], email=data['email'], password=make_password(data['password']))
+        # user = User.objects.create(first_name=data['firstName'], last_name=data['lastName'], username=data['email'], email=data['email'], password=make_password(data['password']), is_active=False)
 
         # generate token for sending mail
-        email_subject = "Activate Your Account"
-        message = render_to_string(
-            "activate.html",
-            {
-            'user' : user,
-            'domain' : 'localhost:8000',
-            'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
-            'token' : generate_token.make_token(user)
-            }
-        )
-        # print(message)
-        email_message=EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[data['email']])
-        email_message.send()
+        # email_subject = "Activate Your Account"
+        # message = render_to_string(
+        #     "activate.html",
+        #     {
+        #     'user' : user,
+        #     'domain' : 'localhost:8000',
+        #     'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
+        #     'token' : generate_token.make_token(user)
+        #     }
+        # )
+        # # print(message)
+        # email_message=EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[data['email']])
+        # email_message.send()
         serialize = UserSerializerWithToken(user, many=False)
         return Response(serialize.data)
     except Exception as e:
+        print("Error during registration: ", str(e))
         message = {'details': e}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
     

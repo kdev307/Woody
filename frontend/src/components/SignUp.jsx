@@ -5,21 +5,38 @@ import "../styles/form.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
-import Error from "./Error";
+import Message from "./Message";
 import { AppRegistration, ArrowBack, Visibility, VisibilityOff } from "@mui/icons-material";
+import { signUp } from "../actions/userActions";
 
-function SignUp() {
-    const navigate = useNavigate();
+function SignUp({ onBack, onSignUpSuccess }) {
+    // const navigate = useNavigate();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
+    // const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
+    // const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const redirect = location.search ? location.search.split("=")[1] : "/signUp";
+
+    const userSignUp = useSelector((state) => state.userSignUp);
+    const { error, loading, userInfo } = userSignUp;
+
+    useEffect(() => {
+        if (userInfo) {
+            onSignUpSuccess();
+            // navigate("/");
+            // navigate(redirect);
+        }
+        // }, [userInfo, redirect, onSignUpSuccess]);
+    }, [userInfo, onSignUpSuccess]);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -34,17 +51,25 @@ function SignUp() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setMessage("");
+        setMessageType();
         if (password !== confirmPassword) {
-            setError("Passwords do not match!");
+            setMessage("Passwords do not match !");
+            setMessageType("fail");
             // navigate();
         } else if (!validEmail.test(email)) {
-            setError("Invalid Email Address");
+            setMessage("Invalid Email Address !");
+            setMessageType("fail");
         } else if (!validPassword.test(password)) {
-            setError(
+            setMessage(
                 "Password must be at least 8 characters long, with at least one uppercase letter, one lowercase letter, one number, and one special character."
             );
+            setMessageType("fail");
         } else {
-            setError("Successful Sign Up");
+            dispatch(signUp(firstName, lastName, email, password));
+            // setMessage("SignUp is Success !");
+            // setMessageType("success");
+            // onSignUpSuccess();
         }
     };
 
@@ -55,7 +80,8 @@ function SignUp() {
                     <h1 className="signup-title">Sign Up</h1>
                     <AppRegistration style={{ fontSize: "2.4rem" }} className="form-icon" />
                 </div>
-                {error && <Error message={error} />}
+                {message && <Message message={message} messageType={messageType} />}
+
                 <form action="post" className="form-container" onSubmit={handleSubmit}>
                     <div className="form-inputs">
                         <div>
@@ -88,16 +114,6 @@ function SignUp() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your Email Address"
-                            required
-                        />
-                        <input
-                            type="text"
-                            name="username"
-                            id="username"
-                            className="form-input"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Enter your Username"
                             required
                         />
                         <div>
@@ -158,7 +174,10 @@ function SignUp() {
                         Sign Up
                     </button>
                 </form>
-                <ArrowBack style={{ fontSize: "2.4rem", cursor: "pointer", marginTop: "1.2rem" }} />
+                <ArrowBack
+                    style={{ fontSize: "2.4rem", cursor: "pointer", marginTop: "1.2rem" }}
+                    onClick={onBack}
+                />
             </div>
         </>
     );

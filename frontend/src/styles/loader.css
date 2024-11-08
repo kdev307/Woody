@@ -10,8 +10,8 @@
     border: 0.4rem solid #c2daba;
     border-top: 0.6rem solid #014210;
     border-radius: 50%;
-    width: 15rem;
-    height: 15rem;
+    width: 5rem;
+    height: 5rem;
     animation: spin 2s linear infinite;
 }
 
