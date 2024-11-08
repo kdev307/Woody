@@ -1,17 +1,34 @@
 import { ArrowBack, Login, Visibility, VisibilityOff } from "@mui/icons-material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/common.css";
 import "../styles/profile.css";
 import "../styles/form.css";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
-import Error from "./Error";
+import Message from "./Message";
+import { useLocation, useNavigate } from "react-router";
+import { logIn } from "../actions/userActions";
 
-function LogIn() {
-    const [username, setUsername] = useState("");
+function LogIn({ onBack }) {
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
+    // const [loading, setLoading] = useState(false);
+
+    const dispatch = useDispatch();
+    const userLogin = useSelector((state) => state.userLogin);
+    const { error, loading, userInfo } = userLogin;
+    // const navigate = useNavigate();
+    const location = useLocation();
+    // const redirect = location.search ? location.search.split("=")[1] : "/profile";
+
+    useEffect(() => {
+        if (userInfo) {
+            // navigate("/");
+        }
+    }, [userInfo]);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -19,6 +36,7 @@ function LogIn() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        dispatch(logIn(email, password));
     };
 
     return (
@@ -27,17 +45,17 @@ function LogIn() {
                 <h1 className="login-title">Log In</h1>
                 <Login style={{ fontSize: "2.4rem" }} className="form-icon" />
             </div>
-            {error && <Error message={error} />}
+            {message && <Message message={message} messageType={messageType} />}
             <form action="post" className="form-container" onSubmit={handleSubmit}>
                 <div className="form-inputs">
                     <input
-                        type="text"
-                        name="username"
-                        id="username"
+                        type="email"
+                        name="email"
+                        id="email"
                         className="form-input"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder="Enter your Username"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your Email Address"
                         required
                     />
                     <div>
@@ -71,7 +89,10 @@ function LogIn() {
                     Log In
                 </button>
             </form>
-            <ArrowBack style={{ fontSize: "2.4rem", cursor: "pointer", marginTop: "1.2rem" }} />
+            <ArrowBack
+                style={{ fontSize: "2.4rem", cursor: "pointer", marginTop: "1.2rem" }}
+                onClick={onBack}
+            />
         </div>
     );
 }
