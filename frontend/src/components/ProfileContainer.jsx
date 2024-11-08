@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AccountCircle, AppRegistration, Close, Login } from "@mui/icons-material";
 import "../styles/common.css";
 import "../styles/profile.css";
@@ -6,16 +6,29 @@ import Profile from "./Profile";
 import LogIn from "./LogIn";
 import SignUp from "./SignUp";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router";
 
 const VIEW_NONE = "none";
 const VIEW_LOGIN = "login";
 const VIEW_SIGNUP = "signup";
 
-function ProfileContainer({ handleProfileToggle, className, logInStatus }) {
+function ProfileContainer({ handleProfileToggle, className }) {
     const [currentView, setCurrentView] = useState(VIEW_NONE);
-
+    const location = useLocation();
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const viewParam = searchParams.get("view");
+        if (viewParam === VIEW_LOGIN) {
+            setCurrentView(VIEW_LOGIN);
+        } else if (viewParam === VIEW_SIGNUP) {
+            setCurrentView(VIEW_SIGNUP);
+        } else {
+            setCurrentView(VIEW_NONE);
+        }
+    }, [location.search]);
 
     const handleLogInClick = () => setCurrentView(VIEW_LOGIN);
     const handleRegisterClick = () => setCurrentView(VIEW_SIGNUP);

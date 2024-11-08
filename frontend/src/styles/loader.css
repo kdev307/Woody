@@ -6,7 +6,7 @@
 }
 
 .loader {
-    margin: auto;
+    margin: 2rem auto;
     border: 0.4rem solid #c2daba;
     border-top: 0.6rem solid #014210;
     border-radius: 50%;

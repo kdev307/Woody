@@ -3,7 +3,16 @@ import React from "react";
 import "../styles/common.css";
 import "../styles/profile.css";
 
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../actions/userActions";
+
 function Profile({ user }) {
+    const userLogin = useSelector((state) => state.userLogin);
+    const { userInfo } = userLogin;
+    const dispatch = useDispatch();
+    const handleLogOut = () => {
+        dispatch(logOut());
+    };
     return (
         <div className={`profile-section`}>
             <div className="profile-heading">
@@ -65,7 +74,7 @@ function Profile({ user }) {
                     My Reviews
                     <Reviews />
                 </button>
-                <button className="profile-btn logout-btn">
+                <button className="profile-btn logout-btn" onClick={handleLogOut}>
                     Log Out <Logout />
                 </button>
             </div>

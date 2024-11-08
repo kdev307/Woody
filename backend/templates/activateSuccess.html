@@ -1,1 +1,21 @@
-<h1>Account is activated successfully</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activation Successful</title>
+</head>
+
+<body>
+    <h1>Your account has been successfully activated!</h1>
+    <p>You will be redirected to the login page shortly...</p>
+
+    <script>
+        setTimeout(function () {
+            window.location.href = "http://localhost:3000/?view=login";
+        }, 3000);
+    </script>
+</body>
+
+</html>

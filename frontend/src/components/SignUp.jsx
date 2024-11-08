@@ -24,19 +24,30 @@ function SignUp({ onBack, onSignUpSuccess }) {
     // const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const location = useLocation();
-    const redirect = location.search ? location.search.split("=")[1] : "/signUp";
+    // const redirect = location.search ? location.search.split("=")[1] : "/signUp";
 
     const userSignUp = useSelector((state) => state.userSignUp);
     const { error, loading, userInfo } = userSignUp;
 
     useEffect(() => {
         if (userInfo) {
-            onSignUpSuccess();
+            // onSignUpSuccess();
             // navigate("/");
             // navigate(redirect);
+            setMessage(userInfo.details);
+            setMessageType("success");
         }
+        if (error) {
+            setMessage(error);
+            setMessageType("fail");
+        }
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
         // }, [userInfo, redirect, onSignUpSuccess]);
-    }, [userInfo, onSignUpSuccess]);
+    }, [userInfo, error, onSignUpSuccess]);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -52,7 +63,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         setMessage("");
-        setMessageType();
+        setMessageType("");
         if (password !== confirmPassword) {
             setMessage("Passwords do not match !");
             setMessageType("fail");

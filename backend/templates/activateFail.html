@@ -1,1 +1,21 @@
-<h1>Account activation is fail</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activation Failed</title>
+</head>
+
+<body>
+    <h1>Account activation failed.</h1>
+    <p>Redirecting to the sign-up page for you to try again...</p>
+
+    <script>
+        setTimeout(function () {
+            window.location.href = "http://localhost:3000/?view=signup";
+        }, 3000);
+    </script>
+</body>
+
+</html>

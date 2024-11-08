@@ -20,8 +20,17 @@ from django.utils.encoding import force_bytes,force_text,DjangoUnicodeDecodeErro
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.views.generic import View
+import threading
 
 # Create your views here.
+
+class EmailThread(threading.Thread):
+    def __init__(self, email_message):
+        self.email_message = email_message
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.email_message.send()
 
 
 @api_view(['GET'])
@@ -78,29 +87,33 @@ def registerUser(request):
     print(f"Received data: {data}")
     print(data)
     try:
-        user = User.objects.create(first_name=data['firstName'], last_name=data['lastName'], username=data['email'], email=data['email'], password=make_password(data['password']))
-        # user = User.objects.create(first_name=data['firstName'], last_name=data['lastName'], username=data['email'], email=data['email'], password=make_password(data['password']), is_active=False)
+        # user = User.objects.create(first_name=data['firstName'], last_name=data['lastName'], username=data['email'], email=data['email'], password=make_password(data['password']))
+        user = User.objects.create(first_name=data['firstName'], last_name=data['lastName'], username=data['email'], email=data['email'], password=make_password(data['password']), is_active=False)
 
         # generate token for sending mail
-        # email_subject = "Activate Your Account"
-        # message = render_to_string(
-        #     "activate.html",
-        #     {
-        #     'user' : user,
-        #     'domain' : 'localhost:8000',
-        #     'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
-        #     'token' : generate_token.make_token(user)
-        #     }
-        # )
-        # # print(message)
-        # email_message=EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[data['email']])
-        # email_message.send()
-        serialize = UserSerializerWithToken(user, many=False)
-        return Response(serialize.data)
+        email_subject = "Activate Your Account"
+        message = render_to_string(
+            "activate.html",
+            {
+            'user' : user,
+            'domain' : 'localhost:8000',
+            'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
+            'token' : generate_token.make_token(user)
+            }
+        )
+        # print(message)
+        email_message=EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[data['email']])
+        EmailThread(email_message).start()
+        # message = {'details' : "Check your mail to verify your mail."}
+        # serialize = UserSerializerWithToken(user, many=False) 
+        return Response({'details' : "Check your mail to verify your account."}, status=status.HTTP_201_CREATED)
+        # return Response(serialize.data)
     except Exception as e:
         print("Error during registration: ", str(e))
-        message = {'details': e}
-        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        # message = {'details': e}
+        # message = {'details': 'Try another email, this email is already registered.'}
+        return Response({'details': "Try another email, this email is already registered."}, status=status.HTTP_400_BAD_REQUEST)
+        # return Response(message)
     
 
 

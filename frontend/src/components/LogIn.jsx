@@ -21,7 +21,7 @@ function LogIn({ onBack }) {
     const userLogin = useSelector((state) => state.userLogin);
     const { error, loading, userInfo } = userLogin;
     // const navigate = useNavigate();
-    const location = useLocation();
+    // const location = useLocation();
     // const redirect = location.search ? location.search.split("=")[1] : "/profile";
 
     useEffect(() => {
@@ -45,7 +45,7 @@ function LogIn({ onBack }) {
                 <h1 className="login-title">Log In</h1>
                 <Login style={{ fontSize: "2.4rem" }} className="form-icon" />
             </div>
-            {message && <Message message={message} messageType={messageType} />}
+            {error && <Message message={error} messageType={messageType} />}
             <form action="post" className="form-container" onSubmit={handleSubmit}>
                 <div className="form-inputs">
                     <input

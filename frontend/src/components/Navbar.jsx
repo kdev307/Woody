@@ -6,8 +6,12 @@ import { Person, ShoppingCart } from "@mui/icons-material";
 import "../styles/common.css";
 import "../styles/navbar.css";
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 function Navbar() {
+    const userLogin = useSelector((state) => state.userLogin);
+    const { userInfo } = userLogin;
+    const dispatch = useDispatch();
     const [isCartOpen, setIsCartOpen] = useState(false);
     const handleCartToggle = () => {
         setIsCartOpen((prev) => !prev);
@@ -65,10 +69,14 @@ function Navbar() {
                     <ul className="user-nav-list">
                         <li>
                             <button className="main-nav-link profile-btn">
-                                <Person
-                                    style={{ fontSize: "2rem" }}
-                                    onClick={handleProfileToggle}
-                                />
+                                {userInfo ? (
+                                    <strong onClick={handleProfileToggle}>{userInfo.name}</strong>
+                                ) : (
+                                    <Person
+                                        style={{ fontSize: "2rem" }}
+                                        onClick={handleProfileToggle}
+                                    />
+                                )}
                             </button>
                         </li>
                         <li>

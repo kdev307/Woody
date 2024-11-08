@@ -41,13 +41,16 @@ export const signUp = (firstName, lastName, email, password) => async (dispatch)
             payload: data,
         });
         // localStorage.setItem("userInfo", JSON.stringify(data));
+        // localStorage.setItem("activatationMessage", "Check your mail to verify your mail.");
     } catch (error) {
+        const message =
+            error.response && error.response.data && error.response.data.details
+                ? error.response.data.details
+                : error.message;
+        // : "An unexpected error occurred. Please try again.";
         dispatch({
             type: USER_SIGNUP_FAIL,
-            payload:
-                error.response && error.response.data.detail
-                    ? error.response.data.detail
-                    : error.message,
+            payload: message,
         });
     }
 };
@@ -80,9 +83,14 @@ export const logIn = (email, password) => async (dispatch) => {
         dispatch({
             type: USER_LOGIN_FAIL,
             payload:
-                error.response && error.response.data.detail
-                    ? error.response.data.detail
+                error.response && error.response.data.details
+                    ? error.response.data.details
                     : error.message,
         });
     }
+};
+
+export const logOut = () => (dispatch) => {
+    localStorage.removeItem("userInfo");
+    dispatch({ type: USER_LOGOUT });
 };

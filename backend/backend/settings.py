@@ -75,7 +75,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["templates"],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -175,11 +175,15 @@ SIMPLE_JWT = {
 # email credential for sending email
 # EMAIL_HOST='smtpout.secureserver.net'
 EMAIL_HOST='smtp.gmail.com'
-EMAIL_HOST_USER=''
-EMAIL_HOST_PASSWORD=''
+EMAIL_HOST_USER='<your-email@gmail.com>'
+EMAIL_HOST_PASSWORD='<the-code-generated-after-setting-up-app-password>'
 EMAIL_PORT=465
 EMAIL_USE_SSL=True
+# EMAIL_PORT=587 # for TLS
+# EMAIL_USE_TLS=True
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'Woody Account Verifier <your-email@gmail.com>'
+# EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 
 
 # Static files (CSS, JavaScript, Images)
