@@ -36,3 +36,9 @@
     text-decoration: underline;
     transition: all 0.3s;
 }
+
+.cart-items-count {
+    position: absolute;
+    left: 88.5%;
+    top: 2%;
+}

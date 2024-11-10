@@ -190,13 +190,29 @@ function Products({ productsList, loading, error }) {
 }
 
 function ProductCard({ product }) {
-    const { productName, productBrand, image, price, rating, description, category, numReviews } =
-        product;
+    const {
+        productName,
+        productBrand,
+        image,
+        price,
+        rating,
+        description,
+        category,
+        numReviews,
+        stockCount,
+    } = product;
 
     return (
         <Link to={`/product/${product.id}`} element className="detail-btn">
             <div className="product-card">
                 <div className="img-container">
+                    {!stockCount ? (
+                        <p className="tag out-of-stock-tag">Out of Stock</p>
+                    ) : stockCount < 50 ? (
+                        <p className="tag few-stock-tag">Only Few Left</p>
+                    ) : (
+                        ""
+                    )}
                     <img src={image} alt={productName} className="product-img" />
                 </div>
                 {/* <ul className="product-category-list">

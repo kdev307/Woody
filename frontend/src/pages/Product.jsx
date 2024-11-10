@@ -3,24 +3,45 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Star, AddShoppingCart, ArrowBack } from "@mui/icons-material";
+import { Star, AddShoppingCart, ArrowBack, Check } from "@mui/icons-material";
 import "../styles/common.css";
 import "../styles/product.css";
 import { listProductDetail } from "../actions/productActions";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import { addToCart } from "../actions/cartActions";
+// import Message from "../components/Message";
 
 function Product({ params }) {
     const { id } = useParams();
     const dispatch = useDispatch();
+    // const navigate = useNavigate();
+    // const location = useLocation();
     const productDetails = useSelector((state) => state.productDetails);
     const { error, loading, product } = productDetails;
+    const cartItemsList = useSelector((state) => state.cart.cartItemsList);
+
+    const [activeTab, setActiveTab] = useState("description");
+    const [isAddedToCart, setIsAddedToCart] = useState(false);
+
     useEffect(() => {
         dispatch(listProductDetail(id));
     }, [dispatch, id]);
-    const [activeTab, setActiveTab] = useState("description");
+
+    useEffect(() => {
+        const existingItem = cartItemsList.find((item) => item.productId === product.id);
+        setIsAddedToCart(!!existingItem);
+    }, [cartItemsList, product.id]);
+
     const handleTabClick = (tab) => {
         setActiveTab(tab);
+    };
+
+    const handleAddToCart = (product) => {
+        if (!isAddedToCart) {
+            dispatch(addToCart(product));
+            setIsAddedToCart(true);
+        }
     };
 
     const {
@@ -30,7 +51,7 @@ function Product({ params }) {
         numReviews,
         price,
         rating,
-        // stockCount,
+        stockCount,
         productBrand,
         // productCategory,
     } = product;
@@ -53,6 +74,13 @@ function Product({ params }) {
                         <div className="product-main-info">
                             <h4 className="product-brand">{productBrand}</h4>
                             <h2 className="product-name">{productName}</h2>
+                            {!stockCount ? (
+                                <p className="stock-tag out-of-stock">Out of Stock</p>
+                            ) : stockCount < 50 ? (
+                                <p className="stock-tag few-stock">Only Few Left</p>
+                            ) : (
+                                ""
+                            )}
                         </div>
                         <ul className="info-btns">
                             <li>
@@ -106,10 +134,25 @@ function Product({ params }) {
                                 {` (${numReviews})`}
                                 {/* {`from ${numReviews} reviews`} */}
                             </div>
-                            <button className="add-to-cart-btn">
-                                Add to Cart
-                                <AddShoppingCart />
+                            <button
+                                className={`add-to-cart-btn ${!stockCount ? "sold-out" : ""}`}
+                                onClick={() => handleAddToCart(product)}
+                                disabled={!stockCount || isAddedToCart}
+                            >
+                                {isAddedToCart ? "Added" : "Add to Cart"}
+                                {isAddedToCart ? <Check /> : <AddShoppingCart />}
                             </button>
+                            {/* {isAddedToCart ? (
+                                <Message
+                                    messageType={"fail"}
+                                    message={"Item already added to cart."}
+                                />
+                            ) : (
+                                ""
+                            )} */}
+                            {/* {isAddedToCart && (
+                                <Message messageType={"success"} message={"Item added to cart!"} />
+                            )} */}
                             <h3 className="product-price">₹ {price}</h3>
                         </div>
                     </div>
