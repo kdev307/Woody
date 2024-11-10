@@ -200,6 +200,25 @@
     gap: 7rem;
 }
 
+.tag {
+    position: absolute;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.4rem;
+    top: 19.4rem;
+    right: 1rem;
+    /* font-weight: 600; */
+    color: #fff;
+}
+
+.few-stock-tag {
+    background-color: #ff8811;
+}
+
+.out-of-stock-tag {
+    background-color: #fb2d2d;
+}
+
 .product-brand,
 .product-name {
     text-align: left;

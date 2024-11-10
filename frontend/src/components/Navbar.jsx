@@ -12,6 +12,8 @@ function Navbar() {
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
     const dispatch = useDispatch();
+    const cartItemsList = useSelector((state) => state.cart.cartItemsList);
+    const totalQuantity = cartItemsList.reduce((acc, item) => acc + item.qty, 0);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const handleCartToggle = () => {
         setIsCartOpen((prev) => !prev);
@@ -85,6 +87,7 @@ function Navbar() {
                                     style={{ fontSize: "2rem" }}
                                     onClick={handleCartToggle}
                                 />
+                                <p className="cart-items-count">{totalQuantity}</p>
                             </button>
                         </li>
                     </ul>

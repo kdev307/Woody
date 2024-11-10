@@ -8,24 +8,42 @@ import {
 } from "@mui/icons-material";
 import "../styles/common.css";
 import "../styles/cart.css";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromCart, updateCartQuantity, clearCart } from "../actions/cartActions";
+import { useNavigate } from "react-router";
 
 function Cart({ handleCartToggle, className }) {
-    const cartItemsList = [
-        {
-            id: "1",
-            name: "Cozy Bed",
-            image: "https://example.com/images/cozy-bed.jpg",
-            qty: 1,
-            price: 15000,
-        },
-        {
-            id: "2",
-            name: "Wooden Crib",
-            image: "https://example.com/images/wooden-crib.jpg",
-            qty: 1,
-            price: 8000,
-        },
-    ];
+    const cartItemsList = useSelector((state) => state.cart.cartItemsList);
+    const totalQuantity = cartItemsList.reduce((acc, item) => acc + Number(item.qty), 0);
+    const totalPrice = cartItemsList.reduce((acc, item) => acc + Number(item.price * item.qty), 0);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    // const { isAuthenticated } = useSelector((state) => state.user);
+
+    const handleClearCart = () => {
+        const confirmClear = window.confirm("Are you sure you want to cancel your order ?");
+        if (confirmClear) {
+            dispatch(clearCart());
+        }
+    };
+    const userLogin = useSelector((state) => state.userLogin);
+    const { userInfo } = userLogin;
+
+    const handleBuyNow = () => {
+        if (!userInfo) {
+            alert("Please login to your account for placing order");
+            // handleCartToggle(false);
+        } else {
+            const confirmOrder = window.confirm("Are you sure you want to proceed with the order?");
+            if (confirmOrder) {
+                dispatch(clearCart());
+                alert("Order Confirmed ! Thank You for Shopping with us. :) :)");
+            }
+        }
+    };
+
+    console.log("Cart items:", cartItemsList);
     return (
         <div className={`cart ${className}`}>
             <Close
@@ -39,45 +57,83 @@ function Cart({ handleCartToggle, className }) {
                 <h1 className="cart-title">My Cart</h1>
                 <ShoppingCart style={{ fontSize: "2.4rem", color: "#014210" }} />
             </div>
-            <ul className="cart-items">
-                {cartItemsList.map((cartItem, key) => {
-                    return (
-                        <li className="cart-item" key={cartItem.id}>
-                            <CartItem cartItem={cartItem} />
-                        </li>
-                    );
-                })}
-            </ul>
+            {cartItemsList.length === 0 ? (
+                <strong className="cart-message">Your cart is empty</strong>
+            ) : (
+                <ul className="cart-items">
+                    {cartItemsList.map((cartItem) => {
+                        return (
+                            <li className="cart-item" key={cartItem.productId}>
+                                <CartItem cartItemData={cartItem} />
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
             <div className="cart-info">
-                <h3 className="total-info">Total Price: ₹600000000</h3>
-                <h3 className="total-info">Quantity: 45</h3>
+                <h3 className="total-info">Total Price: ₹{totalPrice}</h3>
+                <h3 className="total-info">Quantity: {totalQuantity}</h3>
             </div>
             <div className="cart-btns">
-                <button className="cart-btn buy-btn">Buy Now</button>
-                <button className="cart-btn cancel-btn">Cancel</button>
+                <button
+                    className="cart-btn buy-btn"
+                    disabled={cartItemsList.length === 0}
+                    aria-disabled={cartItemsList.length === 0}
+                    onClick={handleBuyNow}
+                >
+                    Buy Now
+                </button>
+                <button
+                    className="cart-btn cancel-btn"
+                    disabled={cartItemsList.length === 0}
+                    aria-disabled={cartItemsList.length === 0}
+                    onClick={handleClearCart}
+                >
+                    Cancel
+                </button>
             </div>
         </div>
     );
 }
 
-function CartItem({ cartItem }) {
-    const { name, image, qty, price } = cartItem;
+function CartItem({ cartItemData }) {
+    const { productId, productBrand, productName, image, qty, stockCount, price } = cartItemData;
+    const dispatch = useDispatch();
+    const handleRemoveFromCart = () => {
+        dispatch(removeFromCart(productId));
+    };
+
+    const handleQuantityUpdate = (change) => {
+        const newQty = qty + change;
+        console.log("Current Quantity:", qty);
+        console.log("New Quantity:", newQty);
+        console.log("Stock Count:", stockCount);
+        if (newQty > 0 && newQty < stockCount) dispatch(updateCartQuantity(productId, newQty));
+        else if (newQty <= 0) {
+            dispatch(removeFromCart(productId));
+        }
+    };
+
     return (
         <>
             <div className="cart-img-info">
-                <img src={image} alt={name} className="cart-item-img" />
+                <img src={image} alt={productName} className="cart-item-img" />
                 <div className="cart-item-qty">
                     <RemoveCircle
+                        className="update-btn"
                         style={{ color: "#560000" }}
                         onClick={() => {
-                            // handleQtyUpdate(-1);
+                            handleQuantityUpdate(-1);
+                            // console.log("-1");
                         }}
                     />
                     <span>{qty}</span>
                     <AddCircle
+                        className="update-btn"
                         style={{ color: "#560000" }}
                         onClick={() => {
-                            // handleQtyUpdate(1);
+                            handleQuantityUpdate(1);
+                            // console.log("+1");
                         }}
                     />
                 </div>
@@ -86,8 +142,9 @@ function CartItem({ cartItem }) {
                 <RemoveShoppingCart
                     className="remove-btn"
                     style={{ fontSize: "1.6rem", color: "#560000" }}
+                    onClick={handleRemoveFromCart}
                 />
-                <h4 className="cart-item-name">{name}</h4>
+                <h4 className="cart-item-name">{productBrand + " " + productName}</h4>
                 <h4 className="cart-total-price">₹ {price * qty}</h4>
             </div>
             <p className="endLine">
