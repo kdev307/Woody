@@ -87,7 +87,7 @@ function Navbar() {
                                     style={{ fontSize: "2rem" }}
                                     onClick={handleCartToggle}
                                 />
-                                <p className="cart-items-count">{totalQuantity}</p>
+                                <p className="cart-items-count">{userInfo ? totalQuantity : ""}</p>
                             </button>
                         </li>
                     </ul>

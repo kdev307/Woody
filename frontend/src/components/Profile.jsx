@@ -19,19 +19,31 @@ function Profile({ user }) {
                 <h1 className="profile-title">My Profile</h1>
                 <Person style={{ fontSize: "2.4rem", color: "#014210" }} />
             </div>
-            {/* <Edit className="edit-btn" style={{ fontSize: "1.8rem" }} /> */}
-            <button className="profile-btn edit-btn">
+            <Edit
+                // className="edit-btn"
+                style={{
+                    fontSize: "1.8rem",
+                    color: "#560000",
+                    position: "absolute",
+                    transform: "translateX(8rem)",
+                }}
+            />
+            {/* <button className="profile-btn edit-btn">
                 Edit Profile <Edit />
-            </button>
+            </button> */}
             <div className="info-container">
                 <div className="basic-info">
-                    <img src="" alt="Ethan Hunt" className="profile-img" />
+                    <img
+                        src="/images/testimonials/customer-5.jpg"
+                        alt={`${user.name}`}
+                        className="profile-img"
+                    />
                     <div className="main-info">
                         <h2 className="name">{user.name}</h2>
-                        <h3 className="mobile">####</h3>
-                        <h3 className="mail">{user.email}</h3>
+                        <h3 className="mobile">+91-9874563210</h3>
                     </div>
                 </div>
+                <h3 className="mail">{user.email}</h3>
                 <p className="endLine">
                     <hr
                         style={{
@@ -43,16 +55,12 @@ function Profile({ user }) {
                     />
                 </p>
                 <div className="additional-info">
-                    <div>
-                        <h4 className="username">Username : ####</h4>
-                        <h4 className="gender">Gender : ####</h4>
-                    </div>
-                    <h4 className="dob">Birthday 🎂 : ####</h4>
                     <h4 className="res-addr">
-                        {/* Address : 65C, Downtown, Manhattan, New York, United States of America -
-                        10013 */}
-                        #####
+                        Address : 65C, Downtown, Manhattan, New York, United States of America -
+                        10013
+                        {/* ##### */}
                     </h4>
+                    <h4 className="dob">Birthday 🎂 : September 30, 2000</h4>
                 </div>
                 {/* <p className="endLine">
                     <hr
