@@ -22,6 +22,7 @@ export default function Store() {
         "Storage",
         "Workspace",
     ];
+
     // const productsList = [];
 
     const dispatch = useDispatch();
@@ -56,7 +57,10 @@ export default function Store() {
             )
             .filter(
                 (product) =>
-                    selectedCategory === "All" || product.productCategory.includes(selectedCategory)
+                    selectedCategory === "All" ||
+                    product.productCategories.some((category) =>
+                        category.includes(selectedCategory)
+                    )
             );
     console.log(filteredProducts);
     let sortedProducts = [...filteredProducts];
@@ -196,8 +200,8 @@ function ProductCard({ product }) {
         image,
         price,
         rating,
-        description,
-        category,
+        productCategories,
+        productDescription,
         numReviews,
         stockCount,
     } = product;
@@ -215,19 +219,18 @@ function ProductCard({ product }) {
                     )}
                     <img src={image} alt={productName} className="product-img" />
                 </div>
-                {/* <ul className="product-category-list">
-                    {categories.map((category) => {
+                <ul className="product-category-list">
+                    {(productCategories || []).map((category) => {
                         return (
                             <li className="category-item" key={category}>
                                 {category}
                             </li>
                         );
                     })}
-                </ul> */}
+                </ul>
                 <div className="product-info">
                     <h4 className="product-brand">{productBrand}</h4>
                     <h3 className="product-name">{productName}</h3>
-                    <p className="product-desc">{description}</p>
                     <div>
                         <h3 className="product-price">₹ {price}</h3>
                         {/* <InfoOutlined style={{ fontSize: "2.4rem" }} className="info-icon" /> */}
@@ -238,6 +241,7 @@ function ProductCard({ product }) {
                             {/* {`from ${numReviews} reviews`} */}
                         </div>
                     </div>
+                    <p className="product-desc">{productDescription}</p>
                 </div>
             </div>
         </Link>

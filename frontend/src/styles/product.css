@@ -28,6 +28,7 @@
 .image-container {
     max-width: 35rem;
     border: 2px solid #000;
+    background-color: #fff;
 }
 
 .image-container > img {
@@ -39,7 +40,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    gap: 2rem;
+    gap: 1.6rem;
 }
 
 .product-main-info {
@@ -50,13 +51,20 @@
     justify-content: center;
 }
 
+.product-main-info > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24rem;
+}
+
 .stock-tag {
-    position: absolute;
+    /* position: absolute; */
     font-size: 0.8rem;
     padding: 0.3rem 0.6rem;
     border-radius: 0.4rem;
-    top: 14rem;
-    right: 48rem;
+    /* top: 10.6rem;
+    right: 10rem; */
     /* margin-top: -2rem; */
     /* font-weight: 600; */
     color: #fff;
@@ -81,6 +89,7 @@
     padding: 0;
     transition: all ease 1s;
     margin: auto;
+    margin-top: -2rem;
 }
 
 .info-btns .active {

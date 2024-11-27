@@ -9,8 +9,11 @@ class Products(models.Model):
     productName = models.CharField(max_length=150)
     image = models.ImageField(null=True, blank=True)
     productBrand = models.CharField(max_length=150, null=True, blank=True)
-    productCategory = models.CharField(max_length=150, null=True, blank=True)
-    productInfo = models.TextField(null=True, blank=True)
+    # productCategory = models.CharField(max_length=150, null=True, blank=True)
+    productCategories = models.JSONField(default=list, null=True, blank=True)
+    productDescription = models.TextField(null=True, blank=True)
+    productSpecification = models.TextField(null=True, blank=True)
+    productReviews = models.TextField(null=True, blank=True)
     rating = models.DecimalField(
         max_digits=5, decimal_places=1, null=True, blank=True)
     numReviews = models.IntegerField(null=True, blank=True, default=0)
