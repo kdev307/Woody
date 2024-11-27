@@ -53,7 +53,10 @@ function Product({ params }) {
         rating,
         stockCount,
         productBrand,
-        // productCategory,
+        productCategories,
+        productDescription,
+        productSpecification,
+        productReviews,
     } = product;
     return (
         <>
@@ -72,15 +75,26 @@ function Product({ params }) {
                     </div>
                     <div className="product-info-container">
                         <div className="product-main-info">
-                            <h4 className="product-brand">{productBrand}</h4>
+                            <div>
+                                <h4 className="product-brand">{productBrand}</h4>
+                                {!stockCount ? (
+                                    <p className="stock-tag out-of-stock">Out of Stock</p>
+                                ) : stockCount < 50 ? (
+                                    <p className="stock-tag few-stock">Only Few Left</p>
+                                ) : (
+                                    ""
+                                )}
+                            </div>
                             <h2 className="product-name">{productName}</h2>
-                            {!stockCount ? (
-                                <p className="stock-tag out-of-stock">Out of Stock</p>
-                            ) : stockCount < 50 ? (
-                                <p className="stock-tag few-stock">Only Few Left</p>
-                            ) : (
-                                ""
-                            )}
+                            <ul className="product-category-list">
+                                {(productCategories || []).map((category) => {
+                                    return (
+                                        <li className="category-item" key={category}>
+                                            {category}
+                                        </li>
+                                    );
+                                })}
+                            </ul>
                         </div>
                         <ul className="info-btns">
                             <li>
@@ -116,15 +130,14 @@ function Product({ params }) {
                         </ul>
                         <div className="content">
                             {activeTab === "description" && (
-                                <div className="description">{productInfo}</div>
+                                <div className="description">{productDescription}</div>
                             )}
                             {activeTab === "specification" && (
-                                <div className="specification">
-                                    This is the product specification.
-                                </div>
+                                <div className="specification">{productSpecification}</div>
                             )}
+
                             {activeTab === "reviews" && (
-                                <div className="reviews">This is the product reviews.</div>
+                                <div className="reviews">{productReviews}</div>
                             )}
                         </div>
                         <div className="product-action">

@@ -67,7 +67,7 @@
     grid-template-columns: 1fr 4fr;
     align-items: flex-start;
     justify-content: center;
-    gap: 2.4rem;
+    gap: 1.2rem;
     font-size: 1.2rem;
 }
 
@@ -118,7 +118,7 @@
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.4rem;
 }
 
 .product-card {
@@ -173,7 +173,8 @@
 }
 
 .product-category-list {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     align-items: center;
     justify-content: flex-start;
     gap: 0.4rem;
@@ -231,9 +232,12 @@
 
 .product-desc {
     font-size: 1rem;
-    text-overflow: ellipsis;
     text-align: left;
     color: #560000;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 20rem;
+    white-space: nowrap;
 }
 
 .detail-btn {
