@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import "../styles/profile.css";
-// import "../styles/form.css";
-import "../styles/scrollbar.css";
 // import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";

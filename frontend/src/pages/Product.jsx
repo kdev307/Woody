@@ -7,8 +7,6 @@ import Loader from "../components/Loader";
 import Error from "../components/Error";
 import Tags from "../components/Tags";
 import { Star, AddShoppingCart, ArrowBack, Check } from "@mui/icons-material";
-// import "../styles/product.css";
-import "../styles/scrollbar.css";
 import { listProductDetail } from "../actions/productActions";
 import { addToCart } from "../actions/cartActions";
 // import Message from "../components/Message";

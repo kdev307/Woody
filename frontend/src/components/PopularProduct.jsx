@@ -1,6 +1,4 @@
 import React from "react";
-// import ImageLayout from "./ImageLayout";
-// import "../styles/popularProduct.css";
 import Marquee from "react-fast-marquee";
 import { Link } from "react-router-dom";
 import Tags from "./Tags";

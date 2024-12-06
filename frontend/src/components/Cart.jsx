@@ -6,8 +6,6 @@ import {
     RemoveCircle,
     AddCircle,
 } from "@mui/icons-material";
-// import "../styles/cart.css";
-import "../styles/scrollbar.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
     removeFromCart,

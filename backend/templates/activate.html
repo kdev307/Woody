@@ -1,8 +1,6 @@
-{% autoescape off %}
+{% autoescape off %} Hi {{user.name}} Please Click This Link below to verify
+your account
 
-Hi {{user.name}}
-Please Click This Link below to verify your account
-
-http://{{domain}}{% url 'activate' uidb64=uid token=token %}
+<button>http://{{domain}}{% url 'activate' uidb64=uid token=token %}</button>
 
 {% endautoescape %}

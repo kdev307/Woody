@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Cart from "./Cart";
 import Logo from "./Logo";
-// import "../styles/navbar.css"
 import ProfileContainer from "./ProfileContainer";
 import { Person, ShoppingCart } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";

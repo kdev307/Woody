@@ -10,7 +10,6 @@ import {
     Cake,
 } from "@mui/icons-material";
 import React from "react";
-// import "../styles/profile.css";
 
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../actions/userActions";

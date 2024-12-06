@@ -4,7 +4,6 @@ import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Star } from "@mui/icons-material";
-// import "../styles/store.css";
 import { Link } from "react-router-dom";
 import { listProducts } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";

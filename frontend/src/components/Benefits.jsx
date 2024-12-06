@@ -1,5 +1,4 @@
 import React from "react";
-// import "../styles/benefits.css";
 import {
     SupportAgent,
     LocalShipping,

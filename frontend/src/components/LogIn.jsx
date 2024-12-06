@@ -1,8 +1,5 @@
 import { Login, Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
-// import "../styles/profile.css";
-// import "../styles/form.css";
-import "../styles/scrollbar.css";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
 import Message from "./Message";

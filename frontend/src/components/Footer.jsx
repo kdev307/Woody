@@ -8,7 +8,6 @@ import {
     Twitter,
 } from "@mui/icons-material";
 import { LocationOn, Mail, Smartphone } from "@mui/icons-material";
-// import "../styles/footer.css";
 
 function Footer() {
     return (
