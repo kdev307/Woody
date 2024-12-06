@@ -1,14 +1,27 @@
 import React from "react";
-import "../styles/common.css";
-import "../styles/hero.css";
 import { Link } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+// import "../styles/hero.css"
 
 function Hero() {
     return (
         <>
-            <div className="hero" style={{ background: 'url("/images/hero.png")' }}>
-                <h1 className="hero-title">Woody Inspired by Nature, Designed for Life</h1>
-                <Link to="/store" className="hero-btn">
+            <div
+                className="hero bg- bg-cover bg-center h-screen flex flex-col justify-start items-center text-center gap-2 -mt-[10.85rem] "
+                style={{ backgroundImage: 'url("/images/hero.png")' }}
+            >
+                <h1 className="hero-title p-8  mt-[16rem] text-9xl font-semibold">
+                    From Nature's Heart to Your Home
+                </h1>
+                <p className="hero-desc p-4 text-2xl font-medium text-center">
+                    {/* Discover timeless designs. Experience the harmony of nature in every
+          piece. */}
+                    Experience the perfect blend of style, comfort, and nature.
+                </p>
+                <Link
+                    to="/store"
+                    className="hero-btn text-white bg-[#560000] p-4 rounded-xl w-[12%] font-semibold text-2xl text-center mt-[1rem] mb-8 mx-16 hover:bg-white hover:text-[#560000] transition-all ease-in-out duration-1000"
+                >
                     Shop Now
                 </Link>
             </div>

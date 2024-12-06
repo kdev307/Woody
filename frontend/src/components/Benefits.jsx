@@ -1,6 +1,5 @@
 import React from "react";
-import "../styles/common.css";
-import "../styles/benefits.css";
+// import "../styles/benefits.css";
 import {
     SupportAgent,
     LocalShipping,
@@ -58,15 +57,26 @@ function Benefits() {
 
     return (
         <>
-            <div className="benefits-section">
-                <h2 className="sub-heading">Benefits for your Expendiency</h2>
-                <div className="benefits">
+            <div className="benefits-section bg-[#c2daba] p-4 m-auto">
+                <h2 className="sub-heading text-2xl font-semibold text-center mb-8 py-8">
+                    Benefits for your Expendiency
+                </h2>
+                <div className="benefits grid grid-cols-4 items-center justify-center gap-y-16 mb-12">
                     {benefitsList.map((benefit, index) => {
                         return (
-                            <div className="benefit" key={index}>
-                                <div className="icon">{benefit.icon}</div>
-                                <h3 className="benefit-title">{benefit.title}</h3>
-                                <p className="benefit-desc">{benefit.description}</p>
+                            <div
+                                className="benefit flex flex-col text-center"
+                                key={index}
+                            >
+                                <div className="icon text-center">
+                                    {benefit.icon}
+                                </div>
+                                <h3 className="benefit-title text-2xl">
+                                    {benefit.title}
+                                </h3>
+                                <p className="benefit-desc">
+                                    {benefit.description}
+                                </p>
                             </div>
                         );
                     })}

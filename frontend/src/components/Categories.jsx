@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import "../styles/common.css";
-import "../styles/categories.css";
+import React, { useState, useEffect } from "react";
+// import "../styles/categories.css";
+import "../styles/scrollbar.css";
 import { Link } from "react-router-dom";
+import Loader from "./Loader";
 
 function Categories() {
     const categoriesData = [
@@ -86,39 +87,73 @@ function Categories() {
     ];
 
     const [selectedCategory, setSelectedCategory] = useState(categoriesData[0]);
+    const [loading, setLoading] = useState(true);
 
     const handleCategoryFilter = (category) => {
         setSelectedCategory(category);
+        setLoading(true);
     };
+
+    const handleImageLoad = () => {
+        setLoading((prevLoading) => prevLoading - 1);
+    };
+    useEffect(() => {
+        // if (selectedCategory.images.length === 0) return;
+        setLoading(selectedCategory.images.length);
+    }, [selectedCategory]);
 
     return (
         <>
-            <div className="categories-section">
-                <h2 className="sub-heading">Explore By Category</h2>
-                <div className="category-container">
-                    <ul className="category-options">
+            <div className="categories-section bg-white p-8 mt-14">
+                <h2 className="sub-heading text-2xl font-semibold text-center mb-11">
+                    Explore By Category
+                </h2>
+                <div className="category-container grid grid-cols-[1fr_4fr] items-start justify-center gap-10 text-xl">
+                    <ul className="category-options flex flex-col items-center justify-center text-center p-8 gap-8">
                         {categoriesData.map((category) => {
                             return (
                                 <li
                                     key={category.name}
-                                    className={`category ${
-                                        selectedCategory.name === category.name ? "active" : ""
-                                    }`}
-                                    onClick={() => handleCategoryFilter(category)}
+                                    className={`category block cursor-pointer p-4 w-full rounded-lg transition-colors duration-300 ${
+                                        selectedCategory.name === category.name
+                                            ? "active font-bold bg-[#e8f6e8] text-[#014210] "
+                                            : "hover:bg-[#d0f4d0]"
+                                    } hover:font-semibold`}
+                                    onClick={() =>
+                                        handleCategoryFilter(category)
+                                    }
                                 >
                                     {category.name}
                                 </li>
                             );
                         })}
 
-                        <Link to="/store" className="category-btn">
+                        <Link
+                            to="/store"
+                            className="category-btn p-4 bg-[#dfd] text-[#014210] font-semibold w-full rounded-lg text-xl shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:bg-[#f2d3bdc6] hover:text-[#560000] shadow-[5px_5px_10px_rgba(86, 0, 0, 0.3)] duration-300"
+                        >
                             All Categories &rarr;
                         </Link>
                     </ul>
-                    <div className="category-images">
-                        {selectedCategory.images.map((image, index) => {
-                            return <img key={index} src={image} alt={selectedCategory.name} />;
-                        })}
+                    {loading > 0 && (
+                        <div className="category-images scrollbar p-8 grid grid-cols-1 items-center justify-center gap-y-10 max-h-[38rem]">
+                            <Loader />
+                        </div>
+                    )}
+                    <div
+                        className={`category-images scrollbar p-8 grid grid-cols-2 items-center justify-center gap-y-10 max-h-[38rem] overflow-y-scroll ${
+                            loading > 0 ? "hidden" : "block"
+                        }`}
+                    >
+                        {selectedCategory.images.map((image, index) => (
+                            <img
+                                key={index}
+                                src={image}
+                                alt={selectedCategory.name}
+                                onLoad={handleImageLoad}
+                                className="w-[38rem] h-72 rounded-lg transition-all duration-1000 hover:scale-110 shadow-[5px_5px_10px_rgba(86,0,0,0.3)] hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)]"
+                            />
+                        ))}
                     </div>
                 </div>
             </div>

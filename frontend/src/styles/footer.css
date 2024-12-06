@@ -71,8 +71,6 @@
         "main-info main-info account-links category-links info-links help-links"
         "main-info main-info newsletter newsletter credit credit"
         "main-info main-info newsletter newsletter copyright copyright";
-    align-items: center;
-    justify-content: center;
 }
 
 .main-info {

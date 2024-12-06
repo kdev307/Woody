@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import "../styles/common.css";
-import "../styles/profile.css";
-import "../styles/form.css";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+// import "../styles/profile.css";
+// import "../styles/form.css";
+import "../styles/scrollbar.css";
+// import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
 import Message from "./Message";
-import { AppRegistration, ArrowBack, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+    AppRegistration,
+    Visibility,
+    VisibilityOff,
+} from "@mui/icons-material";
 import { signUp } from "../actions/userActions";
 
 function SignUp({ onBack, onSignUpSuccess }) {
@@ -23,7 +27,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
     const [messageType, setMessageType] = useState("");
     // const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
-    const location = useLocation();
+    // const location = useLocation();
     // const redirect = location.search ? location.search.split("=")[1] : "/signUp";
 
     const userSignUp = useSelector((state) => state.userSignUp);
@@ -57,7 +61,9 @@ function SignUp({ onBack, onSignUpSuccess }) {
         setShowConfirmPassword(!showConfirmPassword);
     };
 
-    const validEmail = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    const validEmail = new RegExp(
+        "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+    );
     const validPassword = new RegExp("^(?=.*[A-Za-z])(?=.*[0-9]).{8,}$");
 
     const handleSubmit = (e) => {
@@ -86,21 +92,32 @@ function SignUp({ onBack, onSignUpSuccess }) {
 
     return (
         <>
-            <div className="sign-up-container">
-                <div className="form-heading">
-                    <h1 className="signup-title">Sign Up</h1>
-                    <AppRegistration style={{ fontSize: "2.4rem" }} className="form-icon" />
+            <div className="sign-up-container mt-20">
+                <div className="form-heading flex items-center justify-evenly -mt-8">
+                    <h1 className="signup-title text-4xl text-center text-[#014210] font-bold">
+                        Sign Up
+                    </h1>
+                    <AppRegistration
+                        style={{ fontSize: "2.4rem", color: "#014210" }}
+                        className="form-icon"
+                    />
                 </div>
-                {message && <Message message={message} messageType={messageType} />}
+                {message && (
+                    <Message message={message} messageType={messageType} />
+                )}
 
-                <form action="post" className="form-container" onSubmit={handleSubmit}>
-                    <div className="form-inputs">
-                        <div>
+                <form
+                    action="post"
+                    className="form-container flex flex-col items-center justify-center text-left rounded-xl"
+                    onSubmit={handleSubmit}
+                >
+                    <div className="form-inputs scrollbar w-full max-h-72 overflow-y-auto my-6 mx-auto p-6">
+                        <div className="flex items-center justify-center gap-2">
                             <input
                                 type="text"
                                 name="firstName"
                                 id="firstName"
-                                className="form-input"
+                                className="form-input w-full p-4 my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                                 placeholder="Enter your First Name"
@@ -110,7 +127,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 type="text"
                                 name="lastName"
                                 id="lastName"
-                                className="form-input"
+                                className="form-input w-full p-4 my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6 "
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
                                 placeholder="Enter your Last Name"
@@ -121,18 +138,18 @@ function SignUp({ onBack, onSignUpSuccess }) {
                             type="email"
                             name="email"
                             id="email"
-                            className="form-input"
+                            className="form-input w-full p-4 my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6 "
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your Email Address"
                             required
                         />
-                        <div>
+                        <div className="flex items-center justify-center gap-2">
                             <input
                                 type={showPassword ? "text" : "password"}
                                 name="password"
                                 id="password"
-                                className="form-input"
+                                className="form-input w-full p-4 my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6 "
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Enter your Password"
@@ -142,12 +159,18 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 type="button"
                                 className="show-password-btn"
                                 onClick={togglePasswordVisibility}
-                                aria-label={showPassword ? "Hide Password" : "Show Password"}
+                                aria-label={
+                                    showPassword
+                                        ? "Hide Password"
+                                        : "Show Password"
+                                }
                             >
                                 {showPassword ? (
                                     <Visibility style={{ color: "#014210" }} />
                                 ) : (
-                                    <VisibilityOff style={{ color: "#014210" }} />
+                                    <VisibilityOff
+                                        style={{ color: "#014210" }}
+                                    />
                                 )}
                             </button>
                         </div>
@@ -155,14 +178,16 @@ function SignUp({ onBack, onSignUpSuccess }) {
                             <b>*</b>Password must have a <b>minimum length of 8</b> and include{" "}
                             <b>[1-9][a-z][A-Z][_$@!#%^&*]</b>
                         </small> */}
-                        <div>
+                        <div className="flex items-center justify-center gap-2">
                             <input
                                 type={showConfirmPassword ? "text" : "password"}
                                 name="confirmPassword"
                                 id="confirmPassword"
-                                className="form-input"
+                                className="form-input w-full p-4 my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6 "
                                 value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                onChange={(e) =>
+                                    setConfirmPassword(e.target.value)
+                                }
                                 placeholder="Re-enter your Password"
                                 required
                             />
@@ -170,25 +195,39 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 type="button"
                                 className="show-password-btn"
                                 onClick={toggleConfirmPasswordVisibility}
-                                aria-label={showConfirmPassword ? "Hide Password" : "Show Password"}
+                                aria-label={
+                                    showConfirmPassword
+                                        ? "Hide Password"
+                                        : "Show Password"
+                                }
                             >
                                 {showConfirmPassword ? (
                                     <Visibility style={{ color: "#014210" }} />
                                 ) : (
-                                    <VisibilityOff style={{ color: "#014210" }} />
+                                    <VisibilityOff
+                                        style={{ color: "#014210" }}
+                                    />
                                 )}
                             </button>
                         </div>
                     </div>
                     {loading && <Loader />}
-                    <button className="form-btn log-btn sign-up-btn" type="submit">
+                    <button
+                        className="form-btn log-btn sign-up-btn flex items-center justify-center gap-4 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-2xl font-semibold hover:bg-[#014210] hover:text-white transition-all"
+                        type="submit"
+                    >
                         Sign Up
                     </button>
                 </form>
-                <ArrowBack
-                    style={{ fontSize: "2.4rem", cursor: "pointer", marginTop: "1.2rem" }}
+                {/* <ArrowBack
+                    style={{
+                        fontSize: "2.4rem",
+                        cursor: "pointer",
+                        marginTop: "-60rem",
+                        marginLeft: "1rem",
+                    }}
                     onClick={onBack}
-                />
+                /> */}
             </div>
         </>
     );

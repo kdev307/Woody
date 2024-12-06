@@ -1,6 +1,6 @@
 import React from "react";
-import "../styles/common.css";
-import "../styles/testimonials.css";
+// import "../styles/testimonials.css";
+import "../styles/scrollbar.css";
 import { FormatQuote } from "@mui/icons-material";
 
 function Testimonials() {
@@ -39,8 +39,10 @@ function Testimonials() {
 
     return (
         <>
-            <div className="testimonials-section">
-                <h2 className="sub-heading">Testimonials</h2>
+            <div className="testimonials-section bg-white p-8">
+                <h2 className="sub-heading text-2xl font-semibold text-center pt-8">
+                    Testimonials
+                </h2>
                 {/* <p className="quote">&ldquo;</p> */}
                 <FormatQuote
                     style={{
@@ -52,10 +54,13 @@ function Testimonials() {
                         marginTop: "1.2rem",
                     }}
                 />
-                <ul className="testimonials">
+                <ul className="scrollbar testimonials flex flex-col text-center items-center h-[20rem] overflow-y-scroll gap-5 -mt-48 scroll-smooth snap-y snap-mandatory">
                     {testimonialList.map((testimonial, index) => {
                         return (
-                            <li className="testimonial-item" key={index}>
+                            <li
+                                className="testimonial-item flex items-center justify-center gap-6 p-5 snap-start"
+                                key={index}
+                            >
                                 <Testimonial testimonial={testimonial} />
                             </li>
                         );
@@ -80,11 +85,19 @@ function Testimonial({ testimonial }) {
     return (
         <>
             <div className="testimonial-image">
-                <img src={testimonial.image} alt={testimonial.name} />
+                <img
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    className=" rounded-[50%] w-60 shadow-[5px_5px_10px_rgba(83,0,0,0.3)] hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:scale-110 transition-transform duration-1000"
+                />
             </div>
-            <div className="testimonial-info">
-                <p className="testimonial-review">{testimonial.review}</p>
-                <h3 className="testimonial-name">{testimonial.name}</h3>
+            <div className="testimonial-info w-[30rem] text-xl text-left flex flex-col pt-5">
+                <p className="testimonial-review font-normal text-justify text-[#560000]">
+                    {testimonial.review}
+                </p>
+                <h3 className="testimonial-name font-bold text-right mt-4 text-[#014210]">
+                    {testimonial.name}
+                </h3>
             </div>
         </>
     );

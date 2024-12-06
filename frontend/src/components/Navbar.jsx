@@ -1,109 +1,161 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Cart from "./Cart";
 import Logo from "./Logo";
+// import "../styles/navbar.css"
 import ProfileContainer from "./ProfileContainer";
 import { Person, ShoppingCart } from "@mui/icons-material";
-import "../styles/common.css";
-import "../styles/navbar.css";
 import { NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { Link } from "react-scroll";
 
 function Navbar() {
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
-    const dispatch = useDispatch();
     const cartItemsList = useSelector((state) => state.cart.cartItemsList);
-    const totalQuantity = cartItemsList.reduce((acc, item) => acc + item.qty, 0);
+    const totalQuantity = cartItemsList.reduce(
+        (acc, item) => acc + item.qty,
+        0
+    );
+
     const [isCartOpen, setIsCartOpen] = useState(false);
     const handleCartToggle = () => {
         setIsCartOpen((prev) => !prev);
     };
+
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const handleProfileToggle = () => {
         setIsProfileOpen((prev) => !prev);
     };
+
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 50) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
     return (
-        <div>
-            <header className="head">
+        <>
+            <header
+                className={`flex items-center justify-evenly bg-[#b8d6c0] brightness-175 py-4 top-0 left-0 w-full z-50 transition-all ease-in-out duration-300 ${
+                    scrolled
+                        ? "fixed bg-transparent backdrop-blur-md shadow-[5px_5px_10px_#b8d6c0] h-36"
+                        : "bg-[#b8d6c0]"
+                }`}
+            >
+                {/* <header className="flex items-center justify-start bg-transparent brightness-175 py-4 px-52 gap-56"> */}
+
                 <NavLink to="/">
                     <Logo />
                 </NavLink>
-                <nav className="main-nav">
-                    <ul className="main-nav-list">
+
+                <nav className="font-medium text-black text-xl">
+                    <ul className="flex gap-7 items-center justify-center py-4">
                         <li>
-                            <NavLink to="/" className="main-nav-link">
+                            <Link
+                                to="hero"
+                                smooth={true}
+                                duration={500}
+                                className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
+                            >
                                 Home
-                            </NavLink>
-                        </li>
-                        {/* <li>
-                                <NavLink to="#" className="main-nav-link">
-                                    About
-                                </NavLink>
-                            </li> */}
-                        <li>
-                            <NavLink to="" className="main-nav-link">
-                                Category
-                            </NavLink>
+                            </Link>
                         </li>
                         <li>
-                            <NavLink to="" className="main-nav-link">
+                            <Link
+                                to="categories"
+                                smooth={true}
+                                duration={500}
+                                className="cursor-pointer"
+                            >
+                                Categories
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="popularProducts"
+                                smooth={true}
+                                duration={500}
+                                className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
+                            >
                                 Products
-                            </NavLink>
+                            </Link>
                         </li>
-                        {/* <li>
-                                <NavLink to="#" className="main-nav-link">
-                                    Benefits
-                                </NavLink>
-                            </li> */}
                         <li>
-                            <NavLink to="" className="main-nav-link">
+                            <Link
+                                to="testimonials"
+                                smooth={true}
+                                duration={500}
+                                className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
+                            >
                                 Testimonials
-                            </NavLink>
+                            </Link>
                         </li>
                         <li>
-                            <NavLink to="/store" className="main-nav-link">
+                            <NavLink
+                                to="/store"
+                                className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
+                            >
                                 Store
                             </NavLink>
                         </li>
                     </ul>
                 </nav>
-                <nav className="user-nav">
-                    <ul className="user-nav-list">
+
+                <nav>
+                    <ul className="flex gap-7 items-center">
                         <li>
-                            <button className="main-nav-link profile-btn">
+                            <button
+                                className="text-black text-xl hover:text-[#006000] transition-colors"
+                                onClick={handleProfileToggle}
+                            >
                                 {userInfo ? (
-                                    <strong onClick={handleProfileToggle}>{userInfo.name}</strong>
+                                    <strong className="font-merriweather text-2xl">
+                                        {userInfo.name}
+                                    </strong>
                                 ) : (
-                                    <Person
-                                        style={{ fontSize: "2rem" }}
-                                        onClick={handleProfileToggle}
-                                    />
+                                    <Person style={{ fontSize: "2rem" }} />
                                 )}
                             </button>
                         </li>
                         <li>
-                            <button className="main-nav-link profile-btn">
-                                <ShoppingCart
-                                    style={{ fontSize: "2rem" }}
-                                    onClick={handleCartToggle}
-                                />
-                                <p className="cart-items-count">{userInfo ? totalQuantity : ""}</p>
+                            <button
+                                className="relative text-black hover:text-[#006000] transition-colors "
+                                onClick={handleCartToggle}
+                            >
+                                <ShoppingCart style={{ fontSize: "2rem" }} />
+                                <p className="absolute -top-1 left-[60%] text-black hover:text-[#006000] transition-colors duration-200 text-xl font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                    {userInfo ? totalQuantity : ""}
+                                </p>
                             </button>
                         </li>
                     </ul>
                 </nav>
             </header>
+
             {isCartOpen && (
-                <Cart handleCartToggle={handleCartToggle} className={isCartOpen ? "open" : ""} />
+                <Cart handleCartToggle={handleCartToggle} isOpen={isCartOpen} />
             )}
             {isProfileOpen && (
                 <ProfileContainer
                     handleProfileToggle={handleProfileToggle}
-                    className={isProfileOpen ? "open" : ""}
+                    // className={isProfileOpen ? "open" : ""}
+                    isOpen={isProfileOpen}
                     logInStatus={false}
                 />
             )}
-        </div>
+        </>
     );
 }
 
