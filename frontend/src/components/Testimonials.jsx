@@ -47,14 +47,14 @@ function Testimonials() {
                 <FormatQuote
                     style={{
                         fontSize: "15rem",
-                        transform: "rotateZ(180deg) translate(200%,50%)",
+                        transform: "rotateZ(180deg) translate(-8rem, 8rem)",
                         color: "#014210",
                         padding: "1.2rem",
                         // paddingTop: "2.4rem",
                         marginTop: "1.2rem",
                     }}
                 />
-                <ul className="scrollbar testimonials flex flex-col text-center items-center h-[20rem] overflow-y-scroll gap-5 -mt-48 scroll-smooth snap-y snap-mandatory">
+                <ul className="scrollbar testimonials flex flex-col text-center items-center h-[20rem] overflow-y-scroll gap-7 -mt-48 scroll-smooth snap-y snap-mandatory">
                     {testimonialList.map((testimonial, index) => {
                         return (
                             <li
