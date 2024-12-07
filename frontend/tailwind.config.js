@@ -17,6 +17,13 @@ module.exports = {
                 "custom-gradient":
                     "linear-gradient(to right, #98bd8d, #c2daba, #fff, #c2daba, #98bd8d)",
             },
+            screens: {
+                sm: "640px",
+                md: "768px",
+                lg: "1024px",
+                xl: "1280px",
+                "2xl": "1536px",
+            },
         },
     },
     plugins: [scrollbar({ nocompatible: true })],

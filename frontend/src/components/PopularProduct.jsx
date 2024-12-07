@@ -204,7 +204,10 @@ function PopularProduct() {
 
     return (
         <>
-            <div className="popular-products-section m-auto bg-custom-gradient p-8 mt-12 flex flex-col items-center justify-center">
+            <div
+                className="popular-products-section m-auto bg-custom-gradient p-8 mt-12 flex flex-col items-center justify-center"
+                id="popularProducts"
+            >
                 <h2 className="sub-heading text-2xl font-semibold text-center mb-6 py-6">
                     Popular Products
                 </h2>

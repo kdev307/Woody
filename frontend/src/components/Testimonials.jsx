@@ -39,7 +39,10 @@ function Testimonials() {
 
     return (
         <>
-            <div className="testimonials-section bg-white p-8">
+            <div
+                className="testimonials-section bg-white p-8"
+                id="testimonials"
+            >
                 <h2 className="sub-heading text-2xl font-semibold text-center pt-8">
                     Testimonials
                 </h2>

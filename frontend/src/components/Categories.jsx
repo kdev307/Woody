@@ -102,7 +102,10 @@ function Categories() {
 
     return (
         <>
-            <div className="categories-section bg-white p-8 mt-14">
+            <div
+                className="categories-section bg-white p-8 mt-14"
+                id="categories"
+            >
                 <h2 className="sub-heading text-2xl font-semibold text-center mb-11">
                     Explore By Category
                 </h2>

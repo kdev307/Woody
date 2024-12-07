@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Cart from "./Cart";
 import Logo from "./Logo";
 import ProfileContainer from "./ProfileContainer";
-import { Person, ShoppingCart } from "@mui/icons-material";
+import { Person, ShoppingCart, Close, Menu } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Link } from "react-scroll";
@@ -44,29 +44,48 @@ function Navbar() {
         };
     }, []);
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const handleMenuToggle = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
     return (
         <>
             <header
-                className={`flex items-center justify-evenly bg-[#b8d6c0] brightness-175 py-4 top-0 left-0 w-full z-50 transition-all ease-in-out duration-300 ${
+                className={`flex flex-col-reverse lg:flex-row items-end lg:items-center px-12 h-fit justify-evenly lg:px-0 bg-[#b8d6c0] lg:h-[9.6rem]  brightness-175 py-4 top-0 left-0 w-full z-50 transition-all ease-in-out duration-300 ${
                     scrolled
-                        ? "fixed bg-transparent backdrop-blur-md shadow-[5px_5px_10px_#b8d6c0] h-36"
+                        ? "relative lg:fixed lg:bg-transparent backdrop-blur-md shadow-[5px_5px_10px_#b8d6c0] lg:h-[8.8rem]"
                         : "bg-[#b8d6c0]"
+                } ${
+                    isMenuOpen
+                        ? "fixed h-fit bg-transparent lg:bg-[#fff2] "
+                        : ""
                 }`}
             >
                 {/* <header className="flex items-center justify-start bg-transparent brightness-175 py-4 px-52 gap-56"> */}
 
-                <NavLink to="/">
+                <NavLink
+                    to="/"
+                    className={`${!isMenuOpen ? "hidden" : ""} lg:block`}
+                >
                     <Logo />
                 </NavLink>
 
-                <nav className="font-medium text-black text-xl">
-                    <ul className="flex gap-7 items-center justify-center py-4">
+                <nav
+                    className={`${
+                        !isMenuOpen ? "hidden" : ""
+                    } font-medium text-black text-xl`}
+                >
+                    <ul className="flex flex-col lg:flex-row gap-7 items-center justify-center py-4">
                         <li>
                             <Link
                                 to="hero"
                                 smooth={true}
                                 duration={500}
                                 className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
+                                activeClass="text-[#006000] font-bold"
+                                spy={true}
+                                exact="true"
                             >
                                 Home
                             </Link>
@@ -76,7 +95,10 @@ function Navbar() {
                                 to="categories"
                                 smooth={true}
                                 duration={500}
-                                className="cursor-pointer"
+                                className="cursor-pointer hover:text-[#006000] hover:underline transition-colors active:text-[#006000]"
+                                activeClass="text-[#006000] font-bold"
+                                spy={true}
+                                exact="true"
                             >
                                 Categories
                             </Link>
@@ -87,6 +109,9 @@ function Navbar() {
                                 smooth={true}
                                 duration={500}
                                 className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
+                                activeClass="text-[#006000] font-bold"
+                                spy={true}
+                                exact="true"
                             >
                                 Products
                             </Link>
@@ -97,6 +122,9 @@ function Navbar() {
                                 smooth={true}
                                 duration={500}
                                 className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
+                                activeClass="text-[#006000] font-bold"
+                                spy={true}
+                                exact="true"
                             >
                                 Testimonials
                             </Link>
@@ -112,8 +140,8 @@ function Navbar() {
                     </ul>
                 </nav>
 
-                <nav>
-                    <ul className="flex gap-7 items-center">
+                <nav className={`${!isMenuOpen ? "hidden" : ""} lg:block`}>
+                    <ul className="flex gap-7 items-center 2xl:text-2xl">
                         <li>
                             <button
                                 className="text-black text-xl hover:text-[#006000] transition-colors"
@@ -124,7 +152,10 @@ function Navbar() {
                                         {userInfo.name}
                                     </strong>
                                 ) : (
-                                    <Person style={{ fontSize: "2rem" }} />
+                                    <Person
+                                        className="icon"
+                                        style={{ fontSize: "2.4rem" }}
+                                    />
                                 )}
                             </button>
                         </li>
@@ -133,7 +164,10 @@ function Navbar() {
                                 className="relative text-black hover:text-[#006000] transition-colors "
                                 onClick={handleCartToggle}
                             >
-                                <ShoppingCart style={{ fontSize: "2rem" }} />
+                                <ShoppingCart
+                                    className="icon"
+                                    style={{ fontSize: "2.4rem" }}
+                                />
                                 <p className="absolute -top-1 left-[60%] text-black hover:text-[#006000] transition-colors duration-200 text-xl font-bold rounded-full w-5 h-5 flex items-center justify-center">
                                     {userInfo ? totalQuantity : ""}
                                 </p>
@@ -141,6 +175,19 @@ function Navbar() {
                         </li>
                     </ul>
                 </nav>
+                <button
+                    className="relative flex justify-end text-black hover:text-[#006000] transition-colors lg:hidden"
+                    onClick={handleMenuToggle}
+                >
+                    {isMenuOpen ? (
+                        <Close
+                            className="icon"
+                            style={{ fontSize: "2.4rem" }}
+                        />
+                    ) : (
+                        <Menu className="icon" style={{ fontSize: "2.4rem" }} />
+                    )}
+                </button>
             </header>
 
             {isCartOpen && (

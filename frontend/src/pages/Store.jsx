@@ -43,7 +43,7 @@ export default function Store() {
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
     const [sortBy, setSortBy] = useState("alphabetical");
-    const [activeSort, setActiveSort] = useState(null);
+    const [activeSort, setActiveSort] = useState("alphabetical");
 
     const handleCategoryFilter = (category) => {
         setSelectedCategory((prevCategory) =>

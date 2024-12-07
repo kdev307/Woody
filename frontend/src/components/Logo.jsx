@@ -6,7 +6,7 @@ function Logo() {
             <div className="font-merriweather font-semibold text-[#560000] text-base tracking-[2px] mt-1 mb-[-0.8rem]">
                 Inspired by Nature
             </div>
-            <div className="font-playfair text-8xl font-medium text-[#014210]">
+            <div className="font-playfair text-8xl font-semibold text-[#014210]">
                 Woody
             </div>
             <div className="font-merriweather font-semibold text-[#560000] text-base tracking-[2px] mt-[0.2rem] mb-[0.2rem]">

@@ -5,8 +5,9 @@ function Hero() {
     return (
         <>
             <div
-                className="hero bg- bg-cover bg-center h-screen flex flex-col justify-start items-center text-center gap-2 -mt-[10.85rem] "
+                className="hero bg-cover bg-center w-full h-lvh flex flex-col justify-start items-center text-center gap-2 -mt-[9.6rem] "
                 style={{ backgroundImage: 'url("/images/hero.png")' }}
+                id="hero"
             >
                 <h1 className="hero-title p-8  mt-[16rem] text-9xl font-semibold">
                     From Nature's Heart to Your Home
