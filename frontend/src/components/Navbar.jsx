@@ -66,7 +66,7 @@ function Navbar() {
 
                 <NavLink
                     to="/"
-                    className={`${
+                    className={`lg:w-60  ${
                         !isMenuOpen ? "hidden" : "order-2 self-center"
                     } lg:block`}
                 >
@@ -76,7 +76,7 @@ function Navbar() {
                 <nav
                     className={`${
                         !isMenuOpen ? "hidden" : "order-3 self-center"
-                    } lg:block font-medium text-black text-xl`}
+                    } lg:block font-medium text-black text-xl 2`}
                 >
                     <ul className="flex flex-col lg:flex-row gap-7 items-center justify-center py-4">
                         <li>
@@ -147,7 +147,7 @@ function Navbar() {
                         !isMenuOpen ? "hidden" : "order-4 self-center pr-8"
                     } lg:block`}
                 >
-                    <ul className="flex gap-7 items-center 2xl:text-2xl">
+                    <ul className="flex xl:gap-5 items-center 2xl:text-2xl">
                         <li>
                             <button
                                 className="text-black text-xl hover:text-[#006000] transition-colors"
