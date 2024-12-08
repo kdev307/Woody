@@ -78,9 +78,9 @@ function Product({ params }) {
             <Navbar />
             <Link
                 to={`/store`}
-                className="arrow-btn absolute left-8 my-8 px-4 py-2 bg-[#e4efe4]  text-[#560000] text-2xl font-bold rounded-full border-2 border-[#560000] transition-all ease-in duration-1000"
+                className="arrow-btn absolute left-8 my-8 px-4 py-2  text-[#560000] text-2xl font-bold"
             >
-                <ArrowBack style={{ fontSize: "2.4rem" }} /> Go Back
+                <ArrowBack style={{ fontSize: "2.4rem" }} />
             </Link>
             {loading ? (
                 <Loader />

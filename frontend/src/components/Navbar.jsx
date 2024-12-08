@@ -52,13 +52,13 @@ function Navbar() {
     return (
         <>
             <header
-                className={`flex flex-col-reverse lg:flex-row items-end lg:items-center px-12 h-fit justify-evenly lg:px-0 bg-[#b8d6c0] lg:h-[9.6rem]  brightness-175 py-4 top-0 left-0 w-full z-50 transition-all ease-in-out duration-300 ${
+                className={`flex flex-col lg:flex-row items-end lg:items-center px-12 h-fit lg:justify-evenly lg:px-0 bg-[#b8d6c0] lg:h-[9.6rem]  brightness-175 py-4 top-0 left-0 w-full z-50 transition-all ease-in-out duration-300 ${
                     scrolled
-                        ? "relative lg:fixed lg:bg-transparent backdrop-blur-md shadow-[5px_5px_10px_#b8d6c0] lg:h-[8.8rem]"
+                        ? "fixed lg:fixed bg-transparent backdrop-blur-md shadow-[5px_5px_10px_#b8d6c0] lg:h-[8.8rem]"
                         : "bg-[#b8d6c0]"
                 } ${
                     isMenuOpen
-                        ? "fixed h-fit bg-transparent lg:bg-[#fff2] "
+                        ? "fixed h-full shadow-none bg-[#fff2] backdrop-blur-md items-end justify-between"
                         : ""
                 }`}
             >
@@ -66,15 +66,17 @@ function Navbar() {
 
                 <NavLink
                     to="/"
-                    className={`${!isMenuOpen ? "hidden" : ""} lg:block`}
+                    className={`${
+                        !isMenuOpen ? "hidden" : "order-2 self-center"
+                    } lg:block`}
                 >
                     <Logo />
                 </NavLink>
 
                 <nav
                     className={`${
-                        !isMenuOpen ? "hidden" : ""
-                    } font-medium text-black text-xl`}
+                        !isMenuOpen ? "hidden" : "order-3 self-center"
+                    } lg:block font-medium text-black text-xl`}
                 >
                     <ul className="flex flex-col lg:flex-row gap-7 items-center justify-center py-4">
                         <li>
@@ -140,7 +142,11 @@ function Navbar() {
                     </ul>
                 </nav>
 
-                <nav className={`${!isMenuOpen ? "hidden" : ""} lg:block`}>
+                <nav
+                    className={`${
+                        !isMenuOpen ? "hidden" : "order-4 self-center pr-8"
+                    } lg:block`}
+                >
                     <ul className="flex gap-7 items-center 2xl:text-2xl">
                         <li>
                             <button
@@ -181,7 +187,7 @@ function Navbar() {
                 >
                     {isMenuOpen ? (
                         <Close
-                            className="icon"
+                            className="icon order-1 self-end"
                             style={{ fontSize: "2.4rem" }}
                         />
                     ) : (
