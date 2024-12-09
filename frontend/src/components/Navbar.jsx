@@ -30,7 +30,7 @@ function Navbar() {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 50) {
+            if (window.scrollY > 100) {
                 setScrolled(true);
             } else {
                 setScrolled(false);
@@ -52,13 +52,13 @@ function Navbar() {
     return (
         <>
             <header
-                className={`flex flex-col lg:flex-row items-end lg:items-center px-12 h-fit lg:justify-evenly lg:px-0 bg-[#b8d6c0] lg:h-[9.6rem]  brightness-175 py-4 top-0 left-0 w-full z-50 transition-all ease-in-out duration-300 ${
+                className={`flex items-center px-12 h-fit sm_tab:pr-12 justify-evenly lg_tab:justify-between lg_tab:px-16 sm_tab:px-0  brightness-175 pt-8 top-0 left-0 w-full z-50 transition-all ease-in-out duration-300 ${
                     scrolled
-                        ? "fixed lg:fixed bg-transparent backdrop-blur-md shadow-[5px_5px_10px_#b8d6c0] lg:h-[8.8rem]"
-                        : "bg-[#b8d6c0]"
+                        ? "fixed bg-transparent backdrop-blur-md shadow-[5px_5px_10px_#b8d6c0] h-[8.8rem]"
+                        : ""
                 } ${
                     isMenuOpen
-                        ? "fixed h-full shadow-none bg-[#fff2] backdrop-blur-md items-end justify-between"
+                        ? "fixed lg_tab:h-full lg_tab:flex-col shadow-none bg-[#fff2] backdrop-blur-md items-end justify-between pb-12"
                         : ""
                 }`}
             >
@@ -66,26 +66,28 @@ function Navbar() {
 
                 <NavLink
                     to="/"
-                    className={`lg:w-60  ${
-                        !isMenuOpen ? "hidden" : "order-2 self-center"
-                    } lg:block`}
+                    className={` ${
+                        !isMenuOpen
+                            ? "sm_tab:hidden"
+                            : "block order-2 self-center"
+                    } `}
                 >
                     <Logo />
                 </NavLink>
 
                 <nav
                     className={`${
-                        !isMenuOpen ? "hidden" : "order-3 self-center"
-                    } lg:block font-medium text-black text-xl 2`}
+                        !isMenuOpen ? "lg_tab:hidden" : "order-3 self-center"
+                    } font-medium text-black text-4xl`}
                 >
-                    <ul className="flex flex-col lg:flex-row gap-7 items-center justify-center py-4">
+                    <ul className="flex lg_tab:flex-col gap-16 sm_desk:gap-12 items-center justify-center py-4">
                         <li>
                             <Link
                                 to="hero"
                                 smooth={true}
                                 duration={500}
                                 className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
-                                activeClass="text-[#006000] font-bold"
+                                activeClass="text-[#006000] lg_tab:bg-[#560000] lg_tab:text-white lg_tab:px-8 lg_tab:py-4 lg_tab:rounded-xl font-bold"
                                 spy={true}
                                 exact="true"
                             >
@@ -98,7 +100,7 @@ function Navbar() {
                                 smooth={true}
                                 duration={500}
                                 className="cursor-pointer hover:text-[#006000] hover:underline transition-colors active:text-[#006000]"
-                                activeClass="text-[#006000] font-bold"
+                                activeClass="text-[#006000] lg_tab:bg-[#560000] lg_tab:text-white lg_tab:px-8 lg_tab:py-4 lg_tab:rounded-xl font-bold"
                                 spy={true}
                                 exact="true"
                             >
@@ -111,7 +113,7 @@ function Navbar() {
                                 smooth={true}
                                 duration={500}
                                 className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
-                                activeClass="text-[#006000] font-bold"
+                                activeClass="text-[#006000] lg_tab:bg-[#560000] lg_tab:text-white lg_tab:px-8 lg_tab:py-4 lg_tab:rounded-xl font-bold"
                                 spy={true}
                                 exact="true"
                             >
@@ -123,8 +125,9 @@ function Navbar() {
                                 to="testimonials"
                                 smooth={true}
                                 duration={500}
+                                offset={-100}
                                 className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
-                                activeClass="text-[#006000] font-bold"
+                                activeClass="text-[#006000] lg_tab:bg-[#560000] lg_tab:text-white lg_tab:px-8 lg_tab:py-4 lg_tab:rounded-xl font-bold"
                                 spy={true}
                                 exact="true"
                             >
@@ -144,23 +147,25 @@ function Navbar() {
 
                 <nav
                     className={`${
-                        !isMenuOpen ? "hidden" : "order-4 self-center pr-8"
-                    } lg:block`}
+                        !isMenuOpen
+                            ? "lg_tab:hidden"
+                            : "order-4 self-center pr-8"
+                    }`}
                 >
-                    <ul className="flex xl:gap-5 items-center 2xl:text-2xl">
+                    <ul className="flex gap-12 sm_desk:gap-8 items-center">
                         <li>
                             <button
                                 className="text-black text-xl hover:text-[#006000] transition-colors"
                                 onClick={handleProfileToggle}
                             >
                                 {userInfo ? (
-                                    <strong className="font-merriweather text-2xl">
+                                    <strong className="font-merriweather text-5xl">
                                         {userInfo.name}
                                     </strong>
                                 ) : (
                                     <Person
                                         className="icon"
-                                        style={{ fontSize: "2.4rem" }}
+                                        style={{ fontSize: "3.2rem" }}
                                     />
                                 )}
                             </button>
@@ -172,7 +177,7 @@ function Navbar() {
                             >
                                 <ShoppingCart
                                     className="icon"
-                                    style={{ fontSize: "2.4rem" }}
+                                    style={{ fontSize: "3.2rem" }}
                                 />
                                 <p className="absolute -top-1 left-[60%] text-black hover:text-[#006000] transition-colors duration-200 text-xl font-bold rounded-full w-5 h-5 flex items-center justify-center">
                                     {userInfo ? totalQuantity : ""}
@@ -182,16 +187,16 @@ function Navbar() {
                     </ul>
                 </nav>
                 <button
-                    className="relative flex justify-end text-black hover:text-[#006000] transition-colors lg:hidden"
+                    className="relative justify-end sm_tab:ml-auto text-black hover:text-[#006000] transition-colors hidden lg_tab:flex"
                     onClick={handleMenuToggle}
                 >
                     {isMenuOpen ? (
                         <Close
                             className="icon order-1 self-end"
-                            style={{ fontSize: "2.4rem" }}
+                            style={{ fontSize: "3.2rem" }}
                         />
                     ) : (
-                        <Menu className="icon" style={{ fontSize: "2.4rem" }} />
+                        <Menu className="icon" style={{ fontSize: "3.2rem" }} />
                     )}
                 </button>
             </header>

@@ -2,7 +2,7 @@
 const scrollbar = require("tailwind-scrollbar");
 
 module.exports = {
-    content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
+    content: ["./src/**/*.{html,js,jsx,ts,tsx}", "./public/index.html"],
     theme: {
         extend: {
             fontFamily: {
@@ -18,11 +18,11 @@ module.exports = {
                     "linear-gradient(to right, #98bd8d, #c2daba, #fff, #c2daba, #98bd8d)",
             },
             screens: {
-                sm: "640px",
-                md: "768px",
-                lg: "1024px",
-                xl: "1280px",
-                "2xl": "1536px",
+                sm_desk: { max: "84em" }, // small desktops (Below 1344px)
+                lg_tab: { max: "75em" }, // landscape tablets (Below 1200px)
+                tab: { max: "59em" }, // tablets (Below 944px)
+                sm_tab: { max: "44em" }, // small tablets (Below 704px)
+                mob: { max: "34em" }, // phones (Below 544px)
             },
         },
     },
