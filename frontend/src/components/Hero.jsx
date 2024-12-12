@@ -9,7 +9,7 @@ function Hero() {
                 style={{ backgroundImage: 'url("/images/hero.png")' }}
                 id="hero"
             >
-                <h1 className="hero-title p-8 mt-96 text-8xl lg_tab:text-7xl sm_tab:text-[4.8rem] font-bold mob:mt-84">
+                <h1 className="hero-title p-8 mt-96 text-8xl lg_tab:text-7xl sm_tab:text-[4.8rem] font-bold mob:mt-[22rem]">
                     From Nature's Heart to Your Home
                 </h1>
                 <p className="hero-desc p-8 lg_tab:-mt-8 text-4xl font-medium text-center text-black">

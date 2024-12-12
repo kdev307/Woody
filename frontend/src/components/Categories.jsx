@@ -106,16 +106,16 @@ function Categories() {
                 className="categories-section bg-white p-8 mt-14"
                 id="categories"
             >
-                <h2 className="sub-heading text-2xl font-semibold text-center mb-11">
+                <h2 className="sub-heading text-6xl font-bold text-center mb-20">
                     Explore By Category
                 </h2>
-                <div className="category-container grid grid-cols-[1fr_4fr] items-start justify-center gap-10 text-xl">
-                    <ul className="category-options flex flex-col items-center justify-center text-center p-8 gap-8">
+                <div className="category-container grid grid-cols-[1fr_4fr] lg_tab:grid-cols-[1.2fr_3.8fr] tab:grid-cols-[1.5fr_3.5fr] sm_tab:grid-cols-[2fr_3fr] mob:flex mob:flex-col items-start justify-center gap-10 lg_tab:gap-0">
+                    <ul className="category-options flex flex-col mob:grid mob:grid-cols-3 items-center justify-center text-center p-8 gap-8">
                         {categoriesData.map((category) => {
                             return (
                                 <li
                                     key={category.name}
-                                    className={`category block cursor-pointer p-4 w-full rounded-lg transition-colors duration-300 ${
+                                    className={`category block cursor-pointer p-8 w-full rounded-lg transition-colors duration-300 text-4xl sm_desk:text-3xl ${
                                         selectedCategory.name === category.name
                                             ? "active font-bold bg-[#e8f6e8] text-[#014210] "
                                             : "hover:bg-[#d0f4d0]"
@@ -131,19 +131,19 @@ function Categories() {
 
                         <Link
                             to="/store"
-                            className="category-btn p-4 bg-[#dfd] text-[#014210] font-semibold w-full rounded-lg text-xl shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:bg-[#f2d3bdc6] hover:text-[#560000] shadow-[5px_5px_10px_rgba(86, 0, 0, 0.3)] duration-300"
+                            className="category-btn p-8 bg-[#dfd] text-[#014210] font-semibold w-full rounded-lg text-4xl sm_desk:text-3xl shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:bg-[#f2d3bdc6] hover:text-[#560000] shadow-[5px_5px_10px_rgba(86, 0, 0, 0.3)] duration-300"
                         >
                             All Categories &rarr;
                         </Link>
                     </ul>
                     {loading > 0 && (
-                        <div className="category-images scrollbar p-8 grid grid-cols-1 items-center justify-center gap-y-10 max-h-[38rem]">
+                        <div className="category-images scrollbar p-8 m-auto grid grid-cols-1 items-center justify-center gap-y-10 max-h-[38rem]">
                             <Loader />
                         </div>
                     )}
                     <div
-                        className={`category-images scrollbar p-8 grid grid-cols-2 items-center justify-center gap-y-10 max-h-[38rem] overflow-y-scroll ${
-                            loading > 0 ? "hidden" : "block"
+                        className={`category-images scrollbar p-8 grid grid-cols-2 tab:grid-cols-1 mob:max-h-[36rem] items-center justify-center max-h-[60rem] overflow-y-scroll ${
+                            loading > 0 ? "hidden" : ""
                         }`}
                     >
                         {selectedCategory.images.map((image, index) => (
@@ -152,7 +152,7 @@ function Categories() {
                                 src={image}
                                 alt={selectedCategory.name}
                                 onLoad={handleImageLoad}
-                                className="w-[38rem] h-72 rounded-lg transition-all duration-1000 hover:scale-110 shadow-[5px_5px_10px_rgba(86,0,0,0.3)] hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)]"
+                                className="w-[90%] h-[85%] lg_tab:w-[95%] tab:h-[75%] m-auto rounded-lg transition-all duration-1000 hover:scale-110 shadow-[5px_5px_10px_rgba(86,0,0,0.3)] hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)]"
                             />
                         ))}
                     </div>

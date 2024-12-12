@@ -187,7 +187,7 @@ function Navbar() {
                     </ul>
                 </nav>
                 <button
-                    className="relative justify-end sm_tab:ml-auto text-black hover:text-[#006000] transition-colors hidden lg_tab:flex"
+                    className="relative justify-end lg_tab:ml-auto  text-black hover:text-[#006000] transition-colors hidden lg_tab:flex"
                     onClick={handleMenuToggle}
                 >
                     {isMenuOpen ? (
