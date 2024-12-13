@@ -112,12 +112,12 @@ function Categories() {
                     Explore By Category
                 </h2>
                 <div className="category-container grid grid-cols-[1fr_4fr] lg_tab:grid-cols-[1.2fr_3.8fr] tab:grid-cols-[1.5fr_3.5fr] sm_tab:grid-cols-[2fr_3fr] sm_tab:flex sm_tab:flex-col-reverse items-start justify-center gap-10 lg_tab:gap-0">
-                    <ul className="category-options flex flex-col sm_tab:hidden items-center justify-center text-center p-8 gap-8">
+                    <ul className="category-options flex flex-col sm_tab:hidden items-center justify-center p-8 gap-8">
                         {categoriesData.map((category) => {
                             return (
                                 <li
                                     key={category.name}
-                                    className={`category flex items-center justify-between text-center cursor-pointer p-8 w-full rounded-lg transition-colors duration-300 text-4xl sm_desk:text-3xl ${
+                                    className={`category text-center cursor-pointer p-8 w-full rounded-lg transition-colors duration-300 text-4xl sm_desk:text-3xl ${
                                         selectedCategory.name === category.name
                                             ? "active font-bold bg-[#e8f6e8] text-[#014210] "
                                             : "hover:bg-[#d0f4d0]"
