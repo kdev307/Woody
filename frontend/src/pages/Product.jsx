@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
 import Tags from "../components/Tags";
-import { Star, AddShoppingCart, ArrowBack, Check } from "@mui/icons-material";
+import { Star, AddShoppingCart, Check, West } from "@mui/icons-material";
 import { listProductDetail } from "../actions/productActions";
 import { addToCart } from "../actions/cartActions";
 // import Message from "../components/Message";
@@ -80,7 +80,7 @@ function Product({ params }) {
                 to={`/store`}
                 className="arrow-btn absolute left-8 my-8 px-4 py-2  text-[#560000] text-2xl font-bold"
             >
-                <ArrowBack style={{ fontSize: "2.4rem" }} />
+                <West style={{ fontSize: "2.4rem" }} />
             </Link>
             {loading ? (
                 <Loader />

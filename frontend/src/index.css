@@ -133,3 +133,8 @@ button:hover {
 .scrollbar::-webkit-scrollbar-thumb:hover {
     background: #014210;
 }
+
+.scrollbar-hide {
+    width: 0;
+    background: transparent;
+}
