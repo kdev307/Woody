@@ -208,7 +208,7 @@ function PopularProduct() {
                 className="popular-products-section m-auto bg-custom-gradient p-8 mt-12 flex flex-col items-center justify-center"
                 id="popularProducts"
             >
-                <h2 className="sub-heading text-6xl font-bold text-center mb-20 sm_tab:text-[3.6rem]mb-6 py-6">
+                <h2 className="sub-heading text-6xl font-bold text-center sm_tab:text-[3.6rem] mb-6 py-6">
                     Popular Products
                 </h2>
                 <div className="overflow-hidden w-5/6 mx-auto relative ">
