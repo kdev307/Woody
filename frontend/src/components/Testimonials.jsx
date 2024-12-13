@@ -43,21 +43,26 @@ function Testimonials() {
                 className="testimonials-section bg-white p-8"
                 id="testimonials"
             >
-                <h2 className="sub-heading text-2xl font-semibold text-center pt-8">
+                <h2 className="sub-heading text-6xl font-bold text-center sm_tab:text-[3.6rem] pt-8">
                     Testimonials
                 </h2>
                 {/* <p className="quote">&ldquo;</p> */}
                 <FormatQuote
                     style={{
                         fontSize: "15rem",
-                        transform: "rotateZ(180deg) translate(-8rem, 8rem)",
+                        transform:
+                            window.innerWidth > 544
+                                ? "rotateZ(180deg) translate(2rem, 8rem)"
+                                : window.innerWidth > 704
+                                ? "rotateZ(180deg) translate(-8rem, 8rem)"
+                                : "rotateZ(180deg) translate(2rem, 8rem)",
                         color: "#014210",
                         padding: "1.2rem",
                         // paddingTop: "2.4rem",
                         marginTop: "1.2rem",
                     }}
                 />
-                <ul className="scrollbar testimonials flex flex-col text-center items-center h-[20rem] overflow-y-scroll gap-7 -mt-48 scroll-smooth snap-y snap-mandatory">
+                <ul className="scrollbar testimonials flex flex-col text-center items-center h-72 overflow-y-scroll gap-7 -mt-48 scroll-smooth snap-y snap-mandatory">
                     {testimonialList.map((testimonial, index) => {
                         return (
                             <li
