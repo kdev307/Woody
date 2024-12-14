@@ -58,7 +58,7 @@ function Navbar() {
                         : ""
                 } ${
                     isMenuOpen
-                        ? "fixed lg_tab:h-full lg_tab:flex-col shadow-none bg-[#fff2] backdrop-blur-md items-end justify-between pb-12"
+                        ? "fixed lg_tab:h-full lg_tab:flex-col shadow-none bg-[#fff2] backdrop-blur-md backdrop-brightness-75 items-end justify-center  pb-12"
                         : ""
                 }`}
             >
