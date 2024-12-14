@@ -3,13 +3,13 @@ import Error from "../components/Error";
 import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Star } from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp, Star } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { listProducts } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import Tags from "../components/Tags";
 
-export default function Store() {
+function Store() {
     const productFilters = [
         "Accessories",
         "Bedroom",
@@ -44,11 +44,14 @@ export default function Store() {
     const [searchQuery, setSearchQuery] = useState("");
     const [sortBy, setSortBy] = useState("alphabetical");
     const [activeSort, setActiveSort] = useState("alphabetical");
+    const [isSortExpanded, setIsSortExpanded] = useState(false);
+    const [isFilterExpanded, setIsFilterExpanded] = useState(false);
 
     const handleCategoryFilter = (category) => {
         setSelectedCategory((prevCategory) =>
             prevCategory === category ? "All" : category
         );
+        setIsFilterExpanded(!isFilterExpanded);
     };
 
     // const handleSearch = () => {};
@@ -107,14 +110,14 @@ export default function Store() {
             <Navbar />
             <div className="store-container bg-[#e4efe4] p-8">
                 <div className="nav-bar my-1 mx-0 flex justify-start items-center mb-6">
-                    <ul className="sort-btns flex justify-center items-center gap-3">
+                    <ul className="sort-btns flex lg_tab:hidden justify-center items-center gap-8">
                         {sortButtons.map((sortBtn, index) => (
                             <li key={index}>
                                 <button
-                                    className={`relative bg-transparent border-none p-2 cursor-pointer 
+                                    className={`relative bg-transparent border-none p-2 cursor-pointer text-[1.8rem]
                                 ${
                                     activeSort === sortBtn.methodName
-                                        ? "text-[#014210]"
+                                        ? "text-[#014210] font-semibold"
                                         : ""
                                 } group
                                 `}
@@ -137,23 +140,101 @@ export default function Store() {
                             </li>
                         ))}
                     </ul>
+                    <div className="hidden lg_tab:block">
+                        <div
+                            className={`category relative flex items-center justify-between text-center cursor-pointer p-8 w-full rounded-lg transition-colors duration-300 text-4xl sm_desk:text-3xl ${
+                                sortButtons.find(
+                                    (btn) => btn.methodName === activeSort
+                                )
+                                    ? "active font-bold bg-[#e8f6e8] text-[#014210] "
+                                    : "hover:bg-[#d0f4d0]"
+                            } hover:font-semibold flex justify-center items-center gap-4 p-8`}
+                        >
+                            <>
+                                {sortButtons.find(
+                                    (btn) => btn.methodName === activeSort
+                                )?.sortName || ""}
+                            </>
+                            <button
+                                className="hidden lg_tab:block"
+                                onClick={() =>
+                                    setIsSortExpanded(!isSortExpanded)
+                                }
+                            >
+                                {isSortExpanded ? (
+                                    <ArrowDropUp
+                                        style={{
+                                            fontSize: "2.4rem",
+                                        }}
+                                    />
+                                ) : (
+                                    <ArrowDropDown
+                                        style={{
+                                            fontSize: "2.4rem",
+                                        }}
+                                    />
+                                )}
+                            </button>
+                            {isSortExpanded && (
+                                <ul className="sort-btns lg_tab:w-full lg_tab:flex lg_tab:flex-col lg_tab:absolute lg_tab:z-50 lg_tab:bg-white lg_tab:p-4 lg_tab:rounded-xl top-32 right-0 justify-center items-center gap-3">
+                                    {sortButtons.map((sortBtn, index) => (
+                                        <li key={index}>
+                                            <button
+                                                className={`relative bg-transparent border-none p-2 cursor-pointer w-full text-[1.8rem]
+                                ${
+                                    activeSort === sortBtn.methodName
+                                        ? "text-[#014210] font-semibold"
+                                        : ""
+                                } group
+                                `}
+                                                onClick={() => {
+                                                    setActiveSort(
+                                                        sortBtn.methodName
+                                                    );
+                                                    setSortBy(
+                                                        sortBtn.methodName
+                                                    );
+                                                    setIsSortExpanded(
+                                                        !isSortExpanded
+                                                    );
+                                                }}
+                                            >
+                                                {sortBtn.sortName}
+                                                <span
+                                                    className={`absolute left-0 right-0 bottom-[-0.2rem] h-[2px] bg-[#014210] 
+                                    ${
+                                        activeSort === sortBtn.methodName
+                                            ? "scale-x-100"
+                                            : "scale-x-0"
+                                    } group-hover:scale-x-100
+                                    transition-transform duration-300`}
+                                                ></span>
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                    </div>
                     <input
                         type="text"
                         placeholder="Search for products..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="search-bar w-[38vw] p-2.5 pl-6 pr-6 text-base border-2 border-[#014210] text-[#014210] bg-[#eee] rounded-lg shadow-md transition-all duration-1000 ease-in-out transform translate-x-[79%] focus:border-[#560000] focus:outline-none focus:text-[#560000]"
+                        className="search-bar w-[40vw] p-2 px-6 text-[1.8rem] border-2 border-[#014210] text-[#014210] bg-[#eee] rounded-lg shadow-md transition-all duration-1000 ease-in-out transform translate-x-[65%] sm_desk:translate-x-[40%] focus:border-[#560000] focus:outline-none focus:text-[#560000]"
                     />
                     {/* <Search style={{ fontSize: "3.6rem", color: "#014210" }} /> */}
                     {/* <button onClick={handleSearch} className="search-button">
                         <Search style={{ fontSize: "3.6rem", color: "#014210" }} />
                     </button> */}
                 </div>
-                <div className="products-section grid grid-cols-[1fr_4fr] items-start justify-center gap-6 text-xl">
+                <div className="products-section flex lg_tab:flex-col items-start justify-center lg_tab:justify-start gap-8">
                     <ProductFilters
                         productFilters={productFilters}
                         selectedCategory={selectedCategory}
                         handleCategoryFilter={handleCategoryFilter}
+                        isFilterExpanded={isFilterExpanded}
+                        setIsFilterExpanded={setIsFilterExpanded}
                     />
                     <Products
                         productsList={sortedProducts}
@@ -171,14 +252,16 @@ function ProductFilters({
     productFilters,
     selectedCategory,
     handleCategoryFilter,
+    isFilterExpanded,
+    setIsFilterExpanded,
 }) {
     return (
         <>
-            <ul className="filters-list flex flex-col items-center justify-center text-center p-8 gap-4 bg-[#eee] rounded-lg shadow-[2px_2px_8px_rgba(0,86,0,0.3)]">
+            <ul className="filters-list w-[30%] flex lg_tab:hidden flex-col items-center justify-center text-center p-8 gap-4 bg-[#eee] rounded-lg shadow-[2px_2px_8px_rgba(0,86,0,0.3)] mt-2">
                 {productFilters.map((category) => (
                     <li
                         key={category}
-                        className={`category block cursor-pointer p-4 w-full rounded-lg shadow-[2px_2px_8px_rgba(0,86,0,0.3)] transition-all ease-in-out duration-1000 
+                        className={`category block cursor-pointer text-[2rem] p-8 w-full rounded-lg shadow-[2px_2px_8px_rgba(0,86,0,0.3)] transition-all ease-in-out duration-1000 
                 ${
                     selectedCategory === category
                         ? "bg-[#e8f6e8] text-[#014210] font-bold border-2 border-[#014210]"
@@ -190,6 +273,55 @@ function ProductFilters({
                     </li>
                 ))}
             </ul>
+            <div className="hidden lg_tab:flex lg_tab:flex-col lg_tab:items-center lg_tab:justify-center lg_tab:gap-12 lg_tab:p-8">
+                <div
+                    className={`category relative flex items-center justify-between text-center w-[30rem] cursor-pointer p-8 rounded-lg transition-colors duration-300 text-4xl sm_desk:text-3xl ${
+                        selectedCategory.name
+                            ? "active font-bold bg-[#eee] text-[#014210] "
+                            : "hover:bg-[#d0f4d0]"
+                    } hover:font-semibold flex justify-center items-center gap-4 p-8`}
+                >
+                    <>{selectedCategory}</>
+                    <button
+                        className="hidden lg_tab:block"
+                        onClick={() => setIsFilterExpanded(!isFilterExpanded)}
+                    >
+                        {isFilterExpanded ? (
+                            <ArrowDropUp
+                                style={{
+                                    fontSize: "2.4rem",
+                                }}
+                            />
+                        ) : (
+                            <ArrowDropDown
+                                style={{
+                                    fontSize: "2.4rem",
+                                }}
+                            />
+                        )}
+                    </button>
+                    {isFilterExpanded && (
+                        <ul className="hidden lg_tab:flex lg_tab:flex-col lg_tab:absolute lg_tab:top-24 lg_tab:right-0 lg_tab:bg-[#eee] lg_tab:max-h-[80rem] lg_tab:z-[999] lg_tab:rounded-xl w-full items-center justify-center text-center gap-8 p-8">
+                            {productFilters.map((category) => (
+                                <li
+                                    key={category}
+                                    className={`category block cursor-pointer text-[2rem] p-8 w-full rounded-lg shadow-[2px_2px_8px_rgba(0,86,0,0.3)] transition-all ease-in-out duration-1000 
+                ${
+                    selectedCategory === category
+                        ? "bg-[#e8f6e8] text-[#014210] font-bold border-2 border-[#014210]"
+                        : "hover:bg-[#d0f4d0] hover:scale-105 hover:border-2 hover:border-[#014210]"
+                }`}
+                                    onClick={() =>
+                                        handleCategoryFilter(category)
+                                    }
+                                >
+                                    {category}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            </div>
         </>
     );
 }
@@ -206,7 +338,7 @@ function Products({ productsList, loading, error }) {
                 <Error message={error} />
             ) : (
                 <>
-                    <ul className="products-list grid grid-cols-3 items-center justify-center gap-2 -mt-2">
+                    <ul className="products-list grid grid-cols-4 sm_desk:grid-cols-3 tab:grid-cols-2 mob:grid-cols-1 items-center justify-center gap-y-0">
                         {productsList.map((product) => {
                             return (
                                 <li key={product.id}>
@@ -240,8 +372,8 @@ function ProductCard({ product }) {
             element
             className="detail-btn inline-flex text-[#014210] p-2 text-center font-normal border-none outline-none hover:bg-[#014210] hover:border-none hover:outline-none hover:text-white transition-all ease duration-500"
         >
-            <div className="product-card flex flex-col items-start justify-center rounded-lg shadow-[5px_5px_10px_rgba(83,0,0,0.3)] transition-all ease-in-out duration-1000 bg-[#eee] relative text-[#014210] hover:border-2 hover:border-[#014210] hover:scale-105 hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:bg-white">
-                <div className="img-container w-[29.2rem] rounded-t-lg overflow-hidden">
+            <div className="product-card flex flex-col items-start justify-center rounded-lg shadow-[5px_5px_10px_rgba(83,0,0,0.3)] transition-all ease-in-out duration-1000 bg-[#eee] relative text-[#014210] hover:border-2 hover:border-[#014210] hover:scale-105 hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:bg-white hover:z-50">
+                <div className="img-container w-[36rem] sm_desk:w-[34rem] lg_tab:w-[32rem] tab:w-[45rem] sm_tab:w-[33rem] sm_tab:mx-auto sm_tab:px-auto mob:w-[50rem] rounded-t-lg overflow-hidden">
                     {!stockCount ? (
                         <Tags
                             tagData="Out of Stock"
@@ -267,7 +399,7 @@ function ProductCard({ product }) {
                     {(productCategories || []).map((category) => {
                         return (
                             <li
-                                className="category-item rounded-lg text-base font-bold bg-[#560000] text-white p-2 text-center"
+                                className="category-item rounded-lg text-2xl font-bold bg-[#560000] text-white p-2 text-center"
                                 key={category}
                             >
                                 {category}
@@ -275,31 +407,32 @@ function ProductCard({ product }) {
                         );
                     })}
                 </ul>
-                <div className="product-info flex flex-col items-start justify-start h-60 p-4 gap-1">
-                    <h4 className="product-brand text-left text-[#560000] font-bold">
+                <div className="product-info flex flex-col items-start justify-start h-[20rem] p-4 gap-4">
+                    <h4 className="product-brand text-left text-[#560000] text-3xl font-extrabold">
                         {productBrand}
                     </h4>
-                    <h3 className="product-name text-left font-semibold">
+                    <h3 className="product-name text-left font-medium text-4xl">
                         {productName}
                     </h3>
                     <div className=" flex items-center justify-start gap-40">
-                        <h3 className="product-price font-bold text-2xl">
+                        <h3 className="product-price font-bold text-[2.4rem]">
                             ₹ {price}
                         </h3>
                         {/* <InfoOutlined style={{ fontSize: "2.4rem" }} className="info-icon" /> */}
-                        <div className="rating flex items-center justify-center gap-2 text-[#560000] rounded-[4rem] font-semibold">
+                        <div className="rating flex items-center justify-center gap-2 text-[#560000] rounded-[4rem] font-semibold text-[1.8rem]">
                             <h3>{rating}</h3>
                             <Star
                                 style={{
                                     textAlign: "center",
                                     verticalAlign: "center",
+                                    fontSize: "2.4rem",
                                 }}
                             />
-                            {` (${numReviews})`}
+                            <>{` (${numReviews})`}</>
                             {/* {`from ${numReviews} reviews`} */}
                         </div>
                     </div>
-                    <p className="product-desc text-lg text-left text-[#560000] overflow-hidden w-96 whitespace-nowrap text-ellipsis mt-4">
+                    <p className="product-desc text-[1.8rem] text-left text-[#560000] overflow-hidden w-[32rem] whitespace-nowrap text-ellipsis">
                         {productDescription}
                     </p>
                 </div>
@@ -307,3 +440,5 @@ function ProductCard({ product }) {
         </Link>
     );
 }
+
+export default Store;
