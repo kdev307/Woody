@@ -168,12 +168,12 @@ function PopularProduct() {
             imgBrandName: "MALM",
             imgName: "Black-Brown Chest of 6-drawers",
             price: 12000,
-            bestseller: true,
+            bestseller: false,
             sale: false,
             newArrivals: false,
             limited: false,
             exclusive: false,
-            trending: false,
+            trending: true,
         },
         {
             imgPath: "/images/popular-products/dining1.png",
@@ -204,13 +204,16 @@ function PopularProduct() {
 
     return (
         <>
-            <div className="popular-products-section m-auto bg-custom-gradient p-8 mt-12 flex flex-col items-center justify-center">
-                <h2 className="sub-heading text-2xl font-semibold text-center mb-6 py-6">
+            <div
+                className="popular-products-section m-auto bg-custom-gradient p-8 mt-12 flex flex-col items-center justify-center"
+                id="popularProducts"
+            >
+                <h2 className="sub-heading text-6xl font-bold text-center sm_tab:text-[3.6rem] mb-6 py-6">
                     Popular Products
                 </h2>
                 <div className="overflow-hidden w-5/6 mx-auto relative ">
                     <Marquee
-                        speed={120}
+                        speed={110}
                         pauseOnHover={true}
                         gradient={false}
                         direction="right"
@@ -239,7 +242,7 @@ function PopularProduct() {
                     </Marquee>
                     <br />
                     <Marquee
-                        speed={120}
+                        speed={105}
                         pauseOnHover={true}
                         gradient={false}
                         direction="left"
@@ -269,7 +272,7 @@ function PopularProduct() {
                 </div>
                 <Link
                     to="/store"
-                    className="popular-btn mt-12 text-center text-xl rounded-full px-auto border-2 font-bold text-[#014210] border-[#014210] shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:text-[#560000] hover:border-[#560000] hover:shadow-[5px_5px_10px_rgba(86,0,0,0.3)] p-2 transition-all-ease duration-300"
+                    className="popular-btn mt-12 text-center text-4xl tab:text-3xl rounded-full px-8 py-4 border-2 font-bold text-[#014210] border-[#014210] shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:text-[#560000] hover:border-[#560000] hover:shadow-[5px_5px_10px_rgba(86,0,0,0.3)] p-2 transition-all-ease duration-300"
                 >
                     Go to Store
                 </Link>
@@ -292,47 +295,47 @@ function PopularProductCard({
     bgColor,
 }) {
     return (
-        <div className="image-layout-card w-96 h-96 border-[#560000] rounded-xl shadow-[5px_5px_10px_rgba(0,0,0,0.3)] flex-shrink-0 relative group overflow-hidden">
+        <div className="image-layout-card w-[32rem] border-[#560000] rounded-xl shadow-[5px_5px_10px_rgba(0,0,0,0.3)] flex-shrink-0 relative group overflow-hidden">
             {isBestSeller && (
                 <Tags
                     tagData="BestSeller"
-                    tagColor="#000"
-                    tagBackgroundColor="#ffd700"
+                    tagColor="#ffd700"
+                    tagBackgroundColor="#000"
                 />
             )}
             {isExclusive && (
                 <Tags
                     tagData="Exclusive"
-                    tagColor="#fff"
-                    tagBackgroundColor="#036"
+                    tagColor="#036"
+                    tagBackgroundColor="#c0c0c0"
                 />
             )}
             {isLimited && (
                 <Tags
                     tagData="Limited"
-                    tagColor="#fff"
-                    tagBackgroundColor="#f00"
+                    tagColor="#f00"
+                    tagBackgroundColor="#fff"
                 />
             )}
             {isNew && (
                 <Tags
                     tagData="New Arrivals"
-                    tagColor="#2f4f4f"
-                    tagBackgroundColor="#add8e6"
+                    tagBackgroundColor="#2f4f4f"
+                    tagColor="#add8e6"
                 />
             )}
             {isOnSale && (
                 <Tags
                     tagData="Sale"
-                    tagColor="#fff"
-                    tagBackgroundColor="#28a745"
+                    tagColor="#28a745"
+                    tagBackgroundColor="#fff"
                 />
             )}
             {isTrending && (
                 <Tags
                     tagData="Trending"
-                    tagColor="#000"
-                    tagBackgroundColor="#ff1493"
+                    tagColor="#ff1493"
+                    tagBackgroundColor="#000"
                 />
             )}
             <img
@@ -343,13 +346,13 @@ function PopularProductCard({
             <div
                 className={`absolute bottom-0 left-0 w-full bg-[#014210] bg-opacity-50 text-white p-4 transform translate-y-full transition-transform duration-500 group-hover:translate-y-0 bg-[${bgColor}]`}
             >
-                <h4 className="text-lg font-extrabold text-[#e8e7e7]">
+                <h4 className="text-2xl font-extrabold text-[#e8e7e7]">
                     {imgBrandName}
                 </h4>
-                <h3 className="img-title m-0 p-2 font-semibold text-2xl break-words whitespace-normal">
+                <h3 className="img-title m-0 p-2 font-semibold text-3xl break-words whitespace-normal">
                     {imgName}
                 </h3>
-                <h2 className="img-price m-0 p-2 text-3xl font-extrabold text-white">
+                <h2 className="img-price m-0 p-2 text-4xl font-extrabold text-white">
                     ₹ {imgPrice}
                 </h2>
             </div>

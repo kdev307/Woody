@@ -89,32 +89,30 @@ function SignUp({ onBack, onSignUpSuccess }) {
 
     return (
         <>
-            <div className="sign-up-container mt-20">
-                <div className="form-heading flex items-center justify-evenly -mt-8">
-                    <h1 className="signup-title text-4xl text-center text-[#014210] font-bold">
-                        Sign Up
-                    </h1>
+            <div className="sign-up-container mt-32">
+                <h1 className="signup-title flex items-center justify-center gap-16 -mt-8 text-7xl text-center text-[#014210] font-bold">
+                    Sign Up
                     <AppRegistration
-                        style={{ fontSize: "2.4rem", color: "#014210" }}
+                        style={{ fontSize: "4.8rem", color: "#014210" }}
                         className="form-icon"
                     />
-                </div>
+                </h1>
                 {message && (
                     <Message message={message} messageType={messageType} />
                 )}
 
                 <form
                     action="post"
-                    className="form-container flex flex-col items-center justify-center text-left rounded-xl"
+                    className="form-container flex flex-col gap-12 items-center justify-center text-left rounded-2xl"
                     onSubmit={handleSubmit}
                 >
-                    <div className="form-inputs scrollbar w-full max-h-72 overflow-y-auto my-6 mx-auto p-6">
+                    <div className="form-inputs scrollbar w-full max-h-96 overflow-y-auto my-6 mx-auto p-6">
                         <div className="flex items-center justify-center gap-2">
                             <input
                                 type="text"
                                 name="firstName"
                                 id="firstName"
-                                className="form-input w-full p-4 my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6"
+                                className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                                 placeholder="Enter your First Name"
@@ -124,7 +122,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 type="text"
                                 name="lastName"
                                 id="lastName"
-                                className="form-input w-full p-4 my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6 "
+                                className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
                                 placeholder="Enter your Last Name"
@@ -135,7 +133,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
                             type="email"
                             name="email"
                             id="email"
-                            className="form-input w-full p-4 my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6 "
+                            className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your Email Address"
@@ -146,7 +144,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 type={showPassword ? "text" : "password"}
                                 name="password"
                                 id="password"
-                                className="form-input w-full p-4 my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6 "
+                                className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Enter your Password"
@@ -154,7 +152,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
                             />
                             <button
                                 type="button"
-                                className="show-password-btn"
+                                className="show-password-btn ease-linear duration-1000"
                                 onClick={togglePasswordVisibility}
                                 aria-label={
                                     showPassword
@@ -163,10 +161,18 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 }
                             >
                                 {showPassword ? (
-                                    <Visibility style={{ color: "#014210" }} />
+                                    <Visibility
+                                        style={{
+                                            color: "#014210",
+                                            fontSize: "3.2rem",
+                                        }}
+                                    />
                                 ) : (
                                     <VisibilityOff
-                                        style={{ color: "#014210" }}
+                                        style={{
+                                            color: "#014210",
+                                            fontSize: "3.2rem",
+                                        }}
                                     />
                                 )}
                             </button>
@@ -180,7 +186,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 type={showConfirmPassword ? "text" : "password"}
                                 name="confirmPassword"
                                 id="confirmPassword"
-                                className="form-input w-full p-4 my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6 "
+                                className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
                                 value={confirmPassword}
                                 onChange={(e) =>
                                     setConfirmPassword(e.target.value)
@@ -190,7 +196,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
                             />
                             <button
                                 type="button"
-                                className="show-password-btn"
+                                className="show-password-btn ease-linear duration-1000"
                                 onClick={toggleConfirmPasswordVisibility}
                                 aria-label={
                                     showConfirmPassword
@@ -199,10 +205,18 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 }
                             >
                                 {showConfirmPassword ? (
-                                    <Visibility style={{ color: "#014210" }} />
+                                    <Visibility
+                                        style={{
+                                            color: "#014210",
+                                            fontSize: "3.2rem",
+                                        }}
+                                    />
                                 ) : (
                                     <VisibilityOff
-                                        style={{ color: "#014210" }}
+                                        style={{
+                                            color: "#014210",
+                                            fontSize: "3.2rem",
+                                        }}
                                     />
                                 )}
                             </button>
@@ -210,21 +224,12 @@ function SignUp({ onBack, onSignUpSuccess }) {
                     </div>
                     {loading && <Loader />}
                     <button
-                        className="form-btn log-btn sign-up-btn flex items-center justify-center gap-4 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-2xl font-semibold hover:bg-[#014210] hover:text-white transition-all"
+                        className="form-btn log-btn sign-up-btn flex items-center justify-center gap-4 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000"
                         type="submit"
                     >
                         Sign Up
                     </button>
                 </form>
-                {/* <ArrowBack
-                    style={{
-                        fontSize: "2.4rem",
-                        cursor: "pointer",
-                        marginTop: "-60rem",
-                        marginLeft: "1rem",
-                    }}
-                    onClick={onBack}
-                /> */}
             </div>
         </>
     );

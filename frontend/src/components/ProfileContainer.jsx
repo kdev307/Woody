@@ -41,7 +41,7 @@ function ProfileContainer({ handleProfileToggle, isOpen }) {
     return (
         <>
             <div
-                className={`profile-container fixed top-0 right-0 w-[32rem] h-full p-4 bg-[#e4efe4] shadow-[rgba(0,0,0,0.5)_-2px_0_5px] z-[1000] transform transition-transform duration-300 ${
+                className={`profile-container fixed top-0 right-0 w-[50rem] h-full p-4 bg-[#e4efe4] shadow-[rgba(0,0,0,0.5)_-2px_0_5px] z-[1000] transform transition-transform duration-300 ${
                     isOpen ? "translate-x-0" : "translate-x-full"
                 }`}
                 // style={{
@@ -50,7 +50,7 @@ function ProfileContainer({ handleProfileToggle, isOpen }) {
                 // }}
             >
                 <div
-                    className={`pt-4 flex items-center ${
+                    className={`pt-12 flex items-center ${
                         !userInfo && currentView !== VIEW_NONE
                             ? "justify-between px-8"
                             : "justify-end mr-12"
@@ -59,7 +59,7 @@ function ProfileContainer({ handleProfileToggle, isOpen }) {
                     {!userInfo && currentView !== VIEW_NONE && (
                         <ArrowBack
                             className="text-[#014210] cursor-pointer"
-                            style={{ fontSize: "2.8rem" }}
+                            style={{ fontSize: "3.6rem" }}
                             onClick={handleBackClick}
                         />
                     )}
@@ -78,7 +78,7 @@ function ProfileContainer({ handleProfileToggle, isOpen }) {
                     <Close
                         className="profile-close-btn cursor-pointer text-[#014210] text-4xl "
                         onClick={handleProfileToggle}
-                        style={{ fontSize: "2.8rem" }}
+                        style={{ fontSize: "3.6rem" }}
                     />
                 </div>
                 {userInfo ? (
@@ -100,24 +100,24 @@ function ProfileContainer({ handleProfileToggle, isOpen }) {
                             <div className="log-btns flex flex-col items-center justify-center gap-12 mt-12">
                                 <AccountCircle
                                     style={{
-                                        fontSize: "16rem",
+                                        fontSize: "30rem",
                                         color: "#014210",
                                     }}
                                 />
                                 <button
-                                    className="log-btn log-in-btn flex items-center justify-center gap-4 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-2xl font-semibold hover:bg-[#014210] hover:text-white transition-all"
+                                    className="log-btn log-in-btn flex items-center justify-center gap-4 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-4xl font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000"
                                     onClick={handleLogInClick}
                                 >
                                     Log In
-                                    <Login style={{ fontSize: "2.4rem" }} />
+                                    <Login style={{ fontSize: "3.2rem" }} />
                                 </button>
                                 <button
-                                    className="log-btn sign-up-btn flex items-center justify-center gap-4 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-2xl font-semibold hover:bg-[#014210] hover:text-white transition-all"
+                                    className="log-btn sign-up-btn flex items-center justify-center gap-4 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-4xl font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000"
                                     onClick={handleRegisterClick}
                                 >
                                     Sign Up
                                     <AppRegistration
-                                        style={{ fontSize: "2.4rem" }}
+                                        style={{ fontSize: "3.2rem" }}
                                     />
                                 </button>
                             </div>

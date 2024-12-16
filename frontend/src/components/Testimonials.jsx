@@ -1,6 +1,4 @@
 import React from "react";
-// import "../styles/testimonials.css";
-import "../styles/scrollbar.css";
 import { FormatQuote } from "@mui/icons-material";
 
 function Testimonials() {
@@ -39,26 +37,34 @@ function Testimonials() {
 
     return (
         <>
-            <div className="testimonials-section bg-white p-8">
-                <h2 className="sub-heading text-2xl font-semibold text-center pt-8">
+            <div
+                className="testimonials-section bg-white p-8"
+                id="testimonials"
+            >
+                <h2 className="sub-heading text-6xl font-bold text-center sm_tab:text-[3.6rem] pt-8">
                     Testimonials
                 </h2>
                 {/* <p className="quote">&ldquo;</p> */}
                 <FormatQuote
                     style={{
                         fontSize: "15rem",
-                        transform: "rotateZ(180deg) translate(-8rem, 8rem)",
+                        transform:
+                            window.innerWidth > 544
+                                ? "rotateZ(180deg) translate(2rem, 8rem)"
+                                : window.innerWidth > 704
+                                ? "rotateZ(180deg) translate(-8rem, 8rem)"
+                                : "rotateZ(180deg) translate(2rem, 8rem)",
                         color: "#014210",
                         padding: "1.2rem",
                         // paddingTop: "2.4rem",
                         marginTop: "1.2rem",
                     }}
                 />
-                <ul className="scrollbar testimonials flex flex-col text-center items-center h-[20rem] overflow-y-scroll gap-7 -mt-48 scroll-smooth snap-y snap-mandatory">
+                <ul className="scrollbar testimonials flex flex-col text-center items-center h-[28rem] lg_tab:h-[27rem] sm_tab:h-[24rem] mob:h-[20rem] overflow-y-scroll gap-7 -mt-48 scroll-smooth snap-y snap-mandatory">
                     {testimonialList.map((testimonial, index) => {
                         return (
                             <li
-                                className="testimonial-item flex items-center justify-center gap-6 p-5 snap-start"
+                                className="testimonial-item flex items-center justify-center gap-36 sm_tab:gap-16 mob:gap-8 p-5 snap-start"
                                 key={index}
                             >
                                 <Testimonial testimonial={testimonial} />
@@ -88,14 +94,14 @@ function Testimonial({ testimonial }) {
                 <img
                     src={testimonial.image}
                     alt={testimonial.name}
-                    className=" rounded-[50%] w-60 shadow-[5px_5px_10px_rgba(83,0,0,0.3)] hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:scale-110 transition-transform duration-1000"
+                    className=" rounded-[50%] w-96 sm_tab:w-80 shadow-[5px_5px_10px_rgba(83,0,0,0.3)] hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:scale-110 transition-transform duration-1000"
                 />
             </div>
-            <div className="testimonial-info w-[30rem] text-xl text-left flex flex-col pt-5">
-                <p className="testimonial-review font-normal text-justify text-[#560000]">
+            <div className="testimonial-info w-[80rem] lg_tab:w-[60rem] tab:w-[45rem] sm_tab:w-[35rem] text-left flex flex-col pt-5">
+                <p className="testimonial-review font-medium text-4xl sm_tab:text-3xl mob:text-2xl text-justify text-[#560000]">
                     {testimonial.review}
                 </p>
-                <h3 className="testimonial-name font-bold text-right mt-4 text-[#014210]">
+                <h3 className="testimonial-name font-bold text-5xl sm_tab:text-4xl text-right mt-4 text-[#014210]">
                     {testimonial.name}
                 </h3>
             </div>
