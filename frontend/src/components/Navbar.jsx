@@ -19,11 +19,13 @@ function Navbar() {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const handleCartToggle = () => {
         setIsCartOpen((prev) => !prev);
+        setIsMenuOpen(!isMenuOpen);
     };
 
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const handleProfileToggle = () => {
         setIsProfileOpen((prev) => !prev);
+        setIsMenuOpen(!isMenuOpen);
     };
 
     const [scrolled, setScrolled] = useState(false);
@@ -49,12 +51,12 @@ function Navbar() {
         setIsMenuOpen(!isMenuOpen);
     };
     const location = useLocation();
-    const currentPage = location.pathname === "/store" ? "store" : "home";
+    const currentPage = location.pathname === "/" ? "home" : "others";
     return (
         <>
             <header
                 className={`flex items-center px-12 h-fit sm_tab:pr-12 ${
-                    currentPage === "store"
+                    currentPage !== "home"
                         ? "justify-between px-40"
                         : "justify-evenly"
                 } lg_tab:justify-between lg_tab:px-16 sm_tab:px-0  brightness-175 pt-8 top-0 left-0 w-full z-50 transition-all ease-in-out duration-300 ${

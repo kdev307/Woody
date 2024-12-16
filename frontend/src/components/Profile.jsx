@@ -22,76 +22,80 @@ function Profile({ user }) {
         dispatch(logOut());
     };
     return (
-        <div className="profile-container mt-20">
-            <div className="profile-heading flex items-center justify-evenly -mt-8">
-                <h1 className="profile-title text-4xl text-center text-[#014210] font-bold">
-                    My Profile
-                </h1>
-                <Person style={{ fontSize: "2.4rem", color: "#014210" }} />
-            </div>
+        <div className="profile-container mt-20 sm_desk:mt-0 sm_desk:scale-90">
+            <h1 className="profile-title flex items-center justify-center gap-16 -mt-8 text-7xl text-center text-[#014210] font-bold">
+                My Profile
+                <Person style={{ fontSize: "4.8rem", color: "#014210" }} />
+            </h1>
             <Edit
                 className="edit-btn mt-4 font-semibold absolute"
                 style={{
-                    fontSize: "2rem",
+                    fontSize: "3.2rem",
                     color: "#560000",
-                    transform: "translateX(28rem)",
+                    transform: "translateX(40rem)",
                 }}
             />
             {/* <button className="profile-btn edit-btn">
                 Edit Profile <Edit />
                 </button> */}
-            <div className="info-container flex flex-col justify-center items-center gap-0 p-4">
-                <div className="basic-info flex items-center justify-between mt-8 gap-8">
+            <div className="info-container flex flex-col justify-start items-start gap-0 p-4">
+                <div className="basic-info flex items-center justify-between mt-8 gap-8 w-[50%]">
                     <img
                         src="/images/testimonials/customer-5.jpg"
                         alt={`${user.name}"'s image"`}
-                        className="profile-img border-4 border-[#014210] shadow-[2px_2px_5px_#014210] w-40 rounded-[50%]"
+                        className="profile-img border-4 border-[#014210] shadow-[2px_2px_5px_#014210] w-full rounded-[50%]"
                     />
                     <div className="main-info flex flex-col items-start justify-start gap-2 mt-4 -mb-4">
-                        <h2 className="name text-left text-3xl font-extrabold w-80 break-words text-[#560000]">
+                        <h2 className="name text-left text-6xl font-extrabold w-80 break-words text-[#560000]">
                             {user.name}
                             {/* Hubert Blaine Wolfeschlegelsteinhausenbergerdroff
                             Sr. */}
                         </h2>
-                        <h3 className="mobile text-left my-4 mx-0 text-2xl font-bold text-[#560000] flex items-center justify-center gap-4">
+                        <h3 className="mobile text-left my-4 mx-0 text-3xl font-bold text-[#560000] flex items-center justify-center gap-4">
                             <PhoneAndroid
-                                style={{ fontSize: "2rem", color: "#014210" }}
+                                style={{ fontSize: "3.2rem", color: "#014210" }}
                             />{" "}
                             +91-9874563210
                         </h3>
                     </div>
                 </div>
-                <h3 className="mail text-left my-4 mx-0 text-xl font-semibold text-[#560000] flex items-center justify-center gap-4">
-                    <Email style={{ fontSize: "2rem", color: "#014210" }} />{" "}
+                <h3 className="mail text-left self-center my-4 mx-0 text-4xl font-semibold text-[#560000] flex items-center justify-center gap-4">
+                    <Email style={{ fontSize: "3.6rem", color: "#014210" }} />{" "}
                     {user.email}
                 </h3>
-                <p className="endLine text-xl my-4 mx-0">
+                <p className="endLine  self-center text-xl my-4 mx-0">
                     <hr
                         style={{
-                            width: "25rem",
+                            width: "30rem",
                             margin: "auto",
-                            border: "0.15rem solid #014210",
+                            border: "0.1.8rem solid #014210",
                             borderRadius: "100rem",
                         }}
                     />
                 </p>
                 <div className="additional-info flex flex-col items-start justify-center text-left">
-                    <h4 className="res-addr my-4 mx-0 text-lg font-medium text-[#560000] flex items-center justify-center gap-4">
+                    <h4 className="res-addr my-4 mx-0 text-3xl font-medium text-[#560000] flex items-center justify-center gap-4">
                         <LocationOn
-                            style={{ fontSize: "2.4rem", color: "#014210" }}
+                            style={{ fontSize: "3.6rem", color: "#014210" }}
                         />{" "}
                         65C, Downtown, Manhattan, New York, United States of
                         America - 10013
                         {/* ##### */}
                     </h4>
-                    <h4 className="dob my-4 mx-0 text-xl font-semibold text-[#560000] flex items-center justify-center gap-4">
-                        <Cake style={{ fontSize: "2rem", color: "#014210" }} />{" "}
-                        <Cake style={{ fontSize: "2rem", color: "#014210" }} />{" "}
+                    <h4 className="dob my-4 mx-0 text-4xl font-bold text-[#560000] flex items-center justify-center gap-4">
+                        <Cake
+                            style={{ fontSize: "3.6rem", color: "#014210" }}
+                        />{" "}
+                        <Cake
+                            style={{ fontSize: "3.6rem", color: "#014210" }}
+                        />{" "}
                         September 30, 2000
                         <Cake
-                            style={{ fontSize: "2rem", color: "#014210" }}
+                            style={{ fontSize: "3.6rem", color: "#014210" }}
                         />{" "}
-                        <Cake style={{ fontSize: "2rem", color: "#014210" }} />{" "}
+                        <Cake
+                            style={{ fontSize: "3.6rem", color: "#014210" }}
+                        />{" "}
                     </h4>
                 </div>
                 {/* <p className="endLine">
@@ -106,19 +110,19 @@ function Profile({ user }) {
                         </p> */}
             </div>
             <div className="profile-btns flex flex-col items-center justify-center gap-4 py-auto px-0 mx-0 my-2">
-                <button className="profile-btn history-btn flex items-center justify-center gap-4 rounded-md w-full font-semibold text-xl text-center border-[3px] border-[#014210] text-[#014210] hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                <button className="profile-btn history-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
                     My Orders
-                    <History />
+                    <History style={{ fontSize: "3.2rem" }} />
                 </button>
-                <button className="profile-btn reviews-btn flex items-center justify-center gap-4 rounded-md w-full font-semibold text-xl text-center border-[3px] border-[#014210] text-[#014210] hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                <button className="profile-btn reviews-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
                     My Reviews
-                    <Reviews />
+                    <Reviews style={{ fontSize: "3.2rem" }} />
                 </button>
                 <button
-                    className="profile-btn logout-btn flex items-center justify-center gap-4 rounded-md w-full font-semibold text-xl text-center border-[3px] border-[#560000] text-[#560000] hover:bg-[#560000] hover:text-white transition-all ease-linear duration-1000"
+                    className="profile-btn logout-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#560000] rounded-md text-[#560000] text-[2.4rem] font-semibold hover:bg-[#560000] hover:text-white transition-all ease-linear duration-1000"
                     onClick={handleLogOut}
                 >
-                    Log Out <Logout />
+                    Log Out <Logout style={{ fontSize: "3.2rem" }} />
                 </button>
             </div>
         </div>

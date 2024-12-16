@@ -60,66 +60,68 @@ function Cart({ handleCartToggle, isOpen }) {
     console.log("Cart items:", cartItemsList);
     return (
         <div
-            className={`cart fixed top-0 right-0 w-[35rem] h-full py-4 px-8 bg-[#e4efe4] shadow-[rgba(0,0,0,0.5)_-2px_0_5px] z-[1000] transform transition-transform duration-300 ${
+            className={`cart fixed top-0 right-0 w-[50rem] h-full py-4 px-8 bg-[#e4efe4] shadow-[rgba(0,0,0,0.5)_-2px_0_5px] z-[1000] transform transition-transform duration-300 ${
                 isOpen ? "translate-x-0" : "translate-x-full"
             }`}
         >
-            <div className="pt-4 flex items-center justify-end mr-12">
-                <Close
-                    className="cart-close-btn cursor-pointer text-[#014210] text-4xl absolute top-8 right-20"
-                    style={{ fontSize: "2.4rem" }}
-                    onClick={() => {
-                        handleCartToggle();
-                    }}
-                />
+            <div className="pt-4 flex items-center justify-end mt-32 mr-12 sm_desk:mt-0">
+                <div className="pt-12 flex items-center justify-end mr-12">
+                    <Close
+                        className="cart-close-btn cursor-pointer text-[#014210] text-4xl absolute top-8 right-20"
+                        style={{ fontSize: "3.6rem" }}
+                        onClick={() => {
+                            handleCartToggle();
+                        }}
+                    />
+                </div>
             </div>
-            <div className="cart-heading flex items-center justify-evenly mt-20">
-                <h1 className="cart-title text-4xl text-center text-[#014210] font-bold">
+            <div className="sm_desk:scale-90">
+                <h1 className="cart-title flex items-center justify-center gap-16 -mt-8 text-7xl text-center text-[#014210] font-bold">
                     My Cart
+                    <ShoppingCart
+                        style={{ fontSize: "4.8rem", color: "#014210" }}
+                    />
                 </h1>
-                <ShoppingCart
-                    style={{ fontSize: "2.8rem", color: "#014210" }}
-                />
-            </div>
-            {cartItemsList.length === 0 ? (
-                <strong className="cart-message block text-[#560000] text-center text-2xl my-8 mx-auto">
-                    Your cart is empty
-                </strong>
-            ) : (
-                <ul className="cart-items scrollbar max-h-[28rem] overflow-y-auto py-4 mt-4 px-8">
-                    {cartItemsList.map((cartItem) => {
-                        return (
-                            <li
-                                className="cart-item grid grid-cols-[1fr_3fr] items-start justify-center p-2 gap-x-8"
-                                key={cartItem.productId}
-                            >
-                                <CartItem cartItemData={cartItem} />
-                            </li>
-                        );
-                    })}
-                </ul>
-            )}
-            <div className="cart-info flex items-center justify-evenly pl-0 text-[#014210] font-semibold text-xl p-8 ">
-                <h3 className="total-info">Total Price: ₹{totalPrice}</h3>
-                <h3 className="total-info">Quantity: {totalQuantity}</h3>
-            </div>
-            <div className="cart-btns flex flex-col items-center justify-center pl-0 text-center gap-4 ">
-                <button
-                    className="cart-btn buy-btn text-center rounded-md text-xl w-full font-semibold border-[3px] border-[#014210] text-[#014210] hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000"
-                    disabled={cartItemsList.length === 0}
-                    aria-disabled={cartItemsList.length === 0}
-                    onClick={handleBuyNow}
-                >
-                    Buy Now
-                </button>
-                <button
-                    className="cart-btn cancel-btn text-center rounded-md text-xl w-full font-semibold border-[3px] border-[#560000] text-[#560000] hover:bg-[#560000] hover:text-white transition-all ease-linear duration-1000"
-                    disabled={cartItemsList.length === 0}
-                    aria-disabled={cartItemsList.length === 0}
-                    onClick={handleClearCart}
-                >
-                    Cancel
-                </button>
+                {cartItemsList.length === 0 ? (
+                    <strong className="cart-message block text-[#560000] text-center text-3xl my-8 mx-auto">
+                        Your cart is empty
+                    </strong>
+                ) : (
+                    <ul className="cart-items scrollbar max-h-[50rem] overflow-y-auto py-4 mt-8 px-8">
+                        {cartItemsList.map((cartItem) => {
+                            return (
+                                <li
+                                    className="cart-item grid grid-cols-[1fr_3fr] items-start justify-center p-2"
+                                    key={cartItem.productId}
+                                >
+                                    <CartItem cartItemData={cartItem} />
+                                </li>
+                            );
+                        })}
+                    </ul>
+                )}
+                <div className="cart-info flex items-center justify-evenly pl-0 text-[#014210] font-semibold text-4xl p-8 ">
+                    <h3 className="total-info">Total Price: ₹{totalPrice}</h3>
+                    <h3 className="total-info">Quantity: {totalQuantity}</h3>
+                </div>
+                <div className="cart-btns flex flex-col items-center justify-center pl-0 text-center gap-4 ">
+                    <button
+                        className="cart-btn buy-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-200"
+                        disabled={cartItemsList.length === 0}
+                        aria-disabled={cartItemsList.length === 0}
+                        onClick={handleBuyNow}
+                    >
+                        Buy Now
+                    </button>
+                    <button
+                        className="cart-btn cancel-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#560000] rounded-md text-[#560000] text-[2.4rem] font-semibold hover:bg-[#560000] hover:text-white transition-all ease-linear duration-200"
+                        disabled={cartItemsList.length === 0}
+                        aria-disabled={cartItemsList.length === 0}
+                        onClick={handleClearCart}
+                    >
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -154,7 +156,7 @@ function CartItem({ cartItemData }) {
 
     return (
         <>
-            <div className="cart-img-info w-36 flex flex-col items-center justify-center gap-4">
+            <div className="cart-img-info w-64 flex flex-col items-center justify-center gap-4">
                 <img
                     src={image}
                     alt={productName}
@@ -163,16 +165,16 @@ function CartItem({ cartItemData }) {
                 <div className="cart-item-qty flex items-center justify-center gap-3">
                     <RemoveCircle
                         className="update-btn cursor-pointer"
-                        style={{ color: "#560000" }}
+                        style={{ color: "#560000", fontSize: "3.2rem" }}
                         onClick={() => {
                             handleQuantityUpdate(-1);
                             // console.log("-1");
                         }}
                     />
-                    <span>{qty}</span>
+                    <span className="text-3xl">{qty}</span>
                     <AddCircle
                         className="update-btn cursor-pointer"
-                        style={{ color: "#560000" }}
+                        style={{ color: "#560000", fontSize: "3.2rem" }}
                         onClick={() => {
                             handleQuantityUpdate(1);
                             // console.log("+1");
@@ -180,16 +182,16 @@ function CartItem({ cartItemData }) {
                     />
                 </div>
             </div>
-            <div className="cart-item-info flex flex-col justify-start items-end px-8 text-end gap-2">
+            <div className="cart-item-info flex flex-col justify-start items-end px-8 text-end gap-8">
                 <RemoveShoppingCart
                     className="remove-btn cursor-pointer"
-                    style={{ fontSize: "1.6rem", color: "#560000" }}
+                    style={{ fontSize: "2.8rem", color: "#560000" }}
                     onClick={handleRemoveFromCart}
                 />
-                <h4 className="cart-item-name font-semibold text-lg text-[#560000]">
-                    {productBrand + " " + productName}
+                <h4 className="cart-item-name font-semibold text-3xl text-[#560000]">
+                    {productBrand + " | " + productName}
                 </h4>
-                <h4 className="cart-total-price text-lg font-bold text-[#014210]">
+                <h4 className="cart-total-price text-4xl font-bold text-[#014210]">
                     ₹ {price * qty}
                 </h4>
             </div>
@@ -197,7 +199,7 @@ function CartItem({ cartItemData }) {
                 <hr
                     style={{
                         width: "250%",
-                        border: "0.15rem solid #014210",
+                        border: "0.2rem solid #014210",
                         borderRadius: "100rem",
                         margin: "1rem 0",
                     }}

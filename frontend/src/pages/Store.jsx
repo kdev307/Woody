@@ -109,7 +109,7 @@ function Store() {
         <>
             <Navbar />
             <div className="store-container bg-[#e4efe4] p-8">
-                <div className="nav-bar my-1 mx-0 flex justify-start items-center mb-6">
+                <div className="nav-bar my-1 mx-0 flex sm_tab:flex-col-reverse lg_tab:gap-8 sm_desk:gap-64 sm_tab:items-start justify-start items-center mb-6">
                     <ul className="sort-btns flex lg_tab:hidden justify-center items-center gap-8">
                         {sortButtons.map((sortBtn, index) => (
                             <li key={index}>
@@ -221,14 +221,14 @@ function Store() {
                         placeholder="Search for products..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="search-bar w-[40vw] p-2 px-6 text-[1.8rem] border-2 border-[#014210] text-[#014210] bg-[#eee] rounded-lg shadow-md transition-all duration-1000 ease-in-out transform translate-x-[65%] sm_desk:translate-x-[40%] focus:border-[#560000] focus:outline-none focus:text-[#560000]"
+                        className="search-bar w-[40vw] lg_tab:w-[80vw] tab:w-[55vw] sm_tab:w-full p-2 px-6 text-[1.8rem] border-2 border-[#014210] text-[#014210] bg-[#eee] rounded-lg shadow-md transition-all duration-1000 ease-in-out transform translate-x-[65%] sm_desk:translate-x-0 focus:border-[#560000] focus:outline-none focus:text-[#560000]"
                     />
                     {/* <Search style={{ fontSize: "3.6rem", color: "#014210" }} /> */}
                     {/* <button onClick={handleSearch} className="search-button">
                         <Search style={{ fontSize: "3.6rem", color: "#014210" }} />
                     </button> */}
                 </div>
-                <div className="products-section flex lg_tab:flex-col items-start justify-center lg_tab:justify-start gap-8">
+                <div className="products-section grid grid-cols-[1fr_4fr] lg_tab:flex lg_tab:flex-col items-start justify-center lg_tab:justify-start gap-8">
                     <ProductFilters
                         productFilters={productFilters}
                         selectedCategory={selectedCategory}
@@ -257,7 +257,7 @@ function ProductFilters({
 }) {
     return (
         <>
-            <ul className="filters-list w-[30%] flex lg_tab:hidden flex-col items-center justify-center text-center p-8 gap-4 bg-[#eee] rounded-lg shadow-[2px_2px_8px_rgba(0,86,0,0.3)] mt-2">
+            <ul className="filters-list flex lg_tab:hidden flex-col items-center justify-center text-center p-8 gap-4 bg-[#eee] rounded-lg shadow-[2px_2px_8px_rgba(0,86,0,0.3)] mt-2">
                 {productFilters.map((category) => (
                     <li
                         key={category}
@@ -338,7 +338,7 @@ function Products({ productsList, loading, error }) {
                 <Error message={error} />
             ) : (
                 <>
-                    <ul className="products-list grid grid-cols-4 sm_desk:grid-cols-3 tab:grid-cols-2 mob:grid-cols-1 items-center justify-center gap-y-0">
+                    <ul className="products-list grid grid-cols-4 sm_desk:grid-cols-3 tab:grid-cols-2 mob:grid-cols-1 items-center justify-center gap-y-0 sm_tab:gap-x-10 sm_tab:-ml-8 mob:ml-0">
                         {productsList.map((product) => {
                             return (
                                 <li key={product.id}>
@@ -373,7 +373,7 @@ function ProductCard({ product }) {
             className="detail-btn inline-flex text-[#014210] p-2 text-center font-normal border-none outline-none hover:bg-[#014210] hover:border-none hover:outline-none hover:text-white transition-all ease duration-500"
         >
             <div className="product-card flex flex-col items-start justify-center rounded-lg shadow-[5px_5px_10px_rgba(83,0,0,0.3)] transition-all ease-in-out duration-1000 bg-[#eee] relative text-[#014210] hover:border-2 hover:border-[#014210] hover:scale-105 hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:bg-white hover:z-50">
-                <div className="img-container w-[36rem] sm_desk:w-[34rem] lg_tab:w-[32rem] tab:w-[45rem] sm_tab:w-[33rem] sm_tab:mx-auto sm_tab:px-auto mob:w-[50rem] rounded-t-lg overflow-hidden">
+                <div className="img-container w-[100%] sm_tab:mx-auto sm_tab:px-auto mob:w-[100%] rounded-t-lg overflow-hidden">
                     {!stockCount ? (
                         <Tags
                             tagData="Out of Stock"

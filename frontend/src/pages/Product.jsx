@@ -87,13 +87,13 @@ function Product({ params }) {
             ) : error ? (
                 <Error message={error} />
             ) : (
-                <div className="product p-8 grid grid-cols-[2fr_3fr] tab:flex tab:flex-col tab:items-center gap-8 sm_desk:gap-20 items-start justify-center text-xl bg-[#e4efe4] pt-32">
-                    <div className="image-container w-[87%] sm_desk:w-[105%] lg_tab:w-[108%] tab:w-[80%] sm_tab:w-[95%] border-2 border-black bg-white">
+                <div className="product p-8 grid grid-cols-[2fr_3fr] tab:flex tab:flex-col tab:items-start tab:justify-start gap-8 sm_desk:gap-20 items-start justify-center text-xl bg-[#e4efe4] pt-32">
+                    <div className="image-container self-center w-[87%] sm_desk:w-[105%] lg_tab:w-[108%] tab:w-[80%] sm_tab:w-[95%] border-2 border-black bg-white">
                         <img src={image} alt={productName} className="w-full" />
                     </div>
                     <div className="product-info-container flex flex-col items-start justify-center gap-6">
                         <div className="product-main-info flex flex-col items-start justify-center text-left">
-                            <div className="absolute top-[20%] left-[40.5%] sm_desk:top-[25%] sm_desk:left-[41.5%] lg_tab:left-[42%] tab:top-[112%] tab:left-[1.5%] sm_tab:top-[100%] mob:top-[79%] mob:left-[2%]  w-60">
+                            <div className="absolute top-[20%] left-[40.5%] sm_desk:top-[25%] sm_desk:left-[41.5%] lg_tab:left-[42%] tab:top-[110%] tab:left-[1.5%] sm_tab:top-[97%] mob:top-[77%] mob:left-[2%] w-60">
                                 {!stockCount ? (
                                     <Tags
                                         tagData="Out of Stock"
