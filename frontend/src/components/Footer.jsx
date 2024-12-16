@@ -21,10 +21,10 @@ function Footer() {
                             "addr-info newsletter credit-copyright"
                             `,
                     }}
-                    className="footer-info grid grid-cols-3 grid-rows-2 tab:flex tab:flex-col items-center justify-center"
+                    className="footer-info grid grid-cols-3 grid-rows-2 tab:flex tab:flex-col items-center justify-start"
                 >
                     <div
-                        className="main-info flex flex-col justify-center items-center text-center py-0 px-4 gap-4"
+                        className="main-info flex flex-col justify-center items-start text-center py-0 px-4 gap-4"
                         style={{ gridArea: "main-info" }}
                     >
                         <a href="#" className="logo-col">
@@ -49,7 +49,7 @@ function Footer() {
                         </ul>
                     </div>
                     <div
-                        className="main-info flex flex-col justify-center items-center text-center py-0 px-4 gap-4"
+                        className="main-info flex flex-col justify-center items-start text-center py-0 px-4 gap-4"
                         style={{ gridArea: "addr-info" }}
                     >
                         <ul className="contacts flex flex-col justify-start items-start text-center font-semibold gap-8 text-3xl mob:text-[1.8rem]">
