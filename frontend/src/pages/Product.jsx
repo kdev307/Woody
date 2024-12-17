@@ -6,7 +6,15 @@ import Footer from "../components/Footer";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
 import Tags from "../components/Tags";
-import { Star, AddShoppingCart, Check, West } from "@mui/icons-material";
+import {
+    Star,
+    AddShoppingCart,
+    Check,
+    West,
+    Straighten,
+    DescriptionOutlined,
+    ReviewsOutlined,
+} from "@mui/icons-material";
 import { listProductDetail } from "../actions/productActions";
 import { addToCart } from "../actions/cartActions";
 // import Message from "../components/Message";
@@ -59,20 +67,63 @@ function Product({ params }) {
         productSpecification,
         productReviews,
     } = product;
+
     const infoBtns = [
         {
             btnTabName: "Description",
             btnTabMethod: "description",
+            btnIcon: <DescriptionOutlined style={{ fontSize: "2.8rem" }} />,
         },
         {
             btnTabName: "Specifications",
             btnTabMethod: "specifications",
+            btnIcon: <Straighten style={{ fontSize: "2.8rem" }} />,
         },
         {
             btnTabName: "Reviews",
             btnTabMethod: "reviews",
+            btnIcon: <ReviewsOutlined style={{ fontSize: "2.8rem" }} />,
         },
     ];
+    const formatText = (text) => {
+        if (!text) return null;
+
+        return text.split("\n").map((line, index) => {
+            const trimmedLine = line.trim();
+
+            // Check if the line starts with a bullet
+            const isBullet = trimmedLine.startsWith("-");
+
+            // Remove '-' symbol for cleaner rendering
+            const content = isBullet
+                ? trimmedLine.slice(1).trim() // Remove leading dash and spaces
+                : trimmedLine;
+
+            // Check for lines with colons to bold the label part
+            const colonIndex = content.indexOf(":");
+            const hasColon = colonIndex !== -1;
+
+            return (
+                <div key={index} className="mb-1 flex">
+                    {/* Render bullet only if line starts with '-' */}
+                    {isBullet && <span className="mr-2 text-4xl">•</span>}
+
+                    {/* Render content */}
+                    {hasColon ? (
+                        <span>
+                            <span className="font-bold">
+                                {content.slice(0, colonIndex + 1)}
+                            </span>{" "}
+                            {content.slice(colonIndex + 1).trim()}
+                        </span>
+                    ) : (
+                        <span>{content}</span>
+                    )}
+                </div>
+            );
+        });
+    };
+
     return (
         <>
             <Navbar />
@@ -135,7 +186,7 @@ function Product({ params }) {
                             {infoBtns.map((btn, index) => (
                                 <li key={index}>
                                     <button
-                                        className={`info-btn p-6 ${
+                                        className={`info-btn p-6 flex gap-4 items-center justify-center ${
                                             activeTab === btn.btnTabMethod
                                                 ? "bg-white font-bold transition-all ease-in-out duration-1000"
                                                 : ""
@@ -144,27 +195,30 @@ function Product({ params }) {
                                             handleTabClick(btn.btnTabMethod)
                                         }
                                     >
-                                        {btn.btnTabName}
+                                        <>{btn.btnTabName}</>
+                                        <>{btn.btnIcon}</>
                                     </button>
                                 </li>
                             ))}
                         </ul>
-                        <div className="content py-4 px-8 text-left max-h-96 min-h-96 overflow-y-auto scrollbar">
+                        <div className="content py-4 px-8 max-h-[30rem] min-h-[30rem] mx-auto w-[95%] text-left indent-4 overflow-y-auto scrollbar">
                             {activeTab === "description" && (
                                 <div className="description text-3xl">
                                     {productDescription}
                                 </div>
                             )}
-                            {activeTab === "specification" && (
-                                <div className="specification text-3xl">
-                                    {productSpecification}
-                                </div>
+                            {activeTab === "specifications" && (
+                                <ul className="specification text-3xl list-disc list-inside space-y-6 space-x-10">
+                                    {productSpecification &&
+                                        formatText(productSpecification)}
+                                </ul>
                             )}
 
                             {activeTab === "reviews" && (
-                                <div className="reviews text-3xl">
-                                    {productReviews}
-                                </div>
+                                <ul className="specification text-3xl list-disc list-inside">
+                                    {productReviews &&
+                                        formatText(productReviews)}
+                                </ul>
                             )}
                         </div>
                         <div className="product-action m-auto flex items-center justify-center gap-60 sm_desk:gap-48 lg_tab:gap-24 font-bold text-[#014210]">
