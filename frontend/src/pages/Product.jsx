@@ -91,24 +91,35 @@ function Product({ params }) {
         return text.split("\n").map((line, index) => {
             const trimmedLine = line.trim();
 
-            // Check if the line starts with a bullet
-            const isBullet = trimmedLine.startsWith("-");
+            // Check the level of nesting based on the number of leading dashes
+            const nestingLevel =
+                (trimmedLine.match(/^(-+)/) || [])[0]?.length || 0;
 
-            // Remove '-' symbol for cleaner rendering
-            const content = isBullet
-                ? trimmedLine.slice(1).trim() // Remove leading dash and spaces
-                : trimmedLine;
+            // Define symbols for different nesting levels
+            const symbols = ["◆", "✸", "▸"];
+            const symbol =
+                nestingLevel > 0 && nestingLevel <= symbols.length
+                    ? symbols[nestingLevel - 1]
+                    : ""; // Default to no symbol if level exceeds
 
-            // Check for lines with colons to bold the label part
+            // Clean the text by removing leading dashes
+            const content = trimmedLine.replace(/^(-+)/, "").trim();
+
+            // Check for colon to bold the left part
             const colonIndex = content.indexOf(":");
             const hasColon = colonIndex !== -1;
 
             return (
-                <div key={index} className="mb-1 flex">
-                    {/* Render bullet only if line starts with '-' */}
-                    {isBullet && <span className="mr-2 text-4xl">•</span>}
+                <div
+                    key={index}
+                    className={`flex items-start mb-1 ${
+                        nestingLevel > 0 ? `ml-${nestingLevel * 4}` : ""
+                    }`} // Indent based on nesting level
+                >
+                    {/* Render the nesting symbol */}
+                    {symbol && <span className="mr-2">{symbol}</span>}
 
-                    {/* Render content */}
+                    {/* Render content with bold before colon */}
                     {hasColon ? (
                         <span>
                             <span className="font-bold">
