@@ -6,7 +6,11 @@ import {
     PRODUCT_DETAILS_REQUEST,
     PRODUCT_DETAILS_SUCCESS,
     PRODUCT_DETAILS_FAIL,
+    PRODUCT_CREATE_REQUEST,
+    PRODUCT_CREATE_SUCCESS,
+    PRODUCT_CREATE_FAIL,
 } from "../constants/productConstants";
+import { ACCESS_TOKEN } from "../constants/constants";
 
 export const listProducts = () => async (dispatch) => {
     try {
@@ -45,3 +49,39 @@ export const listProductDetail = (id) => async (dispatch) => {
         });
     }
 };
+
+export const createProduct =
+    (formProductData) => async (dispatch, getState) => {
+        try {
+            dispatch({ type: PRODUCT_CREATE_REQUEST });
+            const access_token = localStorage.getItem(ACCESS_TOKEN);
+            if (!access_token) {
+                console.error("Access token is missing");
+                return;
+            }
+            const response = await axios.post(
+                "/api/products/add",
+                // "http://localhost:8000/api/products/add",
+                formProductData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+            dispatch({
+                type: PRODUCT_CREATE_SUCCESS,
+                payload: response.data,
+            });
+        } catch (error) {
+            dispatch({
+                type: PRODUCT_CREATE_FAIL,
+                payload:
+                    error.response && error.response.data.detail
+                        ? error.response.data.detail
+                        : error.message,
+            });
+            console.error("Error creating product:", error);
+        }
+    };

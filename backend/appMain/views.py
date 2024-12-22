@@ -3,11 +3,16 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # from .products import products
+from copy import deepcopy
+
 from .models import Products
 from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -39,6 +44,7 @@ def getRoutes(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny]) 
 def getProducts(request):
     products = Products.objects.all()
     serializer = ProductSerializer(products, many=True)
@@ -46,10 +52,47 @@ def getProducts(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny]) 
 def getProduct(request, pk):
     product = Products.objects.get(id=pk)
     serializer = ProductSerializer(product, many=False)
+    # serializer = ProductSerializer(product, many=True)
     return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+# def addProduct(request):
+#         if not request.user.is_authenticated:
+#             print(f"Received data: {request.data}")
+#             parser_classes = [MultiPartParser, FormParser]
+#             serializer = ProductSerializer(data=request.data)
+#             if serializer.is_valid:
+#                 serializer.save()
+#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+#             else:
+#                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def addProduct(request):
+    try:
+        print(f"Received data: {request.data}")
+        print("Received Files:", request.FILES)
+        for key, value in request.data.items():
+            print(f"{key}: {value} (type: {type(value)})")
+        parser_classes = [MultiPartParser, FormParser]
+        # request.data._mutable = True  # Make data mutable (if QueryDict)
+        # request.data['user'] = request.user.id  # Set the user ID
+        # request.data._mutable = False
+        data = deepcopy(request.data)  # Copy data to a mutable dictionary
+        data['user'] = request.user.id  # Add user to the data
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid(): 
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        print("Error:", e)
+        return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
