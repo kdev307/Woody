@@ -9,6 +9,9 @@ import {
     PRODUCT_CREATE_REQUEST,
     PRODUCT_CREATE_SUCCESS,
     PRODUCT_CREATE_FAIL,
+    PRODUCT_UPDATE_REQUEST,
+    PRODUCT_UPDATE_SUCCESS,
+    PRODUCT_UPDATE_FAIL,
 } from "../constants/productConstants";
 import { ACCESS_TOKEN } from "../constants/constants";
 
@@ -50,18 +53,52 @@ export const listProductDetail = (id) => async (dispatch) => {
     }
 };
 
-export const createProduct =
-    (formProductData) => async (dispatch, getState) => {
+export const createProduct = (formProductData) => async (dispatch) => {
+    try {
+        dispatch({ type: PRODUCT_CREATE_REQUEST });
+        const access_token = localStorage.getItem(ACCESS_TOKEN);
+        if (!access_token) {
+            console.error("Access token is missing");
+            return;
+        }
+        const response = await axios.post(
+            "/api/products/add",
+            formProductData,
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        );
+        dispatch({
+            type: PRODUCT_CREATE_SUCCESS,
+            payload: response.data,
+        });
+    } catch (error) {
+        dispatch({
+            type: PRODUCT_CREATE_FAIL,
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message,
+        });
+        console.error("Error creating product:", error);
+    }
+};
+
+export const updateProduct =
+    (productId, formProductData) => async (dispatch) => {
         try {
-            dispatch({ type: PRODUCT_CREATE_REQUEST });
+            dispatch({ type: PRODUCT_UPDATE_REQUEST });
             const access_token = localStorage.getItem(ACCESS_TOKEN);
             if (!access_token) {
                 console.error("Access token is missing");
                 return;
             }
-            const response = await axios.post(
-                "/api/products/add",
-                // "http://localhost:8000/api/products/add",
+            const response = await axios.put(
+                // `/api/product/edit/${productId}`,
+                `http://localhost:8000/api/product/edit/${productId}`,
                 formProductData,
                 {
                     headers: {
@@ -71,17 +108,17 @@ export const createProduct =
                 }
             );
             dispatch({
-                type: PRODUCT_CREATE_SUCCESS,
+                type: PRODUCT_UPDATE_SUCCESS,
                 payload: response.data,
             });
         } catch (error) {
+            console.error("Error:", error);
             dispatch({
-                type: PRODUCT_CREATE_FAIL,
+                type: PRODUCT_UPDATE_FAIL,
                 payload:
                     error.response && error.response.data.detail
                         ? error.response.data.detail
                         : error.message,
             });
-            console.error("Error creating product:", error);
         }
     };

@@ -8,6 +8,19 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
         fields = '__all__'
+        extra_kwargs = {
+            'productImage': {'required': False, 'allow_null': True},  # Optional image
+            'productBrand': {'required': False},
+            'productName': {'required': False},
+            'productDescription': {'required': False},
+            'productSpecifications': {'required': False},
+            'productReviews': {'required': False},
+            'productRating': {'required': False},
+            'productNumReviews': {'required': False},
+            'productPrice': {'required': False},
+            'productStockCount': {'required': False},
+            'productCategories': {'required': False},
+        }
 
 
 class UserSerializer(serializers.ModelSerializer):

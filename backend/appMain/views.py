@@ -3,8 +3,6 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # from .products import products
-from copy import deepcopy
-
 from .models import Products
 from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken
 from rest_framework import serializers
@@ -78,11 +76,11 @@ def addProduct(request):
         for key, value in request.data.items():
             print(f"{key}: {value} (type: {type(value)})")
         parser_classes = [MultiPartParser, FormParser]
-        # request.data._mutable = True  # Make data mutable (if QueryDict)
-        # request.data['user'] = request.user.id  # Set the user ID
-        # request.data._mutable = False
-        data = deepcopy(request.data)  # Copy data to a mutable dictionary
-        data['user'] = request.user.id  # Add user to the data
+        request.data._mutable = True  # Make data mutable (if QueryDict)
+        request.data['user'] = request.user.id  # Set the user ID
+        request.data._mutable = False
+        # data = deepcopy(request.data)  # Copy data to a mutable dictionary
+        # data['user'] = request.user.id  # Add user to the data
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid(): 
             serializer.save()
@@ -93,6 +91,28 @@ def addProduct(request):
         print("Error:", e)
         return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def editProduct(request, pk):
+    try:
+        product = Products.objects.get(id=pk)
+    except Products.DoesNotExist:
+        return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    print("Incoming data:", request.data)  # Logs form data
+    print("Incoming files:", request.FILES)  # Logs uploaded files
+
+    serializer = ProductSerializer(product, data=request.data, partial=True)  # `partial=True` allows partial updates
+    if serializer.is_valid():
+        if 'productImage' not in request.FILES:
+            serializer.validated_data['productImage'] = product.productImage
+
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        print("Serializer errors:", serializer.errors)  # Logs validation errors
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

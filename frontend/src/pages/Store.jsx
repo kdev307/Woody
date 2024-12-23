@@ -340,9 +340,16 @@ function Products({ productsList, loading, error, userInfo = {} }) {
     // if (!productsList.length) {
     //     return <div>No products found.</div>;
     // }
-    const [viewProductForm, setViewProductForm] = useState(false);
-    const toggleViewProductForm = () => {
-        setViewProductForm(!viewProductForm);
+    const [productFormState, setProductFormState] = useState({
+        isVisible: false,
+        product: null,
+    });
+
+    const toggleProductForm = (product = null) => {
+        setProductFormState((prev) => ({
+            isVisible: !prev.isVisible,
+            product,
+        }));
     };
     return (
         <>
@@ -359,6 +366,7 @@ function Products({ productsList, loading, error, userInfo = {} }) {
                                     <ProductCard
                                         product={product}
                                         userInfo={userInfo}
+                                        toggleProductForm={toggleProductForm}
                                     />
                                 </li>
                             );
@@ -366,8 +374,8 @@ function Products({ productsList, loading, error, userInfo = {} }) {
                         {userInfo.isAdmin && (
                             <li>
                                 <div
-                                    className="product-card cursor-pointer p-2 h-[65rem] flex flex-col items-center justify-center gap-8 rounded-lg shadow-[5px_5px_10px_rgba(83,0,0,0.3)] border-2 border-dashed transition-all ease-in-out duration-1000 bg-[#eee] relative text-[#014210] hover:border-solid border-[#014210] hover:scale-105"
-                                    onClick={toggleViewProductForm}
+                                    className="product-card cursor-pointer p-2 h-[70rem] flex flex-col items-center justify-center gap-8 rounded-lg shadow-[5px_5px_10px_rgba(83,0,0,0.3)] border-2 border-dashed transition-all ease-in-out duration-1000 bg-[#eee] relative text-[#014210] hover:border-solid border-[#014210] hover:scale-105"
+                                    onClick={() => toggleProductForm()}
                                 >
                                     <AddCircle
                                         style={{
@@ -379,31 +387,16 @@ function Products({ productsList, loading, error, userInfo = {} }) {
                                         Add New Product
                                     </h2>
                                 </div>
-                                {viewProductForm && (
-                                    <div
-                                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-                                        onClick={toggleViewProductForm}
-                                    >
-                                        <div
-                                            className="relative w-11/12 max-w-4xl bg-[#e4efe4] rounded-lg p-8 overflow-auto"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            <ProductForm
-                                                route="/api/products/add"
-                                                method="addProduct"
-                                                handleProductFormToggle={
-                                                    toggleViewProductForm
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-                                    // <ProductForm
-                                    //     method="addProduct"
-                                    //     handleProductFormToggle={
-                                    //         toggleViewProductForm
-                                    //     }
-                                    //     isViewProductFormOpen={viewProductForm}
-                                    // />
+                                {productFormState.isVisible && (
+                                    <ProductForm
+                                        method={
+                                            productFormState.product
+                                                ? "editProduct"
+                                                : "addProduct"
+                                        }
+                                        product={productFormState.product}
+                                        toggleProductForm={toggleProductForm}
+                                    />
                                 )}
                             </li>
                         )}
@@ -414,7 +407,7 @@ function Products({ productsList, loading, error, userInfo = {} }) {
     );
 }
 
-function ProductCard({ product, userInfo }) {
+function ProductCard({ product, userInfo, toggleProductForm }) {
     const {
         productName,
         productBrand,
@@ -460,7 +453,12 @@ function ProductCard({ product, userInfo }) {
                 {userInfo.isAdmin && (
                     <>
                         <div className="flex self-end items-center justify-center">
-                            <button>
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault(); // Prevent the link navigation
+                                    toggleProductForm(product); // Toggle the form
+                                }}
+                            >
                                 <Edit
                                     style={{
                                         fontSize: "3.2rem",
@@ -476,6 +474,15 @@ function ProductCard({ product, userInfo }) {
                                     }}
                                 />
                             </button>
+                            {/* {viewProductForm && (
+                                <ProductForm
+                                    method="editProduct"
+                                    product={product}
+                                    handleProductFormToggle={
+                                        toggleViewProductForm
+                                    }
+                                />
+                            )} */}
                         </div>
                         <div className="admin-product-btns flex flex-col items-center justify-center gap-4">
                             <h3 className="px-4 self-start text-2xl font-semibold text-[#560000] text-left">
@@ -497,7 +504,7 @@ function ProductCard({ product, userInfo }) {
                         </div>
                     </>
                 )}
-                <ul className="product-category-list flex flex-wrap items-center justify-start gap-2 mt-2 p-2">
+                <ul className="product-category-list max-h-[4.05rem] overflow-y-auto scrollbar-none flex flex-wrap items-center justify-start gap-2 mt-2 p-2">
                     {(productCategories || []).map((category) => {
                         return (
                             <li
