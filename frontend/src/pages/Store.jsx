@@ -12,7 +12,7 @@ import {
     Star,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { listProducts } from "../actions/productActions";
+import { deleteProduct, listProducts } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import Tags from "../components/Tags";
 import ProductForm from "../components/ProductForm";
@@ -104,14 +104,18 @@ function Store() {
     } else if (sortBy === "popularity") {
         sortedProducts.sort(
             (a, b) =>
-                Number(a.stockCount - b.stockCount) &&
-                Number(b.rating - a.rating) &&
-                Number(b.numReviews - a.numReviews)
+                Number(a.productStockCount - b.productStockCount) &&
+                Number(b.productRating - a.productRating) &&
+                Number(b.productNumReviews - a.productNumReviews)
         );
     } else if (sortBy === "priceLowToHigh") {
-        sortedProducts.sort((a, b) => Number(a.price) - Number(b.price));
+        sortedProducts.sort(
+            (a, b) => Number(a.productPrice) - Number(b.productPrice)
+        );
     } else if (sortBy === "priceHighToLow") {
-        sortedProducts.sort((a, b) => Number(b.price) - Number(a.price));
+        sortedProducts.sort(
+            (a, b) => Number(b.productPrice) - Number(a.productPrice)
+        );
     }
 
     return (
@@ -340,10 +344,24 @@ function Products({ productsList, loading, error, userInfo = {} }) {
     // if (!productsList.length) {
     //     return <div>No products found.</div>;
     // }
+
+    const dispatch = useDispatch();
+
+    // Access success status for delete
+    const productDelete = useSelector((state) => state.product);
+    const { success: successDelete } = productDelete;
+
     const [productFormState, setProductFormState] = useState({
         isVisible: false,
         product: null,
     });
+
+    // Re-fetch products after deletion
+    useEffect(() => {
+        if (successDelete) {
+            dispatch(listProducts());
+        }
+    }, [dispatch, successDelete]);
 
     const toggleProductForm = (product = null) => {
         setProductFormState((prev) => ({
@@ -351,6 +369,7 @@ function Products({ productsList, loading, error, userInfo = {} }) {
             product,
         }));
     };
+
     return (
         <>
             {loading ? (
@@ -420,6 +439,12 @@ function ProductCard({ product, userInfo, toggleProductForm }) {
         productStockCount,
         createdAT,
     } = product;
+    const dispatch = useDispatch();
+    const handleDelete = () => {
+        if (window.confirm("Are you sure you want to delete this product?")) {
+            dispatch(deleteProduct(product.id));
+        }
+    };
 
     return (
         <Link
@@ -466,7 +491,13 @@ function ProductCard({ product, userInfo, toggleProductForm }) {
                                     }}
                                 />
                             </button>
-                            <button>
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleDelete();
+                                }}
+                            >
                                 <Delete
                                     style={{
                                         fontSize: "3.2rem",

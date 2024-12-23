@@ -114,6 +114,22 @@ def editProduct(request, pk):
         print("Serializer errors:", serializer.errors)  # Logs validation errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteProduct(request, pk):
+    try:
+        product = Products.objects.get(id=pk)
+        product.delete()
+        return Response({"detail": "Product deleted successfully"}, status=status.HTTP_200_OK)
+    except Products.DoesNotExist:
+        return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+            return Response(
+                {"detail": f"An error occurred: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):

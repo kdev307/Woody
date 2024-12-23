@@ -12,6 +12,9 @@ import {
     PRODUCT_UPDATE_REQUEST,
     PRODUCT_UPDATE_SUCCESS,
     PRODUCT_UPDATE_FAIL,
+    PRODUCT_DELETE_REQUEST,
+    PRODUCT_DELETE_SUCCESS,
+    PRODUCT_DELETE_FAIL,
 } from "../constants/productConstants";
 import { ACCESS_TOKEN } from "../constants/constants";
 
@@ -97,8 +100,8 @@ export const updateProduct =
                 return;
             }
             const response = await axios.put(
-                // `/api/product/edit/${productId}`,
-                `http://localhost:8000/api/product/edit/${productId}`,
+                `/api/product/edit/${productId}`,
+                // `http://localhost:8000/api/product/edit/${productId}`,
                 formProductData,
                 {
                     headers: {
@@ -122,3 +125,41 @@ export const updateProduct =
             });
         }
     };
+
+export const deleteProduct = (productId) => async (dispatch) => {
+    try {
+        dispatch({ type: PRODUCT_DELETE_REQUEST });
+        const access_token = localStorage.getItem(ACCESS_TOKEN);
+        if (!access_token) {
+            console.error("Access token is missing");
+            return;
+        }
+        const { status, response } = await axios.delete(
+            `/api/product/delete/${productId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            }
+        );
+        if (status === 200 || status === 204) {
+            console.log(response || "Product deleted successfully.");
+            dispatch({ type: PRODUCT_DELETE_SUCCESS });
+        } else {
+            console.warn("Unexpected response status: ", status);
+            dispatch({ type: PRODUCT_DELETE_SUCCESS }); // Handle gracefully
+        }
+    } catch (error) {
+        console.error(
+            "Delete Product Error: ",
+            error.response || error.message
+        );
+        dispatch({
+            type: PRODUCT_DELETE_FAIL,
+            payload:
+                error.response && error.response.data.detail
+                    ? error.response.data.detail
+                    : error.message,
+        });
+    }
+};
