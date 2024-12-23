@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import Cart from "./Cart";
 import Logo from "./Logo";
 import ProfileContainer from "./ProfileContainer";
-import { Person, ShoppingCart, Close, Menu, Home } from "@mui/icons-material";
+import {
+    Person,
+    ShoppingCart,
+    Close,
+    Menu,
+    Home,
+    AdminPanelSettings,
+} from "@mui/icons-material";
 import { NavLink, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Link } from "react-scroll";
@@ -178,9 +185,15 @@ function Navbar() {
                                 onClick={handleProfileToggle}
                             >
                                 {userInfo ? (
-                                    <strong className="font-merriweather text-5xl">
-                                        {userInfo.name}
-                                    </strong>
+                                    userInfo.isAdmin ? (
+                                        <AdminPanelSettings
+                                            style={{ fontSize: "3.2rem" }}
+                                        />
+                                    ) : (
+                                        <strong className="font-merriweather text-5xl">
+                                            {userInfo.name}
+                                        </strong>
+                                    )
                                 ) : (
                                     <Person
                                         className="icon"

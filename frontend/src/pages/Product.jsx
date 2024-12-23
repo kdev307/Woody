@@ -54,17 +54,17 @@ function Product({ params }) {
     };
 
     const {
-        image,
+        productImage,
         productName,
         // productInfo,
-        numReviews,
-        price,
-        rating,
-        stockCount,
+        productNumReviews,
+        productPrice,
+        productRating,
+        productStockCount,
         productBrand,
         productCategories,
         productDescription,
-        productSpecification,
+        productSpecifications,
         productReviews,
     } = product;
 
@@ -151,18 +151,22 @@ function Product({ params }) {
             ) : (
                 <div className="product p-8 grid grid-cols-[2fr_3fr] tab:flex tab:flex-col tab:items-start tab:justify-start gap-8 sm_desk:gap-20 items-start justify-center text-xl bg-[#e4efe4] pt-32">
                     <div className="image-container self-center w-[87%] sm_desk:w-[105%] lg_tab:w-[108%] tab:w-[80%] sm_tab:w-[95%] border-2 border-black bg-white">
-                        <img src={image} alt={productName} className="w-full" />
+                        <img
+                            src={productImage}
+                            alt={productName}
+                            className="w-full"
+                        />
                     </div>
                     <div className="product-info-container flex flex-col items-start justify-center gap-6">
                         <div className="product-main-info flex flex-col items-start justify-center text-left">
                             <div className="absolute top-[20%] left-[40.5%] sm_desk:top-[25%] sm_desk:left-[41.5%] lg_tab:left-[42%] tab:top-[110%] tab:left-[1.5%] sm_tab:top-[97%] mob:top-[77%] mob:left-[2%] w-60">
-                                {!stockCount ? (
+                                {!productStockCount ? (
                                     <Tags
                                         tagData="Out of Stock"
                                         tagColor="#fff"
                                         tagBackgroundColor="#fb2d2d"
                                     />
-                                ) : stockCount < 50 ? (
+                                ) : productStockCount < 50 ? (
                                     <Tags
                                         tagData="Only few left"
                                         tagColor="#fff"
@@ -220,8 +224,8 @@ function Product({ params }) {
                             )}
                             {activeTab === "specifications" && (
                                 <ul className="specification text-3xl list-disc list-inside space-y-6 space-x-10">
-                                    {productSpecification &&
-                                        formatText(productSpecification)}
+                                    {productSpecifications &&
+                                        formatText(productSpecifications)}
                                 </ul>
                             )}
 
@@ -234,7 +238,7 @@ function Product({ params }) {
                         </div>
                         <div className="product-action m-auto flex items-center justify-center gap-60 sm_desk:gap-48 lg_tab:gap-24 font-bold text-[#014210]">
                             <div className="rating flex items-center justify-center text-4xl">
-                                <h3>{rating}</h3>
+                                <h3>{productRating}</h3>
                                 <Star
                                     style={{
                                         textAlign: "center",
@@ -242,18 +246,18 @@ function Product({ params }) {
                                         fontSize: "2.8rem",
                                     }}
                                 />
-                                {` (${numReviews})`}
+                                {` (${productNumReviews})`}
                                 {/* {`from ${numReviews} reviews`} */}
                             </div>
                             <button
                                 className={`add-to-cart-btn flex items-center justify-center gap-8 border-4 rounded-lg shadow-[5px_5px_10px_rgba(86,0,0,0.3)] transition-all ease duration-300 font-semibold text-[2.4rem] lg_tab:text-[2rem] p-4
         ${
-            !stockCount
+            !productStockCount
                 ? "cursor-not-allowed text-[#888] border-[#888] hover:text-[#888] hover:border-[#888]"
                 : "border-[#560000] text-[#560000] bg-white hover:border-[#014210] hover:text-[#014210] hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)]"
         }`}
                                 onClick={() => handleAddToCart(product)}
-                                disabled={!stockCount || isAddedToCart}
+                                disabled={!productStockCount || isAddedToCart}
                             >
                                 {isAddedToCart ? "Added" : "Add to Cart"}
                                 {isAddedToCart ? (
@@ -276,7 +280,7 @@ function Product({ params }) {
                                 <Message messageType={"success"} message={"Item added to cart!"} />
                             )} */}
                             <h3 className="product-price text-4xl">
-                                ₹ {price}
+                                ₹ {productPrice}
                             </h3>
                         </div>
                     </div>

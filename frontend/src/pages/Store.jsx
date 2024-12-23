@@ -3,11 +3,19 @@ import Error from "../components/Error";
 import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { ArrowDropDown, ArrowDropUp, Star } from "@mui/icons-material";
+import {
+    AddCircle,
+    ArrowDropDown,
+    ArrowDropUp,
+    Delete,
+    Edit,
+    Star,
+} from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { listProducts } from "../actions/productActions";
+import { deleteProduct, listProducts } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import Tags from "../components/Tags";
+import ProductForm from "../components/ProductForm";
 
 function Store() {
     const productFilters = [
@@ -30,7 +38,8 @@ function Store() {
     ];
 
     // const productsList = [];
-
+    const userLogin = useSelector((state) => state.userLogin);
+    const { userInfo } = userLogin;
     const dispatch = useDispatch();
     const productsList = useSelector((state) => state.productsList);
     const { error, loading, products } = productsList;
@@ -95,14 +104,18 @@ function Store() {
     } else if (sortBy === "popularity") {
         sortedProducts.sort(
             (a, b) =>
-                Number(a.stockCount - b.stockCount) &&
-                Number(b.rating - a.rating) &&
-                Number(b.numReviews - a.numReviews)
+                Number(a.productStockCount - b.productStockCount) &&
+                Number(b.productRating - a.productRating) &&
+                Number(b.productNumReviews - a.productNumReviews)
         );
     } else if (sortBy === "priceLowToHigh") {
-        sortedProducts.sort((a, b) => Number(a.price) - Number(b.price));
+        sortedProducts.sort(
+            (a, b) => Number(a.productPrice) - Number(b.productPrice)
+        );
     } else if (sortBy === "priceHighToLow") {
-        sortedProducts.sort((a, b) => Number(b.price) - Number(a.price));
+        sortedProducts.sort(
+            (a, b) => Number(b.productPrice) - Number(a.productPrice)
+        );
     }
 
     return (
@@ -240,6 +253,7 @@ function Store() {
                         productsList={sortedProducts}
                         loading={loading}
                         error={error}
+                        userInfo={userInfo}
                     />
                 </div>
             </div>
@@ -326,10 +340,36 @@ function ProductFilters({
     );
 }
 
-function Products({ productsList, loading, error }) {
+function Products({ productsList, loading, error, userInfo = {} }) {
     // if (!productsList.length) {
     //     return <div>No products found.</div>;
     // }
+
+    const dispatch = useDispatch();
+
+    // Access success status for delete
+    const productDelete = useSelector((state) => state.product);
+    const { success: successDelete } = productDelete;
+
+    const [productFormState, setProductFormState] = useState({
+        isVisible: false,
+        product: null,
+    });
+
+    // Re-fetch products after deletion
+    useEffect(() => {
+        if (successDelete) {
+            dispatch(listProducts());
+        }
+    }, [dispatch, successDelete]);
+
+    const toggleProductForm = (product = null) => {
+        setProductFormState((prev) => ({
+            isVisible: !prev.isVisible,
+            product,
+        }));
+    };
+
     return (
         <>
             {loading ? (
@@ -342,10 +382,43 @@ function Products({ productsList, loading, error }) {
                         {productsList.map((product) => {
                             return (
                                 <li key={product.id}>
-                                    <ProductCard product={product} />
+                                    <ProductCard
+                                        product={product}
+                                        userInfo={userInfo}
+                                        toggleProductForm={toggleProductForm}
+                                    />
                                 </li>
                             );
                         })}
+                        {userInfo.isAdmin && (
+                            <li>
+                                <div
+                                    className="product-card cursor-pointer p-2 h-[70rem] flex flex-col items-center justify-center gap-8 rounded-lg shadow-[5px_5px_10px_rgba(83,0,0,0.3)] border-2 border-dashed transition-all ease-in-out duration-1000 bg-[#eee] relative text-[#014210] hover:border-solid border-[#014210] hover:scale-105"
+                                    onClick={() => toggleProductForm()}
+                                >
+                                    <AddCircle
+                                        style={{
+                                            fontSize: "6.4rem",
+                                            color: "#014210",
+                                        }}
+                                    />
+                                    <h2 className="font-semibold text-5xl text-[#014210]">
+                                        Add New Product
+                                    </h2>
+                                </div>
+                                {productFormState.isVisible && (
+                                    <ProductForm
+                                        method={
+                                            productFormState.product
+                                                ? "editProduct"
+                                                : "addProduct"
+                                        }
+                                        product={productFormState.product}
+                                        toggleProductForm={toggleProductForm}
+                                    />
+                                )}
+                            </li>
+                        )}
                     </ul>
                 </>
             )}
@@ -353,18 +426,25 @@ function Products({ productsList, loading, error }) {
     );
 }
 
-function ProductCard({ product }) {
+function ProductCard({ product, userInfo, toggleProductForm }) {
     const {
         productName,
         productBrand,
-        image,
-        price,
-        rating,
+        productImage,
+        productPrice,
+        productRating,
         productCategories,
         productDescription,
-        numReviews,
-        stockCount,
+        productNumReviews,
+        productStockCount,
+        createdAT,
     } = product;
+    const dispatch = useDispatch();
+    const handleDelete = () => {
+        if (window.confirm("Are you sure you want to delete this product?")) {
+            dispatch(deleteProduct(product.id));
+        }
+    };
 
     return (
         <Link
@@ -374,13 +454,13 @@ function ProductCard({ product }) {
         >
             <div className="product-card flex flex-col items-start justify-center rounded-lg shadow-[5px_5px_10px_rgba(83,0,0,0.3)] transition-all ease-in-out duration-1000 bg-[#eee] relative text-[#014210] hover:border-2 hover:border-[#014210] hover:scale-105 hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)] hover:bg-white hover:z-50">
                 <div className="img-container w-[100%] sm_tab:mx-auto sm_tab:px-auto mob:w-[100%] rounded-t-lg overflow-hidden">
-                    {!stockCount ? (
+                    {!productStockCount ? (
                         <Tags
                             tagData="Out of Stock"
                             tagColor="#fff"
                             tagBackgroundColor="#fb2d2d"
                         />
-                    ) : stockCount < 50 ? (
+                    ) : productStockCount < 50 ? (
                         <Tags
                             tagData="Only few left"
                             tagColor="#fff"
@@ -390,12 +470,72 @@ function ProductCard({ product }) {
                         ""
                     )}
                     <img
-                        src={image}
+                        src={productImage}
                         alt={productName}
                         className="product-img w-full"
                     />
                 </div>
-                <ul className="product-category-list flex flex-wrap items-center justify-start gap-2 mt-2 p-2">
+                {userInfo.isAdmin && (
+                    <>
+                        <div className="flex self-end items-center justify-center">
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault(); // Prevent the link navigation
+                                    toggleProductForm(product); // Toggle the form
+                                }}
+                            >
+                                <Edit
+                                    style={{
+                                        fontSize: "3.2rem",
+                                        color: "#560000",
+                                    }}
+                                />
+                            </button>
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleDelete();
+                                }}
+                            >
+                                <Delete
+                                    style={{
+                                        fontSize: "3.2rem",
+                                        color: "#560000",
+                                    }}
+                                />
+                            </button>
+                            {/* {viewProductForm && (
+                                <ProductForm
+                                    method="editProduct"
+                                    product={product}
+                                    handleProductFormToggle={
+                                        toggleViewProductForm
+                                    }
+                                />
+                            )} */}
+                        </div>
+                        <div className="admin-product-btns flex flex-col items-center justify-center gap-4">
+                            <h3 className="px-4 self-start text-2xl font-semibold text-[#560000] text-left">
+                                Added on:{" "}
+                                {new Date(createdAT).toLocaleString("en-US", {
+                                    weekday: "short",
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                })}
+                            </h3>
+
+                            <h3 className="px-4 self-start text-2xl font-semibold text-[#560000] text-left">
+                                Stock Count: {productStockCount}
+                            </h3>
+                        </div>
+                    </>
+                )}
+                <ul className="product-category-list max-h-[4.05rem] overflow-y-auto scrollbar-none flex flex-wrap items-center justify-start gap-2 mt-2 p-2">
                     {(productCategories || []).map((category) => {
                         return (
                             <li
@@ -416,11 +556,11 @@ function ProductCard({ product }) {
                     </h3>
                     <div className=" flex items-center justify-start gap-40">
                         <h3 className="product-price font-bold text-[2.4rem]">
-                            ₹ {price}
+                            ₹ {productPrice}
                         </h3>
                         {/* <InfoOutlined style={{ fontSize: "2.4rem" }} className="info-icon" /> */}
                         <div className="rating flex items-center justify-center gap-2 text-[#560000] rounded-[4rem] font-semibold text-[1.8rem]">
-                            <h3>{rating}</h3>
+                            <h3>{productRating}</h3>
                             <Star
                                 style={{
                                     textAlign: "center",
@@ -428,7 +568,7 @@ function ProductCard({ product }) {
                                     fontSize: "2.4rem",
                                 }}
                             />
-                            <>{` (${numReviews})`}</>
+                            <>{` (${productNumReviews})`}</>
                             {/* {`from ${numReviews} reviews`} */}
                         </div>
                     </div>
