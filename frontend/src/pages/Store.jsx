@@ -469,11 +469,9 @@ function ProductCard({ product, userInfo, toggleProductForm }) {
                     ) : (
                         ""
                     )}
-                    {productImages
-                        ?.sort((img1, img2) =>
-                            img1.image.localeCompare(img2.image)
-                        )
-                        .pop() && (
+                    {productImages?.sort((img1, img2) =>
+                        img1.image.localeCompare(img2.image)
+                    )[0] && (
                         <img
                             key={productImages[0].id}
                             src={productImages[0].image}

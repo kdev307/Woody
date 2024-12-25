@@ -26,6 +26,8 @@ import { addToCart } from "../actions/cartActions";
 function Product({ params }) {
     const { id } = useParams();
     const dispatch = useDispatch();
+    const userLogin = useSelector((state) => state.userLogin);
+    const { userInfo } = userLogin;
     // const navigate = useNavigate();
     // const location = useLocation();
     const productDetails = useSelector((state) => state.productDetails);
@@ -311,9 +313,26 @@ function Product({ params }) {
                             {/* {isAddedToCart && (
                                 <Message messageType={"success"} message={"Item added to cart!"} />
                             )} */}
-                            <h3 className="product-price text-4xl">
-                                ₹ {productPrice}
-                            </h3>
+
+                            {userInfo &&
+                            !userInfo.isAdmin &&
+                            new Date(userInfo.dob).getDate() ===
+                                new Date().getDate() &&
+                            new Date(userInfo.dob).getMonth() ===
+                                new Date().getMonth() ? (
+                                <>
+                                    <h3 className="line-through product-price text-2xl">
+                                        ₹{productPrice}
+                                    </h3>
+                                    <h3 className="product-price text-4xl">
+                                        ₹{(productPrice * 90) / 100}
+                                    </h3>
+                                </>
+                            ) : (
+                                <h3 className="product-price text-4xl">
+                                    ₹{productPrice}
+                                </h3>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -386,12 +405,12 @@ function ProductCarousel({ productImages, toggleMediaView }) {
                                     .map((image) => (
                                         <div
                                             key={image.id}
-                                            className="w-full flex-shrink-0 flex items-center justify-center"
+                                            className="w-full h-full overflow-hidden flex-shrink-0 flex items-center justify-center"
                                         >
                                             <img
                                                 src={image.image}
                                                 alt={`Product ${image.product_id}`}
-                                                className="w-full h-auto max-h-[80vh] object-contain border-2 border-black"
+                                                className="w-full h-full object-cover border-2 border-black"
                                             />
                                         </div>
                                     ))}
