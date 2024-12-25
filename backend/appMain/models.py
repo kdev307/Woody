@@ -6,9 +6,8 @@ from django.contrib.auth.models import User
 
 class Products(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    productName = models.CharField(max_length=150)
-    productImage = models.ImageField(upload_to='products/',null=True, blank=True)
-    productBrand = models.CharField(max_length=150, null=True, blank=True)
+    productName = models.CharField(max_length=255)
+    productBrand = models.CharField(max_length=255, null=True, blank=True)
     # productCategory = models.CharField(max_length=150, null=True, blank=True)
     productCategories = models.JSONField(default=list, null=True, blank=True)
     productDescription = models.TextField(null=True, blank=True)
@@ -21,7 +20,15 @@ class Products(models.Model):
         null=True, blank=True)
     productStockCount = models.IntegerField(null=True, blank=True, default=0)
     createdAT = models.DateTimeField(auto_now_add=True)
+    updatedAT = models.DateTimeField(auto_now=True)
     id = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):
         return self.productName
+
+class ProductImages(models.Model):
+    product = models.ForeignKey(Products, related_name="productImages", on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="products/")
+    uploadedAT = models.DateTimeField(auto_now_add=True)
+    updatedAT = models.DateTimeField(auto_now=True)
+    id = models.AutoField(primary_key=True, editable=False)

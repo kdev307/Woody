@@ -14,6 +14,10 @@ import {
     Straighten,
     DescriptionOutlined,
     ReviewsOutlined,
+    PermMedia,
+    Close,
+    ChevronLeft,
+    ChevronRight,
 } from "@mui/icons-material";
 import { listProductDetail } from "../actions/productActions";
 import { addToCart } from "../actions/cartActions";
@@ -30,6 +34,8 @@ function Product({ params }) {
 
     const [activeTab, setActiveTab] = useState("description");
     const [isAddedToCart, setIsAddedToCart] = useState(false);
+
+    const [mediaView, setMediaView] = useState(false);
 
     useEffect(() => {
         dispatch(listProductDetail(id));
@@ -53,8 +59,12 @@ function Product({ params }) {
         }
     };
 
+    const handleMediaView = () => {
+        setMediaView((mediaView) => !mediaView);
+    };
+
     const {
-        productImage,
+        productImages,
         productName,
         // productInfo,
         productNumReviews,
@@ -150,12 +160,34 @@ function Product({ params }) {
                 <Error message={error} />
             ) : (
                 <div className="product p-8 grid grid-cols-[2fr_3fr] tab:flex tab:flex-col tab:items-start tab:justify-start gap-8 sm_desk:gap-20 items-start justify-center text-xl bg-[#e4efe4] pt-32">
-                    <div className="image-container self-center w-[87%] sm_desk:w-[105%] lg_tab:w-[108%] tab:w-[80%] sm_tab:w-[95%] border-2 border-black bg-white">
-                        <img
-                            src={productImage}
-                            alt={productName}
-                            className="w-full"
-                        />
+                    <div className="image-container gap-4 self-center w-[100%] sm_desk:w-[105%] lg_tab:w-[108%] tab:w-[80%] sm_tab:w-[95%]">
+                        {productImages?.sort((img1, img2) =>
+                            img1.image.localeCompare(img2.image)
+                        )[0] && (
+                            <img
+                                key={productImages[0].id}
+                                src={productImages[0].image}
+                                alt={`Product ${productImages[0].product_id}`}
+                                className="w-full border-2 border-black"
+                            />
+                        )}
+                        <button
+                            className="cursor-pointer absolute top-[28%] left-[36%]"
+                            onClick={handleMediaView}
+                        >
+                            <PermMedia
+                                style={{
+                                    color: "#000",
+                                    fontSize: "3.2rem",
+                                }}
+                            />
+                        </button>
+                        {mediaView && (
+                            <ProductCarousel
+                                productImages={productImages}
+                                toggleMediaView={handleMediaView}
+                            />
+                        )}
                     </div>
                     <div className="product-info-container flex flex-col items-start justify-center gap-6">
                         <div className="product-main-info flex flex-col items-start justify-center text-left">
@@ -288,6 +320,114 @@ function Product({ params }) {
             )}
             <Footer />
         </>
+    );
+}
+
+function ProductCarousel({ productImages, toggleMediaView }) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    // Function to move to the next image
+    const nextImage = () => {
+        setCurrentIndex(
+            currentIndex + 1 >= productImages.length ? 0 : currentIndex + 1
+        );
+    };
+
+    // Function to move to the previous image
+    const prevImage = () => {
+        setCurrentIndex(
+            currentIndex - 1 < 0 ? productImages.length - 1 : currentIndex - 1
+        );
+    };
+
+    // Automatically transition the carousel every 5 seconds
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            nextImage(); // Automatically move to the next image
+        }, 7000); // Change to next image every 5 seconds
+
+        // Cleanup on component unmount
+        return () => clearInterval(intervalId);
+    }, [currentIndex]);
+
+    return (
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
+            onClick={toggleMediaView}
+        >
+            <div
+                className="relative w-[40%] h-[90%] bg-[#e4efe4] rounded-lg p-8 border-2 border-[#014210] overflow-hidden"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="product-form-container p-6">
+                    <div className="pt-12 flex items-center justify-end">
+                        <Close
+                            className="cart-close-btn cursor-pointer text-[#014210] text-4xl absolute top-8 right-20"
+                            style={{ fontSize: "3.6rem" }}
+                            onClick={toggleMediaView}
+                        />
+                    </div>
+
+                    {/* Carousel container */}
+                    <div className="relative overflow-hidden">
+                        <div
+                            className="image-container flex transition-transform duration-500 ease-in-out"
+                            style={{
+                                transform: `translateX(-${
+                                    currentIndex * 100
+                                }%)`,
+                            }}
+                        >
+                            {productImages &&
+                                productImages
+                                    .sort((img1, img2) =>
+                                        img1.image.localeCompare(img2.image)
+                                    )
+                                    .map((image) => (
+                                        <div
+                                            key={image.id}
+                                            className="w-full flex-shrink-0 flex items-center justify-center"
+                                        >
+                                            <img
+                                                src={image.image}
+                                                alt={`Product ${image.product_id}`}
+                                                className="w-full h-auto max-h-[80vh] object-contain border-2 border-black"
+                                            />
+                                        </div>
+                                    ))}
+                        </div>
+
+                        {/* Buttons for manual control */}
+                        <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10">
+                            <button
+                                className="bg-black p-2 rounded-full"
+                                onClick={prevImage}
+                            >
+                                <ChevronLeft
+                                    style={{
+                                        fontSize: "3.2rem",
+                                        color: "white",
+                                    }}
+                                />
+                            </button>
+                        </div>
+                        <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10">
+                            <button
+                                className="bg-black p-2 rounded-full"
+                                onClick={nextImage}
+                            >
+                                <ChevronRight
+                                    style={{
+                                        fontSize: "3.2rem",
+                                        color: "white",
+                                    }}
+                                />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }
 

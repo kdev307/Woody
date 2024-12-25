@@ -33,6 +33,8 @@ function LogIn({ onBack }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log("Email: ", email);
+        console.log("Password: ", password);
         dispatch(logIn(email, password));
     };
 

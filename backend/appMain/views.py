@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # from .products import products
-from .models import Products
+from .models import Products, ProductImages
 from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -75,15 +75,21 @@ def addProduct(request):
         print("Received Files:", request.FILES)
         for key, value in request.data.items():
             print(f"{key}: {value} (type: {type(value)})")
+        
         parser_classes = [MultiPartParser, FormParser]
+
         request.data._mutable = True  # Make data mutable (if QueryDict)
         request.data['user'] = request.user.id  # Set the user ID
         request.data._mutable = False
         # data = deepcopy(request.data)  # Copy data to a mutable dictionary
         # data['user'] = request.user.id  # Add user to the data
+
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid(): 
-            serializer.save()
+            product = serializer.save()
+            images = request.FILES.getlist("productImages")
+            for image in images:
+                ProductImages.objects.create(product=product, image=image)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -105,10 +111,14 @@ def editProduct(request, pk):
 
     serializer = ProductSerializer(product, data=request.data, partial=True)  # `partial=True` allows partial updates
     if serializer.is_valid():
-        if 'productImage' not in request.FILES:
-            serializer.validated_data['productImage'] = product.productImage
+        product = serializer.save()
+        new_images = request.FILES.getlist("productImages")  # Fetch new uploaded files
+        for image in new_images:
+            ProductImages.objects.create(product=product, image=image)
 
-        serializer.save()
+        images_to_delete = request.data.getlist("deleteImages", [])  # IDs of images to delete
+        ProductImages.objects.filter(id__in=images_to_delete, product=product).delete()
+
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
         print("Serializer errors:", serializer.errors)  # Logs validation errors

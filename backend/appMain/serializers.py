@@ -1,15 +1,21 @@
 from rest_framework import serializers
-from .models import Products
+from .models import Products, ProductImages
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
+class ProductImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImages
+        fields = '__all__'
+
 
 class ProductSerializer(serializers.ModelSerializer):
+    productImages = ProductImagesSerializer(many=True, read_only=True)
+
     class Meta:
         model = Products
         fields = '__all__'
         extra_kwargs = {
-            'productImage': {'required': False, 'allow_null': True},  # Optional image
             'productBrand': {'required': False},
             'productName': {'required': False},
             'productDescription': {'required': False},
