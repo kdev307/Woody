@@ -363,7 +363,7 @@ function ProductCarousel({ productImages, toggleMediaView }) {
     useEffect(() => {
         const intervalId = setInterval(() => {
             nextImage(); // Automatically move to the next image
-        }, 7000); // Change to next image every 5 seconds
+        }, 5000); // Change to next image every 5 seconds
 
         // Cleanup on component unmount
         return () => clearInterval(intervalId);

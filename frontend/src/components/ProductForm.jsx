@@ -134,9 +134,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                         <Close
                             className="cart-close-btn cursor-pointer text-[#014210] text-4xl absolute top-8 right-20"
                             style={{ fontSize: "3.6rem" }}
-                            onClick={() => {
-                                toggleProductForm();
-                            }}
+                            onClick={toggleProductForm}
                         />
                     </div>
                     <h1 className="product-form-title flex items-center justify-center gap-4 text-7xl text-center text-[#014210] font-bold">
@@ -422,12 +420,12 @@ function ProductForm({ method, toggleProductForm, product }) {
                                             >
                                                 <img
                                                     src={
-                                                        typeof image ===
+                                                        typeof image.image ===
                                                         "string"
-                                                            ? image
+                                                            ? image.image
                                                             : URL.createObjectURL(
                                                                   image
-                                                              )
+                                                              ).image
                                                     }
                                                     alt={`${productName} Preview`}
                                                     className="w-full"
@@ -455,20 +453,20 @@ function ProductForm({ method, toggleProductForm, product }) {
                                 )}
                                 <label
                                     htmlFor="productImages"
-                                    className="w-full p-6 mt-2 text-[1.8rem] text-[#014210] bg-[#f8f6f6] border border-[#ccc] rounded-md cursor-pointer block text-center"
+                                    className="w-full p-6 -mb-2 mt-2 text-[1.8rem] text-[#014210] bg-[#f8f6f6] border border-[#ccc] rounded-md cursor-pointer block text-center"
                                 >
+                                    {method === "editProduct"
+                                        ? "Update Images"
+                                        : "Upload Images"}
                                     <input
                                         type="file"
                                         accept="images/*"
                                         multiple
                                         id="productImages"
                                         name="productImages"
-                                        className="form-input w-full opacity-0  absolute top-0 left-0 p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                        className="opacity-0 w-0 h-0 box-border border rounded-md"
                                         onChange={handleImageChange}
                                     />
-                                    {productImages
-                                        ? "Update Images"
-                                        : "Upload Images"}
                                 </label>
                             </div>
                         </div>
