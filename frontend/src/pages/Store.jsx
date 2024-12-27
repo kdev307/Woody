@@ -430,7 +430,7 @@ function ProductCard({ product, userInfo, toggleProductForm }) {
     const {
         productName,
         productBrand,
-        productImage,
+        productImages,
         productPrice,
         productRating,
         productCategories,
@@ -469,11 +469,16 @@ function ProductCard({ product, userInfo, toggleProductForm }) {
                     ) : (
                         ""
                     )}
-                    <img
-                        src={productImage}
-                        alt={productName}
-                        className="product-img w-full"
-                    />
+                    {productImages?.sort((img1, img2) =>
+                        img1.image.localeCompare(img2.image)
+                    )[0] && (
+                        <img
+                            key={productImages[0].id}
+                            src={productImages[0].image}
+                            alt={`Product ${productImages[0].product_id}`}
+                            className="w-full"
+                        />
+                    )}
                 </div>
                 {userInfo.isAdmin && (
                     <>

@@ -20,8 +20,8 @@ function ProductForm({ method, toggleProductForm, product }) {
         product?.productBrand || ""
     );
     const [productName, setProductName] = useState(product?.productName || "");
-    const [productImage, setProductImage] = useState(
-        product?.productImage || null
+    const [productImages, setProductImages] = useState(
+        product?.productImages || []
     );
     const [productCategories, setProductCategories] = useState(
         product?.productCategories
@@ -71,8 +71,16 @@ function ProductForm({ method, toggleProductForm, product }) {
     };
 
     const handleImageChange = (event) => {
-        setProductImage(event.target.files[0]);
+        const files = event.target.files;
+        setProductImages((prevImages) => [...prevImages, ...Array.from(files)]);
     };
+
+    const handleRemoveImage = (index) => {
+        setProductImages((prevImages) =>
+            prevImages.filter((_, i) => i !== index)
+        );
+    };
+
     const dispatch = useDispatch();
     async function handleProductDataSubmit(e) {
         e.preventDefault();
@@ -95,8 +103,10 @@ function ProductForm({ method, toggleProductForm, product }) {
             JSON.stringify(selectedCategories)
         );
         // formData.append("productImage", productImage);
-        if (productImage && typeof productImage !== "string") {
-            formData.append("productImage", productImage);
+        if (productImages.length > 0) {
+            productImages.forEach((image) => {
+                formData.append("productImages", image);
+            });
         }
         if (method === "editProduct") {
             formData.append("productId", product.id);
@@ -124,9 +134,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                         <Close
                             className="cart-close-btn cursor-pointer text-[#014210] text-4xl absolute top-8 right-20"
                             style={{ fontSize: "3.6rem" }}
-                            onClick={() => {
-                                toggleProductForm();
-                            }}
+                            onClick={toggleProductForm}
                         />
                     </div>
                     <h1 className="product-form-title flex items-center justify-center gap-4 text-7xl text-center text-[#014210] font-bold">
@@ -137,201 +145,329 @@ function ProductForm({ method, toggleProductForm, product }) {
                         onSubmit={handleProductDataSubmit}
                     >
                         <div className="form-inputs max-h-[60rem] overflow-y-scroll scrollbar w-full mx-auto p-8">
-                            <input
-                                type="text"
-                                name="productBrand"
-                                id="productBrand"
-                                className="form-input w-full p-6 text-[1.8rem] my-8 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                value={productBrand}
-                                onChange={(e) =>
-                                    setProductBrand(e.target.value)
-                                }
-                                placeholder="Enter Product Brand"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="productName"
-                                id="productName"
-                                className="form-input w-full p-6 text-[1.8rem] my-8 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                value={productName}
-                                onChange={(e) => setProductName(e.target.value)}
-                                placeholder="Enter Product Name"
-                                required
-                            />
-                            <div className="categories grid grid-cols-3 gap-12 items-center justify-center p-4">
-                                {[
-                                    "Accessories",
-                                    "Bedroom",
-                                    "Dining Room",
-                                    "Hallway",
-                                    "Kid Room",
-                                    "Living Room",
-                                    "Outdoor",
-                                    "Storage",
-                                    "Workspace",
-                                ].map((category) => (
-                                    <label
-                                        key={category}
-                                        htmlFor={category}
-                                        className="flex items-center space-x-2"
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            id={category}
-                                            name="categories"
-                                            checked={
-                                                productCategories[category] ||
-                                                false
-                                            } // Ensure false for unchecked categories
-                                            onChange={handleCheckboxChange}
-                                            className="form-checkbox w-8 h-8 text-[#014210] checked:bg-[#014210] border-[#ccc] checked:border-[#014210]"
-                                        />
-                                        <span className="text-[1.5rem] capitalize">
-                                            {category.replace(
-                                                /([A-Z])/g,
-                                                " $1"
-                                            )}
-                                        </span>
-                                    </label>
-                                ))}
+                            {/* Product Brand */}
+                            <div className="input-group mb-4">
+                                <label
+                                    htmlFor="productBrand"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    Enter Product Brand:
+                                </label>
+                                <input
+                                    type="text"
+                                    name="productBrand"
+                                    id="productBrand"
+                                    className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={productBrand}
+                                    onChange={(e) =>
+                                        setProductBrand(e.target.value)
+                                    }
+                                    placeholder="Enter Product Brand"
+                                    required
+                                />
                             </div>
 
-                            <textarea
-                                name="productDescription"
-                                id="productDescription"
-                                className="form-input w-full p-6 text-[1.8rem] my-8 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                value={productDescription}
-                                onChange={(e) =>
-                                    setProductDescription(e.target.value)
-                                }
-                                placeholder="Enter Product Description"
-                                required
-                            ></textarea>
-                            <textarea
-                                name="productSpecifications"
-                                id="productSpecifications"
-                                className="form-input w-full p-6 text-[1.8rem] my-8 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                value={productSpecifications}
-                                onChange={(e) =>
-                                    setProductSpecifications(e.target.value)
-                                }
-                                placeholder="Enter Product Specifications"
-                                required
-                            ></textarea>
-                            <textarea
-                                name="productReviews"
-                                id="productReviews"
-                                className="form-input w-full p-6 text-[1.8rem] my-8 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                value={productReviews}
-                                onChange={(e) =>
-                                    setProductReviews(e.target.value)
-                                }
-                                placeholder="Enter Product Reviews"
-                                required
-                            ></textarea>
-                            <div className="flex items-center justify-center gap-2">
+                            {/* Product Name */}
+                            <div className="input-group mb-4">
+                                <label
+                                    htmlFor="productName"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    Enter Product Name:
+                                </label>
                                 <input
-                                    type="number"
-                                    name="productPrice"
-                                    id="productPrice"
-                                    className="form-input w-full p-6 text-[1.8rem] my-8 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                    value={
-                                        productPrice === 0 ? "" : productPrice
-                                    }
+                                    type="text"
+                                    name="productName"
+                                    id="productName"
+                                    className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={productName}
                                     onChange={(e) =>
-                                        setProductPrice(
-                                            parseInt(e.target.value)
-                                        )
+                                        setProductName(e.target.value)
                                     }
-                                    placeholder="Enter Product Price (in ₹)"
-                                    required
-                                />
-                                <input
-                                    type="number"
-                                    name="productRating"
-                                    id="productRating"
-                                    className="form-input w-full p-6 text-[1.8rem] my-8 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                    value={
-                                        productRating === 0.0
-                                            ? ""
-                                            : productRating
-                                    }
-                                    onChange={(e) =>
-                                        setProductRating(
-                                            parseFloat(e.target.value)
-                                        )
-                                    }
-                                    placeholder="Enter Product Rating"
+                                    placeholder="Enter Product Name"
                                     required
                                 />
                             </div>
-                            <div className="flex items-center justify-center gap-2">
-                                <input
-                                    type="number"
-                                    name="productNumReviews"
-                                    id="productNumReviews"
-                                    className="form-input w-full p-6 text-[1.8rem] my-8 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                    value={
-                                        productNumReviews === 0
-                                            ? ""
-                                            : productNumReviews
-                                    }
-                                    onChange={(e) =>
-                                        setProductNumReviews(
-                                            parseInt(e.target.value)
-                                        )
-                                    }
-                                    placeholder="Enter Product Number of Reviews"
-                                    required
-                                />
-                                <input
-                                    type="number"
-                                    name="productStockCount"
-                                    id="productStockCount"
-                                    className="form-input w-full p-6 text-[1.8rem] my-8 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                    value={
-                                        productStockCount === 0
-                                            ? ""
-                                            : productStockCount
-                                    }
-                                    onChange={(e) =>
-                                        setProductStockCount(
-                                            parseInt(e.target.value)
-                                        )
-                                    }
-                                    placeholder="Enter Product Stock Count"
-                                    required
-                                />
+
+                            {/* Categories */}
+                            <div className="input-group mb-4">
+                                <label className="text-[1.8rem] font-semibold text-[#014210]">
+                                    Select Categories:
+                                </label>
+                                <div className="categories grid grid-cols-3 gap-12 items-center justify-center p-4">
+                                    {[
+                                        "Accessories",
+                                        "Bedroom",
+                                        "Dining Room",
+                                        "Hallway",
+                                        "Kid Room",
+                                        "Living Room",
+                                        "Outdoor",
+                                        "Storage",
+                                        "Workspace",
+                                    ].map((category) => (
+                                        <label
+                                            key={category}
+                                            htmlFor={category}
+                                            className="flex items-center space-x-2"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                id={category}
+                                                name="categories"
+                                                checked={
+                                                    productCategories[
+                                                        category
+                                                    ] || false
+                                                }
+                                                onChange={handleCheckboxChange}
+                                                className="form-checkbox w-8 h-8 text-[#014210] checked:bg-[#014210] border-[#ccc] checked:border-[#014210]"
+                                            />
+                                            <span className="text-2xl capitalize">
+                                                {category.replace(
+                                                    /([A-Z])/g,
+                                                    " $1"
+                                                )}
+                                            </span>
+                                        </label>
+                                    ))}
+                                </div>
                             </div>
-                            <div>
-                                {productImage ? (
-                                    <div className="w-full relative group">
-                                        <img
-                                            src={
-                                                typeof productImage === "string"
-                                                    ? productImage
-                                                    : URL.createObjectURL(
-                                                          productImage
-                                                      )
-                                            }
-                                            alt={`${productName} Preview`}
-                                            className={`w-full`}
-                                        />
-                                        <h3 className="text-4xl font-semibold absolute bottom-0 left-0 h-[35%] p-4 text-center right-0 text-white bg-black  bg-opacity-50 opacity-0 group-hover:opacity-100 hover:backdrop-blur-sm transition-opacity">
-                                            {productName} Image
-                                        </h3>
+
+                            {/* Product Description */}
+                            <div className="input-group mb-4">
+                                <label
+                                    htmlFor="productDescription"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    Enter Product Description:
+                                </label>
+                                <textarea
+                                    name="productDescription"
+                                    id="productDescription"
+                                    className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={productDescription}
+                                    onChange={(e) =>
+                                        setProductDescription(e.target.value)
+                                    }
+                                    placeholder="Enter detailed product description"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            {/* Product Specifications */}
+                            <div className="input-group mb-4">
+                                <label
+                                    htmlFor="productSpecifications"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    Enter Product Specifications:
+                                </label>
+                                <textarea
+                                    name="productSpecifications"
+                                    id="productSpecifications"
+                                    className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={productSpecifications}
+                                    onChange={(e) =>
+                                        setProductSpecifications(e.target.value)
+                                    }
+                                    placeholder="List key specifications of the product"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            {/* Product Reviews */}
+                            <div className="input-group mb-4">
+                                <label
+                                    htmlFor="productReviews"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    Enter Product Reviews:
+                                </label>
+                                <textarea
+                                    name="productReviews"
+                                    id="productReviews"
+                                    className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={productReviews}
+                                    onChange={(e) =>
+                                        setProductReviews(e.target.value)
+                                    }
+                                    placeholder="Enter product reviews or customer feedback"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            {/* Product Price and Rating */}
+                            <div className="flex items-center justify-center gap-2 mb-4">
+                                <div className="input-group">
+                                    <label
+                                        htmlFor="productPrice"
+                                        className="text-[1.8rem] font-semibold text-[#014210]"
+                                    >
+                                        Enter Product Price:
+                                    </label>
+                                    <input
+                                        type="number"
+                                        name="productPrice"
+                                        id="productPrice"
+                                        className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                        value={
+                                            productPrice === 0
+                                                ? ""
+                                                : productPrice
+                                        }
+                                        onChange={(e) =>
+                                            setProductPrice(
+                                                parseInt(e.target.value)
+                                            )
+                                        }
+                                        placeholder=" (in ₹)"
+                                        required
+                                    />
+                                </div>
+                                <div className="input-group">
+                                    <label
+                                        htmlFor="productRating"
+                                        className="text-[1.8rem] font-semibold text-[#014210]"
+                                    >
+                                        Enter Product Rating:
+                                    </label>
+                                    <input
+                                        type="number"
+                                        name="productRating"
+                                        id="productRating"
+                                        className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                        value={
+                                            productRating === 0.0
+                                                ? ""
+                                                : productRating
+                                        }
+                                        onChange={(e) =>
+                                            setProductRating(
+                                                parseFloat(e.target.value)
+                                            )
+                                        }
+                                        placeholder="4.5"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Product Stock Count and Number of Reviews */}
+                            <div className="flex items-center justify-center gap-2 mb-4">
+                                <div className="input-group">
+                                    <label
+                                        htmlFor="productNumReviews"
+                                        className="text-[1.8rem] font-semibold text-[#014210]"
+                                    >
+                                        Enter Product Number of Reviews:
+                                    </label>
+                                    <input
+                                        type="number"
+                                        name="productNumReviews"
+                                        id="productNumReviews"
+                                        className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                        value={
+                                            productNumReviews === 0
+                                                ? ""
+                                                : productNumReviews
+                                        }
+                                        onChange={(e) =>
+                                            setProductNumReviews(
+                                                parseInt(e.target.value)
+                                            )
+                                        }
+                                        placeholder="100"
+                                        required
+                                    />
+                                </div>
+                                <div className="input-group">
+                                    <label
+                                        htmlFor="productStockCount"
+                                        className="text-[1.8rem] font-semibold text-[#014210]"
+                                    >
+                                        Enter Product Stock Count:
+                                    </label>
+                                    <input
+                                        type="number"
+                                        name="productStockCount"
+                                        id="productStockCount"
+                                        className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                        value={
+                                            productStockCount === 0
+                                                ? ""
+                                                : productStockCount
+                                        }
+                                        onChange={(e) =>
+                                            setProductStockCount(
+                                                parseInt(e.target.value)
+                                            )
+                                        }
+                                        placeholder="50"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Product Image */}
+                            <div className="mt-2">
+                                {productImages && (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {productImages.map((image, index) => (
+                                            <div
+                                                key={index}
+                                                className="relative group w-full"
+                                            >
+                                                <img
+                                                    src={
+                                                        typeof image.image ===
+                                                        "string"
+                                                            ? image.image
+                                                            : URL.createObjectURL(
+                                                                  image
+                                                              ).image
+                                                    }
+                                                    alt={`${productName} Preview`}
+                                                    className="w-full"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        handleRemoveImage(index)
+                                                    }
+                                                    className="absolute top-0 right-0 bg-black p-1 rounded-full"
+                                                >
+                                                    <Close
+                                                        style={{
+                                                            fontSize: "2.4rem",
+                                                            color: "#fff",
+                                                        }}
+                                                    />
+                                                </button>
+                                                <h3 className="text-3xl font-medium absolute bottom-0 left-0 h-[35%] p-4 text-center right-0 text-white bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 hover:backdrop-blur-sm transition-opacity">
+                                                    {productName} Image
+                                                </h3>
+                                            </div>
+                                        ))}
                                     </div>
-                                ) : (
-                                    ""
                                 )}
-                                <input
-                                    type="file"
-                                    alt="productImage"
-                                    id="productImage"
-                                    className="form-input w-full p-6 text-[1.8rem] my-8 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                    onChange={handleImageChange}
-                                />
+                                <label
+                                    htmlFor="productImages"
+                                    className="w-full p-6 -mb-2 mt-2 text-[1.8rem] text-[#014210] bg-[#f8f6f6] border border-[#ccc] rounded-md cursor-pointer block text-center"
+                                >
+                                    {method === "editProduct"
+                                        ? "Update Images"
+                                        : "Upload Images"}
+                                    <input
+                                        type="file"
+                                        accept="images/*"
+                                        multiple
+                                        id="productImages"
+                                        name="productImages"
+                                        className="opacity-0 w-0 h-0 box-border border rounded-md"
+                                        onChange={handleImageChange}
+                                    />
+                                </label>
                             </div>
                         </div>
                         <button
