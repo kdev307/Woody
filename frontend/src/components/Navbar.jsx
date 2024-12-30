@@ -190,9 +190,11 @@ function Navbar() {
                                             style={{ fontSize: "3.2rem" }}
                                         />
                                     ) : (
-                                        <strong className="font-merriweather text-5xl">
-                                            {userInfo.name}
-                                        </strong>
+                                        <img
+                                            src={userInfo.profile_picture}
+                                            alt={`${userInfo.name}"'s image"`}
+                                            className="profile-img border border-[#014210] shadow-[2px_2px_5px_#014210] w-20 rounded-[50%]"
+                                        />
                                     )
                                 ) : (
                                     <Person

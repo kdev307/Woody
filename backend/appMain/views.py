@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # from .products import products
-from .models import Products, ProductImages
+from .models import Products, ProductImages, User, UserAddresses
 from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import status
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
 # for sending mail and generate token
@@ -33,7 +33,11 @@ class EmailThread(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        self.email_message.send()
+        try:
+            self.email_message.send()
+            print("Email sent successfully!")
+        except Exception as e:
+            print(f"Error sending email: {str(e)}")
 
 
 @api_view(['GET'])
@@ -171,14 +175,36 @@ def getUsers(request):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def registerUser(request):
     data = request.data
     print(f"Received data: {data}")
+    profile_picture = request.FILES.get('profilePicture', None)
     print(data)
     try:
         # user = User.objects.create(first_name=data['firstName'], last_name=data['lastName'], username=data['email'], email=data['email'], password=make_password(data['password']))
-        user = User.objects.create(first_name=data['firstName'], last_name=data['lastName'], username=data['email'], email=data['email'], password=make_password(data['password']), is_active=False)
-
+        if User.objects.filter(email=data['email']).exists():
+            return Response({'details': 'Try another email, this email is already registered.'}, status=status.HTTP_400_BAD_REQUEST)
+        user = User.objects.create(
+            first_name=data['firstName'], 
+            last_name=data['lastName'], 
+            username=data['email'], 
+            email=data['email'], 
+            password=make_password(data['password']), 
+            mobile_number=data['mobileNumber'],
+            date_of_birth=data['dateOfBirth'],
+            profile_picture = profile_picture,
+            is_active=False  # User is inactive until email is verified
+        )
+        UserAddresses.objects.create(
+            user=user,
+            address_line_1=data['addressLine1'],
+            address_line_2=data['addressLine2'],
+            city=data['city'],
+            state=data['state'],
+            country=data['country'],
+            pincode=data['pincode'],
+        )
         # generate token for sending mail
         email_subject = "Activate Your Account"
         message = render_to_string(
@@ -192,6 +218,7 @@ def registerUser(request):
         )
         # print(message)
         email_message=EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[data['email']])
+        email_message.content_subtype = 'html'
         EmailThread(email_message).start()
         # message = {'details' : "Check your mail to verify your mail."}
         # serialize = UserSerializerWithToken(user, many=False) 
@@ -201,7 +228,7 @@ def registerUser(request):
         print("Error during registration: ", str(e))
         # message = {'details': e}
         # message = {'details': 'Try another email, this email is already registered.'}
-        return Response({'details': "Try another email, this email is already registered."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'details': "Unknown error occured during registration !"}, status=status.HTTP_400_BAD_REQUEST)
         # return Response(message)
     
 
@@ -213,6 +240,7 @@ class ActivateAccountView(View):
             user = User.objects.get(pk=uid)
         except Exception as identifier:
             user = None
+            print(f"Error decoding user: {str(identifier)}")
         if user is not None and generate_token.check_token(user, token):
             user.is_active = True
             user.save()
@@ -220,4 +248,4 @@ class ActivateAccountView(View):
             # return  Response(message, status=status.HTTP_200_OK)
             return render(request, "activateSuccess.html")
         else:
-            return render(request, "activateFail.html")
+            return render(request, "activateFail.html", {"reason": "Invalid or expired token"})

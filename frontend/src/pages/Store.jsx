@@ -472,12 +472,26 @@ function ProductCard({ product, userInfo, toggleProductForm }) {
                     {productImages?.sort((img1, img2) =>
                         img1.image.localeCompare(img2.image)
                     )[0] && (
-                        <img
-                            key={productImages[0].id}
-                            src={productImages[0].image}
-                            alt={`Product ${productImages[0].product_id}`}
-                            className="w-full"
-                        />
+                        <>
+                            <img
+                                key={productImages[0].id}
+                                src={productImages[0].image}
+                                alt={`Product ${productImages[0].product_id}`}
+                                className="w-full"
+                            />
+                            {userInfo &&
+                                !userInfo.isAdmin &&
+                                new Date(userInfo.date_of_birth).getDate() ===
+                                    new Date().getDate() &&
+                                new Date(userInfo.date_of_birth).getMonth() ===
+                                    new Date().getMonth() && (
+                                    <div class="relative">
+                                        <span class="absolute bottom-[29.6rem] right-[-9rem] uppercase text-[#333] text-[1.2rem] font-semibold bg-[#a3ff3b] py-[0.8rem] px-[8rem] transform rotate-45">
+                                            Birthday Discount
+                                        </span>
+                                    </div>
+                                )}
+                        </>
                     )}
                 </div>
                 {userInfo.isAdmin && (
@@ -559,10 +573,28 @@ function ProductCard({ product, userInfo, toggleProductForm }) {
                     <h3 className="product-name text-left font-medium text-4xl">
                         {productName}
                     </h3>
-                    <div className=" flex items-center justify-start gap-40">
-                        <h3 className="product-price font-bold text-[2.4rem]">
-                            ₹ {productPrice}
-                        </h3>
+                    <div className=" flex items-center justify-start gap-24">
+                        <div className="flex items-center justify-center gap-4">
+                            {userInfo &&
+                            !userInfo.isAdmin &&
+                            new Date(userInfo.date_of_birth).getDate() ===
+                                new Date().getDate() &&
+                            new Date(userInfo.date_of_birth).getMonth() ===
+                                new Date().getMonth() ? (
+                                <>
+                                    <h3 className="line-through product-price font-semibold text-[2rem]">
+                                        ₹{productPrice}
+                                    </h3>
+                                    <h3 className="product-price font-bold text-[2.4rem]">
+                                        ₹{(productPrice * 80) / 100}
+                                    </h3>
+                                </>
+                            ) : (
+                                <h3 className="product-price text-4xl">
+                                    ₹{productPrice}
+                                </h3>
+                            )}
+                        </div>
                         {/* <InfoOutlined style={{ fontSize: "2.4rem" }} className="info-icon" /> */}
                         <div className="rating flex items-center justify-center gap-2 text-[#560000] rounded-[4rem] font-semibold text-[1.8rem]">
                             <h3>{productRating}</h3>

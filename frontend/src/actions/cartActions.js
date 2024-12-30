@@ -1,8 +1,15 @@
-import { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_UPDATE_QUANTITY } from "../constants/cartConstants";
+import {
+    CART_ADD_ITEM,
+    CART_REMOVE_ITEM,
+    CART_UPDATE_QUANTITY,
+    CLEAR_CART,
+} from "../constants/cartConstants";
 
 export const addToCart = (product) => (dispatch, getState) => {
     const { cartItemsList } = getState().cart;
-    const existingItem = cartItemsList.find((item) => item.productId === product.id);
+    const existingItem = cartItemsList.find(
+        (item) => item.productId === product.id
+    );
 
     if (!existingItem) {
         console.log("Adding new item to cart:", product);
@@ -17,9 +24,9 @@ export const addToCart = (product) => (dispatch, getState) => {
                 productId: product.id,
                 productName: product.productName,
                 productBrand: product.productBrand,
-                price: product.price,
-                image: product.image,
-                stockCount: product.stockCount,
+                productPrice: product.productPrice,
+                productImages: product.productImages,
+                productStockCount: product.productStockCount,
                 qty: 1,
             },
         });
@@ -43,6 +50,6 @@ export const removeFromCart = (productId) => ({
 
 export const clearCart = () => {
     return {
-        type: "CLEAR_CART",
+        type: CLEAR_CART,
     };
 };
