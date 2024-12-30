@@ -58,7 +58,7 @@ function Footer() {
                                 <>
                                     39, Sector 4, HSR Layout,
                                     <br className="hidden mob:block" />
-                                    Bengaluru, Karnataka - 560102
+                                    Bengaluru, Karnataka, India - 560102
                                 </>
                             </li>
                             <li className="contacts-item flex items-center justify-center text-center gap-2">

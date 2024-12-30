@@ -64,8 +64,8 @@ function Profile({ user }) {
                     } mt-8 gap-8 w-[50%]`}
                 >
                     <img
-                        src="/images/testimonials/customer-5.jpg"
-                        alt={`${user.name}"'s image"`}
+                        src={userInfo.profile_picture}
+                        alt={`${userInfo.name}"'s image"`}
                         className="profile-img border-4 border-[#014210] shadow-[2px_2px_5px_#014210] w-full rounded-[50%]"
                     />
                     <div
@@ -94,7 +94,7 @@ function Profile({ user }) {
                                         color: "#014210",
                                     }}
                                 />{" "}
-                                +91-9874563210
+                                {userInfo.mobile_number}
                             </h3>
                         )}
                     </div>
@@ -123,9 +123,17 @@ function Profile({ user }) {
                                         color: "#014210",
                                     }}
                                 />{" "}
-                                65C, Downtown, Manhattan, New York, United
-                                States of America - 10013
-                                {/* ##### */}
+                                {userInfo.addresses.map((address, index) => (
+                                    <li key={index}>
+                                        <p>
+                                            {address.address_line_1},{" "}
+                                            {address.address_line_2},{" "}
+                                            {address.city}, {address.state},{" "}
+                                            {address.country} -{" "}
+                                            {address.pincode}
+                                        </p>
+                                    </li>
+                                ))}
                             </h4>
                             <h4 className="dob my-4 mx-0 text-4xl font-bold text-[#560000] flex items-center justify-center gap-4">
                                 <Cake
@@ -140,7 +148,13 @@ function Profile({ user }) {
                                         color: "#014210",
                                     }}
                                 />{" "}
-                                September 30, 2000
+                                {new Date(
+                                    userInfo.date_of_birth
+                                ).toLocaleString("en-US", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                })}
                                 <Cake
                                     style={{
                                         fontSize: "3.6rem",

@@ -21,7 +21,7 @@ function Cart({ handleCartToggle, isOpen }) {
         0
     );
     const totalPrice = cartItemsList.reduce(
-        (acc, item) => acc + Number(item.price * item.qty),
+        (acc, item) => acc + Number(item.productPrice * item.qty),
         0
     );
     const dispatch = useDispatch();
@@ -132,10 +132,10 @@ function CartItem({ cartItemData }) {
         productId,
         productBrand,
         productName,
-        image,
+        productImages,
         qty,
-        stockCount,
-        price,
+        productStockCount,
+        productPrice,
     } = cartItemData;
     const dispatch = useDispatch();
     const handleRemoveFromCart = () => {
@@ -146,8 +146,8 @@ function CartItem({ cartItemData }) {
         const newQty = qty + change;
         console.log("Current Quantity:", qty);
         console.log("New Quantity:", newQty);
-        console.log("Stock Count:", stockCount);
-        if (newQty > 0 && newQty < stockCount)
+        console.log("Stock Count:", productStockCount);
+        if (newQty > 0 && newQty < productStockCount)
             dispatch(updateCartQuantity(productId, newQty));
         else if (newQty <= 0) {
             dispatch(removeFromCart(productId));
@@ -157,11 +157,16 @@ function CartItem({ cartItemData }) {
     return (
         <>
             <div className="cart-img-info w-64 flex flex-col items-center justify-center gap-4">
-                <img
-                    src={image}
-                    alt={productName}
-                    className="cart-item-img w-full border-2 border-black"
-                />
+                {productImages?.sort((img1, img2) =>
+                    img1.image.localeCompare(img2.image)
+                )[0] && (
+                    <img
+                        key={productImages[0].id}
+                        src={productImages[0].image}
+                        alt={`Product ${productImages[0].product_id}`}
+                        className="w-full"
+                    />
+                )}
                 <div className="cart-item-qty flex items-center justify-center gap-3">
                     <RemoveCircle
                         className="update-btn cursor-pointer"
@@ -192,7 +197,7 @@ function CartItem({ cartItemData }) {
                     {productBrand + " | " + productName}
                 </h4>
                 <h4 className="cart-total-price text-4xl font-bold text-[#014210]">
-                    ₹ {price * qty}
+                    ₹ {productPrice * qty}
                 </h4>
             </div>
             <p className="endLine text-xl text-center">

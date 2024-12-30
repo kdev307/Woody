@@ -162,16 +162,32 @@ function Product({ params }) {
                 <Error message={error} />
             ) : (
                 <div className="product p-8 grid grid-cols-[2fr_3fr] tab:flex tab:flex-col tab:items-start tab:justify-start gap-8 sm_desk:gap-20 items-start justify-center text-xl bg-[#e4efe4] pt-32">
-                    <div className="image-container gap-4 self-center w-[100%] sm_desk:w-[105%] lg_tab:w-[108%] tab:w-[80%] sm_tab:w-[95%]">
+                    <div className="image-container overflow-hidden gap-4 self-center w-[100%] sm_desk:w-[105%] lg_tab:w-[108%] tab:w-[80%] sm_tab:w-[95%]">
                         {productImages?.sort((img1, img2) =>
                             img1.image.localeCompare(img2.image)
                         )[0] && (
-                            <img
-                                key={productImages[0].id}
-                                src={productImages[0].image}
-                                alt={`Product ${productImages[0].product_id}`}
-                                className="w-full border-2 border-black"
-                            />
+                            <>
+                                <img
+                                    key={productImages[0].id}
+                                    src={productImages[0].image}
+                                    alt={`Product ${productImages[0].product_id}`}
+                                    className="w-full border-2 border-black"
+                                />
+                                {userInfo &&
+                                    !userInfo.isAdmin &&
+                                    new Date(
+                                        userInfo.date_of_birth
+                                    ).getDate() === new Date().getDate() &&
+                                    new Date(
+                                        userInfo.date_of_birth
+                                    ).getMonth() === new Date().getMonth() && (
+                                        <div class="relative ">
+                                            <span class="absolute bottom-[67rem] right-[58rem] uppercase text-[#333] border-2 border-black text-[1.3rem] font-semibold bg-[#a3ff3b] py-[0.8rem] px-[8rem] transform -rotate-45">
+                                                Birthday Discount
+                                            </span>
+                                        </div>
+                                    )}
+                            </>
                         )}
                         <button
                             className="cursor-pointer absolute top-[28%] left-[36%]"
@@ -313,26 +329,27 @@ function Product({ params }) {
                             {/* {isAddedToCart && (
                                 <Message messageType={"success"} message={"Item added to cart!"} />
                             )} */}
-
-                            {userInfo &&
-                            !userInfo.isAdmin &&
-                            new Date(userInfo.dob).getDate() ===
-                                new Date().getDate() &&
-                            new Date(userInfo.dob).getMonth() ===
-                                new Date().getMonth() ? (
-                                <>
-                                    <h3 className="line-through product-price text-2xl">
+                            <div className="flex items-center justify-center gap-12">
+                                {userInfo &&
+                                !userInfo.isAdmin &&
+                                new Date(userInfo.date_of_birth).getDate() ===
+                                    new Date().getDate() &&
+                                new Date(userInfo.date_of_birth).getMonth() ===
+                                    new Date().getMonth() ? (
+                                    <>
+                                        <h3 className="line-through product-price text-3xl">
+                                            ₹{productPrice}
+                                        </h3>
+                                        <h3 className="product-price text-5xl">
+                                            ₹{(productPrice * 90) / 100}
+                                        </h3>
+                                    </>
+                                ) : (
+                                    <h3 className="product-price text-4xl">
                                         ₹{productPrice}
                                     </h3>
-                                    <h3 className="product-price text-4xl">
-                                        ₹{(productPrice * 90) / 100}
-                                    </h3>
-                                </>
-                            ) : (
-                                <h3 className="product-price text-4xl">
-                                    ₹{productPrice}
-                                </h3>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -18,6 +18,15 @@ function SignUp({ onBack, onSignUpSuccess }) {
     // const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [mobileNumber, setMobileNumber] = useState("");
+    const [dateOfBirth, setDateOfBirth] = useState("");
+    const [profilePicture, setProfilePicture] = useState(null);
+    const [addressLine1, setAddressLine1] = useState("");
+    const [addressLine2, setAddressLine2] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [country, setCountry] = useState("");
+    const [pincode, setPincode] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [message, setMessage] = useState("");
@@ -47,6 +56,15 @@ function SignUp({ onBack, onSignUpSuccess }) {
         setEmail("");
         setPassword("");
         setConfirmPassword("");
+        setMobileNumber("");
+        setDateOfBirth("");
+        setAddressLine1("");
+        setAddressLine2("");
+        setCity("");
+        setState("");
+        setCountry("");
+        setPincode("");
+        setProfilePicture(null);
         // }, [userInfo, redirect, onSignUpSuccess]);
     }, [userInfo, error, onSignUpSuccess]);
 
@@ -80,7 +98,24 @@ function SignUp({ onBack, onSignUpSuccess }) {
             );
             setMessageType("fail");
         } else {
-            dispatch(signUp(firstName, lastName, email, password));
+            const formData = new FormData();
+            formData.append("firstName", firstName);
+            formData.append("lastName", lastName);
+            formData.append("email", email);
+            formData.append("password", password);
+            formData.append("mobileNumber", mobileNumber);
+            formData.append("dateOfBirth", dateOfBirth);
+            if (profilePicture) {
+                formData.append("profilePicture", profilePicture);
+            }
+            formData.append("addressLine1", addressLine1);
+            formData.append("addressLine2", addressLine2);
+            formData.append("city", city);
+            formData.append("state", state);
+            formData.append("country", country);
+            formData.append("pincode", pincode);
+            dispatch(signUp(formData));
+            console.log("Sign Up Data: ", [...formData]);
             // setMessage("SignUp is Success !");
             // setMessageType("success");
             // onSignUpSuccess();
@@ -103,124 +138,353 @@ function SignUp({ onBack, onSignUpSuccess }) {
 
                 <form
                     action="post"
-                    className="form-container flex flex-col gap-12 items-center justify-center text-left rounded-2xl"
+                    className="form-container flex flex-col gap-12 items-center justify-center text-left rounded-2xl mt-4"
                     onSubmit={handleSubmit}
+                    encType="multipart/form-data"
                 >
-                    <div className="form-inputs scrollbar w-full max-h-96 overflow-y-auto my-6 mx-auto p-6">
+                    <div className="form-inputs scrollbar w-full max-h-[45rem] overflow-y-auto my-6 mx-auto p-6">
+                        {/* Basic Information */}
                         <div className="flex items-center justify-center gap-2">
-                            <input
-                                type="text"
-                                name="firstName"
-                                id="firstName"
-                                className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                placeholder="Enter your First Name"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="lastName"
-                                id="lastName"
-                                className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                placeholder="Enter your Last Name"
-                                required
-                            />
+                            <div className="flex flex-col items-start justify-center">
+                                <label
+                                    htmlFor="firstName"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    First Name
+                                </label>
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    id="firstName"
+                                    className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={firstName}
+                                    onChange={(e) =>
+                                        setFirstName(e.target.value)
+                                    }
+                                    placeholder="Enter your First Name"
+                                    required
+                                />
+                            </div>
+                            <div className="flex flex-col items-start justify-center">
+                                <label
+                                    htmlFor="lastName"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    Last Name
+                                </label>
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    id="lastName"
+                                    className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={lastName}
+                                    onChange={(e) =>
+                                        setLastName(e.target.value)
+                                    }
+                                    placeholder="Enter your Last Name"
+                                    required
+                                />
+                            </div>
                         </div>
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter your Email Address"
-                            required
-                        />
-                        <div className="flex items-center justify-center gap-2">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                id="password"
-                                className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Enter your Password"
-                                required
-                            />
-                            <button
-                                type="button"
-                                className="show-password-btn ease-linear duration-1000"
-                                onClick={togglePasswordVisibility}
-                                aria-label={
-                                    showPassword
-                                        ? "Hide Password"
-                                        : "Show Password"
-                                }
+                        <div className="flex flex-col items-start justify-center">
+                            <label
+                                htmlFor="email"
+                                className="text-[1.8rem] font-semibold text-[#014210]"
                             >
-                                {showPassword ? (
-                                    <Visibility
-                                        style={{
-                                            color: "#014210",
-                                            fontSize: "3.2rem",
-                                        }}
-                                    />
-                                ) : (
-                                    <VisibilityOff
-                                        style={{
-                                            color: "#014210",
-                                            fontSize: "3.2rem",
-                                        }}
-                                    />
-                                )}
-                            </button>
-                        </div>
-                        {/* <small style={{ textAlign: "left" }}>
-                            <b>*</b>Password must have a <b>minimum length of 8</b> and include{" "}
-                            <b>[1-9][a-z][A-Z][_$@!#%^&*]</b>
-                        </small> */}
-                        <div className="flex items-center justify-center gap-2">
+                                Email Address
+                            </label>
                             <input
-                                type={showConfirmPassword ? "text" : "password"}
-                                name="confirmPassword"
-                                id="confirmPassword"
+                                type="email"
+                                name="email"
+                                id="email"
                                 className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                value={confirmPassword}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Enter your Email Address"
+                                required
+                            />
+                        </div>
+                        <div className="flex flex-col items-start justify-center">
+                            <label
+                                htmlFor="mobileNumber"
+                                className="text-[1.8rem] font-semibold text-[#014210]"
+                            >
+                                Mobile Number
+                            </label>
+                            <input
+                                type="tel"
+                                name="mobileNumber"
+                                id="mobileNumber"
+                                className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                value={mobileNumber}
                                 onChange={(e) =>
-                                    setConfirmPassword(e.target.value)
+                                    setMobileNumber(e.target.value)
                                 }
-                                placeholder="Re-enter your Password"
+                                placeholder="Enter your Mobile Number"
                                 required
                             />
-                            <button
-                                type="button"
-                                className="show-password-btn ease-linear duration-1000"
-                                onClick={toggleConfirmPasswordVisibility}
-                                aria-label={
-                                    showConfirmPassword
-                                        ? "Hide Password"
-                                        : "Show Password"
-                                }
-                            >
-                                {showConfirmPassword ? (
-                                    <Visibility
-                                        style={{
-                                            color: "#014210",
-                                            fontSize: "3.2rem",
-                                        }}
-                                    />
-                                ) : (
-                                    <VisibilityOff
-                                        style={{
-                                            color: "#014210",
-                                            fontSize: "3.2rem",
-                                        }}
-                                    />
-                                )}
-                            </button>
                         </div>
+                        <div className="flex flex-col items-start justify-center">
+                            <label
+                                htmlFor="dateOfBirth"
+                                className="text-[1.8rem] font-semibold text-[#014210]"
+                            >
+                                Date of Birth
+                            </label>
+                            <input
+                                type="date"
+                                name="dateOfBirth"
+                                id="dateOfBirth"
+                                className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                value={dateOfBirth}
+                                onChange={(e) => setDateOfBirth(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        {/* Password Fields */}
+                        <div className="flex flex-col items-start justify-center">
+                            <label
+                                htmlFor="password"
+                                className="text-[1.8rem] font-semibold text-[#014210]"
+                            >
+                                Password
+                            </label>
+                            <div className="flex items-center justify-center gap-2 w-full">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    id="password"
+                                    className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={password}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    placeholder="Enter your Password"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    className="show-password-btn ease-linear duration-1000"
+                                    onClick={togglePasswordVisibility}
+                                    aria-label={
+                                        showPassword
+                                            ? "Hide Password"
+                                            : "Show Password"
+                                    }
+                                >
+                                    {showPassword ? (
+                                        <Visibility
+                                            style={{
+                                                color: "#014210",
+                                                fontSize: "3.2rem",
+                                            }}
+                                        />
+                                    ) : (
+                                        <VisibilityOff
+                                            style={{
+                                                color: "#014210",
+                                                fontSize: "3.2rem",
+                                            }}
+                                        />
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                        <div className="flex flex-col items-start justify-center">
+                            <label
+                                htmlFor="confirmPassword"
+                                className="text-[1.8rem] font-semibold text-[#014210]"
+                            >
+                                Confirm Password
+                            </label>
+                            <div className="flex items-center justify-center gap-2 w-full">
+                                <input
+                                    type={
+                                        showConfirmPassword
+                                            ? "text"
+                                            : "password"
+                                    }
+                                    name="confirmPassword"
+                                    id="confirmPassword"
+                                    className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={confirmPassword}
+                                    onChange={(e) =>
+                                        setConfirmPassword(e.target.value)
+                                    }
+                                    placeholder="Re-enter your Password"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    className="show-password-btn ease-linear duration-1000"
+                                    onClick={toggleConfirmPasswordVisibility}
+                                    aria-label={
+                                        showConfirmPassword
+                                            ? "Hide Password"
+                                            : "Show Password"
+                                    }
+                                >
+                                    {showConfirmPassword ? (
+                                        <Visibility
+                                            style={{
+                                                color: "#014210",
+                                                fontSize: "3.2rem",
+                                            }}
+                                        />
+                                    ) : (
+                                        <VisibilityOff
+                                            style={{
+                                                color: "#014210",
+                                                fontSize: "3.2rem",
+                                            }}
+                                        />
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Address Fields */}
+                        <div className="flex flex-col items-start justify-center">
+                            <label
+                                htmlFor="addressLine1"
+                                className="text-[1.8rem] font-semibold text-[#014210]"
+                            >
+                                Address Line 1
+                            </label>
+                            <input
+                                type="text"
+                                name="addressLine1"
+                                id="addressLine1"
+                                className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                value={addressLine1}
+                                onChange={(e) =>
+                                    setAddressLine1(e.target.value)
+                                }
+                                placeholder="Address Line 1"
+                                required
+                            />
+                        </div>
+                        <div className="flex flex-col items-start justify-center">
+                            <label
+                                htmlFor="addressLine2"
+                                className="text-[1.8rem] font-semibold text-[#014210]"
+                            >
+                                Address Line 2
+                            </label>
+                            <input
+                                type="text"
+                                name="addressLine2"
+                                id="addressLine2"
+                                className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                value={addressLine2}
+                                onChange={(e) =>
+                                    setAddressLine2(e.target.value)
+                                }
+                                placeholder="Address Line 2 (optional)"
+                            />
+                        </div>
+                        <div className="flex items-center justify-center gap-2">
+                            <div className="flex flex-col items-start justify-center">
+                                <label
+                                    htmlFor="city"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    City
+                                </label>
+                                <input
+                                    type="text"
+                                    name="city"
+                                    id="city"
+                                    className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={city}
+                                    onChange={(e) => setCity(e.target.value)}
+                                    placeholder="City"
+                                    required
+                                />
+                            </div>
+                            <div className="flex flex-col items-start justify-center">
+                                <label
+                                    htmlFor="state"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    State
+                                </label>
+                                <input
+                                    type="text"
+                                    name="state"
+                                    id="state"
+                                    className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={state}
+                                    onChange={(e) => setState(e.target.value)}
+                                    placeholder="State"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-center gap-2">
+                            <div className="flex flex-col items-start justify-center">
+                                <label
+                                    htmlFor="country"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    Country
+                                </label>
+                                <input
+                                    type="text"
+                                    name="country"
+                                    id="country"
+                                    className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={country}
+                                    onChange={(e) => setCountry(e.target.value)}
+                                    placeholder="Country"
+                                    required
+                                />
+                            </div>
+                            <div className="flex flex-col items-start justify-center">
+                                <label
+                                    htmlFor="pincode"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    Pincode
+                                </label>
+                                <input
+                                    type="text"
+                                    name="pincode"
+                                    id="pincode"
+                                    className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={pincode}
+                                    onChange={(e) => setPincode(e.target.value)}
+                                    placeholder="Pincode"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        {/* Profile Picture */}
+                        <label
+                            htmlFor="profilePicture"
+                            className="w-full p-6 -mb-2 mt-2 text-[1.8rem] text-[#014210] bg-[#f8f6f6] border border-[#ccc] rounded-md cursor-pointer block text-center"
+                        >
+                            {profilePicture && (
+                                <img
+                                    src={URL.createObjectURL(profilePicture)}
+                                    alt="Product Preview"
+                                    className="w-full"
+                                />
+                            )}
+                            ChooseProfile Picture
+                            <input
+                                type="file"
+                                accept="images/*"
+                                name="profilePicture"
+                                id="profilePicture"
+                                className="form-input opacity-0 w-0 h-0"
+                                onChange={(e) =>
+                                    setProfilePicture(e.target.files[0])
+                                }
+                                required
+                            />
+                        </label>
                     </div>
                     {loading && <Loader />}
                     <button

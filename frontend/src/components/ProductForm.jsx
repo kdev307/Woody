@@ -118,6 +118,7 @@ function ProductForm({ method, toggleProductForm, product }) {
         }
         toggleProductForm();
         dispatch(listProducts());
+        dispatch(listProducts());
     }
 
     return (
@@ -151,7 +152,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                     htmlFor="productBrand"
                                     className="text-[1.8rem] font-semibold text-[#014210]"
                                 >
-                                    Enter Product Brand:
+                                    Product Brand:
                                 </label>
                                 <input
                                     type="text"
@@ -173,7 +174,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                     htmlFor="productName"
                                     className="text-[1.8rem] font-semibold text-[#014210]"
                                 >
-                                    Enter Product Name:
+                                    Product Name:
                                 </label>
                                 <input
                                     type="text"
@@ -240,7 +241,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                     htmlFor="productDescription"
                                     className="text-[1.8rem] font-semibold text-[#014210]"
                                 >
-                                    Enter Product Description:
+                                    Product Description:
                                 </label>
                                 <textarea
                                     name="productDescription"
@@ -261,7 +262,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                     htmlFor="productSpecifications"
                                     className="text-[1.8rem] font-semibold text-[#014210]"
                                 >
-                                    Enter Product Specifications:
+                                    Product Specifications:
                                 </label>
                                 <textarea
                                     name="productSpecifications"
@@ -282,7 +283,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                     htmlFor="productReviews"
                                     className="text-[1.8rem] font-semibold text-[#014210]"
                                 >
-                                    Enter Product Reviews:
+                                    Product Reviews:
                                 </label>
                                 <textarea
                                     name="productReviews"
@@ -304,7 +305,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                         htmlFor="productPrice"
                                         className="text-[1.8rem] font-semibold text-[#014210]"
                                     >
-                                        Enter Product Price:
+                                        Product Price:
                                     </label>
                                     <input
                                         type="number"
@@ -330,7 +331,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                         htmlFor="productRating"
                                         className="text-[1.8rem] font-semibold text-[#014210]"
                                     >
-                                        Enter Product Rating:
+                                        Product Rating:
                                     </label>
                                     <input
                                         type="number"
@@ -360,7 +361,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                         htmlFor="productNumReviews"
                                         className="text-[1.8rem] font-semibold text-[#014210]"
                                     >
-                                        Enter Product Number of Reviews:
+                                        Product Number of Reviews:
                                     </label>
                                     <input
                                         type="number"
@@ -386,7 +387,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                         htmlFor="productStockCount"
                                         className="text-[1.8rem] font-semibold text-[#014210]"
                                     >
-                                        Enter Product Stock Count:
+                                        Product Stock Count:
                                     </label>
                                     <input
                                         type="number"
@@ -464,7 +465,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                         multiple
                                         id="productImages"
                                         name="productImages"
-                                        className="opacity-0 w-0 h-0 box-border border rounded-md"
+                                        className="opacity-0 w-0 h-0"
                                         onChange={handleImageChange}
                                     />
                                 </label>
