@@ -38,16 +38,6 @@ function Profile({ user }) {
                     <Person style={{ fontSize: "4.8rem", color: "#014210" }} />
                 </h1>
             )}
-            {!userInfo.isAdmin && (
-                <Edit
-                    className="edit-btn mt-4 font-semibold absolute"
-                    style={{
-                        fontSize: "3.2rem",
-                        color: "#560000",
-                        transform: "translateX(40rem)",
-                    }}
-                />
-            )}
             {/* <button className="profile-btn edit-btn">
                 Edit Profile <Edit />
                 </button> */}
@@ -116,7 +106,7 @@ function Profile({ user }) {
                 <div className="additional-info flex flex-col items-start justify-center text-left">
                     {!userInfo.isAdmin && (
                         <>
-                            <h4 className="res-addr my-4 mx-0 text-3xl font-medium text-[#560000] flex items-center justify-center gap-4">
+                            {/* <h4 className="res-addr my-4 mx-0 text-3xl font-medium text-[#560000] flex items-center justify-center gap-4">
                                 <LocationOn
                                     style={{
                                         fontSize: "3.6rem",
@@ -134,7 +124,7 @@ function Profile({ user }) {
                                         </p>
                                     </li>
                                 ))}
-                            </h4>
+                            </h4> */}
                             <h4 className="dob my-4 mx-0 text-4xl font-bold text-[#560000] flex items-center justify-center gap-4">
                                 <Cake
                                     style={{
@@ -182,23 +172,35 @@ function Profile({ user }) {
                         />
                         </p> */}
             </div>
-            <div className="profile-btns flex flex-col items-center justify-center gap-4 py-auto px-0 mx-0 my-2">
+            <div className="profile-btns flex flex-col items-center justify-center gap-8 py-auto px-0 mx-0 my-12">
+                {!userInfo.isAdmin && (
+                    <div className="flex items-center justify-center gap-4 w-full">
+                        <button className="profile-btn edit-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                            Edit Profile
+                            <Edit style={{ fontSize: "3.2rem" }} />
+                        </button>
+                        <button className="profile-btn reviews-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                            My Addresses
+                            <LocationOn style={{ fontSize: "3.2rem" }} />
+                        </button>
+                    </div>
+                )}
                 {userInfo.isAdmin ? (
                     <button className="profile-btn dispatch-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
                         View & Dispatch Orders
                         <LocalShipping style={{ fontSize: "3.2rem" }} />
                     </button>
                 ) : (
-                    <>
-                        <button className="profile-btn history-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                    <div className="flex items-center justify-center gap-4 w-full">
+                        <button className="profile-btn history-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
                             My Orders
                             <History style={{ fontSize: "3.2rem" }} />
                         </button>
-                        <button className="profile-btn reviews-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                        <button className="profile-btn reviews-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
                             My Reviews
                             <Reviews style={{ fontSize: "3.2rem" }} />
                         </button>
-                    </>
+                    </div>
                 )}
                 <button
                     className="profile-btn logout-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#560000] rounded-md text-[#560000] text-[2.4rem] font-semibold hover:bg-[#560000] hover:text-white transition-all ease-linear duration-1000"
