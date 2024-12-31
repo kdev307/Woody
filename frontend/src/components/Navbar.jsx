@@ -26,13 +26,13 @@ function Navbar() {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const handleCartToggle = () => {
         setIsCartOpen((prev) => !prev);
-        setIsMenuOpen(!isMenuOpen);
+        // setIsMenuOpen(!isMenuOpen);
     };
 
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const handleProfileToggle = () => {
         setIsProfileOpen((prev) => !prev);
-        setIsMenuOpen(!isMenuOpen);
+        // setIsMenuOpen(!isMenuOpen);
     };
 
     const [scrolled, setScrolled] = useState(false);
