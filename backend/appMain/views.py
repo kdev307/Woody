@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # from .products import products
 from .models import Products, ProductImages, User, UserAddresses
-from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken
+from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -249,3 +249,79 @@ class ActivateAccountView(View):
             return render(request, "activateSuccess.html")
         else:
             return render(request, "activateFail.html", {"reason": "Invalid or expired token"})
+        
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateProfile(request):
+    user = request.user
+    data = request.data
+
+    try:
+        if "mobileNumber" in data:
+            user.mobile_number = data['mobileNumber']
+
+        if "password" in data:
+            user.set_password(data['password'])
+
+        user.save()
+        return Response({'details': "Profile updated successfully!"}, status=status.HTTP_200_OK)
+    except Exception as e:
+        print(f"Error Updating Profile: {str(e)}"),
+        return Response(
+            {'details': "Error Updating Profile."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def manageAddresses(request):
+    user = request.user
+
+    if request.method == 'GET':
+        addresses = UserAddresses.objects.filter(user=user)
+        serializer = UserAddressSerializer(addresses, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    elif request.method == 'POST':
+        data = request.data
+        new_address = UserAddresses.objects.create(
+            user=user,
+            address_line_1=data['addressLine1'],
+            address_line_2=data['addressLine2'],
+            city=data['city'],
+            state=data['state'],
+            country=data['country'],
+            pincode=data['pincode'],
+        )
+        serializer = UserAddressSerializer(new_address)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    elif request.method == 'PUT':
+        data = request.data
+        try:
+            address = UserAddresses.objects.get(id=data['id'], user=user)
+            address.address_line_1 = data['addressLine1']
+            address.address_line_2 = data['addressLine_2']
+            address.city = data['city']
+            address.state = data['state']
+            address.country = data['country']
+            address.pincode = data['pincode']
+            address.save()
+            serializer = UserAddressSerializer(address)
+            return Response(serializer.data, {'details': 'User Address updated.'},status=status.HTTP_200_OK)
+        except UserAddresses.DoesNotExist:
+            return Response({'details': 'User Address not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+    
+    elif request.method == 'DELETE':
+        try:
+            address_id = request.data.get('id')
+            address = UserAddresses.objects.get(id=address_id, user=user)
+            address.delete()
+            return Response({'details': 'User Address deleted.'}, status=status.HTTP_200_OK)
+        except UserAddresses.DoesNotExist:
+            return Response({'details': 'User Address not found.'}, status=status.HTTP_404_NOT_FOUND)
+

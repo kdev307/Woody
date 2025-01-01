@@ -1,0 +1,268 @@
+PRODUCT TABLE
+
+- productName
+- productBrand
+- productStockCount
+- createdAT
+- id
+- user_id
+- productNumReviews
+- productCategories
+- productDescription
+- productReviews
+- productSpecifications
+- productPrice
+- productRating
+- updatedAT
+
+
+PRODUCT IMAGES TABLE
+- id
+- image
+- uploadedAT
+- updatedAT
+- product_id
+
+
+
+
+
+"Table and 8 chairs, brown/Gunnared medium grey"	
+"STRANDTORP / BERGMUND"	0	
+"2024-12-18 18:40:31.3489+05:30"	
+1
+1
+20
+"[""Dining Room""]"	
+
+"Enhance your dining experience with the STRANDTORP / BERGMUND Table and 8 Chairs set. This stylish and versatile dining set features a beautiful brown table complemented by 8 chairs upholstered in Gunnared medium grey fabric. Perfect for family meals, gatherings, or entertaining guests, this set offers both comfort and functionality. The extendable table allows you to adjust the length to suit various occasions, while the soft upholstery and sturdy construction ensure lasting comfort and durability. The warm brown tones of the table combined with the neutral grey chairs create an inviting and elegant atmosphere that suits a wide range of interior styles."
+
+
+- "John Doe: ""Absolutely love this dining set! The extendable table is perfect for when we have guests over, and the grey chairs complement the brown table beautifully. Very sturdy and easy to assemble!""
+- Sarah Miller: ""While the table looks nice, the assembly process was a nightmare. It took me hours to put everything together, and the instructions weren’t very clear. The chairs are comfortable, but I expected better quality for the price.""
+- Michael Harris: ""I was looking for a spacious table, and this one fits the bill perfectly. The 260 cm length is fantastic for hosting dinner parties. The chairs are soft yet supportive – great value for the price.""
+- Emily King: ""The table is nice, but I’m really disappointed with the finish. It scratches easily, and I've already noticed some marks after only a few uses. The chairs are comfortable, but the table is not as durable as I hoped.""
+- David Lee: ""Very happy with this purchase. The quality is top-notch, and the assembly was straightforward. It fits well in our dining space, and the extended table length is ideal for our large family gatherings.""
+- Lisa White: ""I like the look of the set, but the table is much heavier than I expected. Moving it around is a hassle, especially when trying to extend it. Also, the grey upholstery on the chairs started fading after just a few months."""	
+
+
+
+"The specifications and necessary information of the products are -
+- Table Design:
+-- Extendable Table with adjustable lengths:
+-- Minimum Length: 150 cm (59"")
+-- Maximum Length: 260 cm (102 3/8"")
+-- Standard Length: 205 cm (80 ¾"")
+-- Table Finish: Rich brown finish that complements a variety of interior styles.
+-- Material: Constructed with high-quality wood for durability and stability.
+
+- Chairs:
+-- Upholstery: 8 chairs upholstered in Gunnared medium grey fabric for a soft and comfortable seating experience.
+-- Width: 95 cm (37 3/8"") 
+-- Height: 75 cm (29 1/2"")
+
+- Design & Aesthetic:
+-- Color: A warm brown table with Gunnared medium grey chairs, creating a welcoming and modern look.
+-- Style: Contemporary design suitable for various dining room aesthetics.
+
+- Construction:
+-- Made with premium materials for long-lasting durability and solid support.
+-- Sturdy frame and legs ensure stable use during family meals or gatherings.
+
+- Maintenance:
+-- Easy to Clean: The table surface can be easily wiped with a damp cloth. Chairs are designed to be low-maintenance and easy to care for.
+-- Care Instructions: For best results, wipe the table and chairs with a damp cloth. Avoid harsh chemicals to preserve the finish and upholstery.
+
+- Perfect For: 
+-- Dining Rooms or Kitchens
+--  Ideal for creating memorable moments with family, friends, or guests"	99500	4.6	"2024-12-24 17:12:46.808897+05:30"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"6-seat modular sofa with side table"	
+"LILLEHEM"	
+100	
+"2024-12-18 18:56:33.97373+05:30"	
+2	
+1	
+45	
+"[""Living Room""]"	
+
+
+"Transform your living space with the versatile and stylish LILLEHEM modular sofa. Designed for both comfort and adaptability, this 6-seat sofa offers a customizable solution to suit your needs, whether for your home or office. The modular design allows you to create your perfect seating arrangement, and you can update or expand it whenever desired.
+The sofa features a soft yet durable Vissle fabric cover, made from dope-dyed polyester, which ensures a smooth texture and an elegant two-tone effect. The cover is also machine washable, making maintenance a breeze. Each module is designed to look great from all angles, so it’s perfect for placing against a wall or as a centerpiece in the middle of the room.
+Comfort is a priority with this sofa. The seat cushions are crafted with high-density foam and zigzag springs for supportive seating, while the generous backrest provides comfort for your back and lumbar. You can complete the look with the optional TUNSTA table, which can serve as a side table or coffee table, seamlessly integrating with the sofa for a cohesive and stylish setup.
+Designed to be flexible, you can refresh the look by adding new covers, cushions, or throws, personalizing it to match your style. Whether used at home or in a business environment, the LILLEHEM modular sofa offers both comfort and practicality."	
+
+
+
+"- Sofia Torres: ""This LILLEHEM modular sofa is perfect for our living room! The customizable design allowed us to create the ideal setup for our space, and the washable covers are a huge bonus with kids around. The side table fits seamlessly with the sofa and is very sturdy. Super happy with this purchase!""
+- Raj Patel: ""The LILLEHEM modular sofa is great in terms of comfort and flexibility. We were able to configure it just the way we wanted. The fabric feels durable, and the cushions are supportive. The side table was a nice touch, but I do wish the seat cushions were a little firmer. Still, very satisfied overall!""
+- Yuki Nakamura: ""I love how the LILLEHEM sofa fits into my small apartment. The modules are easy to arrange and rearrange depending on my needs. The fabric has a lovely texture, and I’ve already washed the covers once with no issues. The only thing is the side table is a bit lower than I expected, but still functional.""
+- Ahmed Al-Farsi: ""We’ve had this modular sofa for a few weeks now, and it’s become the heart of our living room. The setup process was easy, and I love that we can change the arrangement when we want to refresh the look. It’s very comfortable, and the side table is just the right size for drinks or a laptop. Definitely worth the investment!""
+- Olivia Johnson: ""This sofa is a game-changer! I was worried about fitting something large in my living room, but the LILLEHEM is so versatile, I can change it around based on the occasion. The cushions are really comfortable, and I appreciate how easy the covers are to clean. The side table complements the sofa perfectly."""	
+
+
+
+"This product comes as 28 packages.
+- Max Load on Table Top: 40 kg (88 lbs)
+- 1-Seat Module Frame:
+-- Dimensions: 
+--- Width: 74 cm (29 ¼"")
+--- Height: 23 cm (9"")
+--- Length: 74 cm (29 ¼"")
+-- Weight: 10.95 kg (24 lbs 2 oz)
+-- Package(s): 3
+- 2-Seat Module Frame:
+-- Dimensions: 
+--- Width: 74 cm (29 ¼"")
+--- Height: 23 cm (9"")
+--- Length: 144 cm (56 ¾"")
+-- Weight: 17.70 kg (38 lbs 16 oz)
+-- Package(s): 2
+
+- Frame Armrest:
+-- Dimensions: 
+--- Width: 53 cm (20 ¾"")
+--- Height: 17 cm (6 ¾"")
+--- Length: 76 cm (30"")
+-- Weight: 6.00 kg (13 lbs 4 oz)
+-- Package(s): 6
+
+- Cover for 1-Seat Module:
+-- Dimensions: 
+--- Width: 24 cm (9 ½"")
+--- Height: 3 cm (1"")
+--- Length: 36 cm (14 ¼"")
+-- Weight: 0.47 kg (16 oz)
+-- Package(s): 3
+
+- Cover for 2-Seat Module:
+-- Dimensions: 
+--- Width: 37 cm (14 ¼"")
+--- Height: 3 cm (1"")
+--- Length: 57 cm (22 ¼"")
+-- Weight: 0.82 kg (1 lb 13 oz)
+-- Package(s): 2
+
+- Cover for Armrest:
+-- Dimensions: 
+--- Width: 24 cm (9 ½"")
+--- Height: 3 cm (1"")
+--- Length: 36 cm (14 ¼"")
+-- Weight: 0.39 kg (14 oz)
+-- Package(s): 6
+
+- TUNSTA Side Table:
+-- Dimensions: 
+--- Width: 51 cm (20"")
+--- Height: 6 cm (2 ½"")
+--- Length: 88 cm (34 ½"")
+-- Weight: 13.76 kg (30 lbs 5 oz)
+-- Package(s): 1
+
+- Leg:
+-- Dimensions: 
+--- Width: 17 cm (6 ½"")
+--- Height: 4 cm (1 ¾"")
+--- Length: 24 cm (9 ½"")
+-- Weight: 0.92 kg (1 lb 16 oz)
+-- Package(s): 5"	
+
+
+100000	
+4.8	
+"2024-12-25 15:24:22.2886+05:30"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"Storage box, light bamboo"	"UPPDATERA"
+45
+"2024-12-19 01:45:36.601135+05:30"	
+3	
+1	
+125	
+"[""Accessories"", ""Hallway"", ""Workspace""]"	
+
+"This versatile storage box, crafted from durable bamboo, blends both functionality and style. Its sleek, natural design makes it a perfect addition to any space, whether on a shelf, in a deep drawer, or on a countertop. Ideal for organizing everything from kitchen utensils and spice jars to small items in the hallway or bathroom, this box is both practical and decorative. The sturdy bamboo construction ensures long-lasting use, while the box’s bottom is designed to stand firm, even when stacked with others. You can easily combine this box with other UPPDATERA drawer organizers to maximize space and keep your home clutter-free."	
+
+
+"- Emma Peterson: ""I love this storage box! It fits perfectly on my kitchen shelf and is great for organizing small items like spice jars and utensils. The bamboo material looks sleek and feels very sturdy. It’s also easy to wipe clean, which is a huge plus for me. I’ll definitely be getting more!""
+- James Williams: ""This box is exactly what I needed for my bathroom. I use it to store toiletries and small bottles. It’s lightweight but durable, and the bamboo gives it a natural, calming look. The fact that it’s easy to clean is an added bonus, especially in a bathroom setting.""
+- Lena Schmidt: ""I use this storage box in my office to organize papers and pens. The size is perfect for my desk drawer, and it stacks nicely with other boxes. The bamboo finish is lovely and gives a warm touch to the room. I like that it's made from sustainable materials too.""
+- Carlos Martinez: ""The UPPDATERA storage box is great for decluttering. I use it in my kitchen for utensils and small jars, and it helps keep everything organized. It’s sturdy, well-built, and has a nice finish. Highly recommend if you need something practical and stylish!""
+- Olivia Brown: ""I bought this box for my hallway to store small items like keys, sunglasses, and wallets. It fits neatly on the shelf and keeps everything in order. The bamboo design is simple yet elegant, and it feels like a quality product. Definitely worth the price."""	
+
+
+
+"The specifications and necessary information of the products are -
+- Material:
+-- Base: Bamboo, Stain, Clear lacquer
+-- Bottom: Fibreboard, Bamboo veneer, Stain, Clear lacquer
+
+- Care: Wipe clean with a damp cloth.
+
+- Dimensions:
+-- Width: 24 cm (9 ½"")
+-- Height: 15 cm (5 ¾"")
+-- Length: 32 cm (12 ¾"")
+- Weight: 1.26 kg (2 lb 12 oz)
+- Package(s): 1"	1000	4.9	"2024-12-25 15:23:59.189236+05:30"
+
+
+
+
+USER TABLE
+- id
+- password
+- last_login
+- is_superuser
+- username
+- first_name
+- last_name
+- email
+- is_staff
+- is_active
+- date_joined
+- mobile_number
+- date_of_birth
+- address_line_1
+- address_line_2
+- city
+- state
+- country
+- pincode
+- profile_picture

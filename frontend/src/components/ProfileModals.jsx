@@ -6,10 +6,21 @@ import {
     Visibility,
     VisibilityOff,
 } from "@mui/icons-material";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Message from "./Message";
+import {
+    addAddress,
+    deleteAddress,
+    editAddress,
+    fetchAddresses,
+    updateProfile,
+} from "../actions/userActions";
+import Loader from "./Loader";
 
 export const EditModal = ({ closeModal }) => {
+    const userLogin = useSelector((state) => state.userLogin);
+    const { userInfo } = userLogin;
     const [mobileNumber, setMobileNumber] = useState("");
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -22,9 +33,11 @@ export const EditModal = ({ closeModal }) => {
     const [updateMobile, setUpdateMobile] = useState(false);
     const [updatePassword, setUpdatePassword] = useState(false);
 
-    const toggleVisibility = (field) => {
-        setVisibleField((prevField) => (prevField === field ? "" : field));
-    };
+    const { profileData, loading, error } = useSelector(
+        (state) => state.profile
+    );
+
+    const dispatch = useDispatch();
 
     // Handle form submission
     const handleSubmit = (e) => {
@@ -34,13 +47,25 @@ export const EditModal = ({ closeModal }) => {
 
         // If updateMobile is checked, include the mobile number in the submitted data
         if (updateMobile) {
-            updatedData.mobileNumber = mobileNumber;
+            if (/^[0-9\- ]+$/.test(mobileNumber))
+                updatedData.mobileNumber = mobileNumber;
+            else {
+                setMessage("Invalid Input, not a Mobile Number.");
+                setMessageType("fail");
+                return;
+            }
         }
 
         // If updatePassword is checked, include the password details
         if (updatePassword) {
+            if (!oldPassword || !newPassword || !confirmPassword) {
+                setMessage("All password fields are required.");
+                setMessageType("fail");
+                return;
+            }
             if (newPassword !== confirmPassword) {
-                alert("New password and confirm password do not match.");
+                setMessage("New password and confirm password do not match.");
+                setMessageType("fail");
                 return;
             }
             updatedData.password = newPassword;
@@ -48,18 +73,24 @@ export const EditModal = ({ closeModal }) => {
 
         // Here, you can call your API or handle the submission with updatedData
         console.log("Form submitted with data:", updatedData);
+        dispatch(updateProfile(updatedData));
 
+        setMessage(profileData.details);
+        setMessageType("success");
+        setMobileNumber("");
+        setOldPassword("");
+        setNewPassword("");
         // Close the modal after submission
-        closeModal();
+        // closeModal();
     };
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
+            className="absolute w-[120vw] h-[130vh] top-[35%] -translate-x-[70%] -translate-y-[50%] inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
             onClick={closeModal}
         >
             <div
-                className="absolute w-[250%] right-[72%] top-[20%] bg-[#e4efe4] rounded-lg p-8 overflow-auto border-2 border-[#014210]"
+                className="relative w-[70%] bg-[#e4efe4] rounded-lg p-8 overflow-auto border-2 border-[#014210]"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="product-form-container p-6">
@@ -74,6 +105,10 @@ export const EditModal = ({ closeModal }) => {
                     <h1 className="edit-form-title flex items-center justify-center gap-4 text-7xl text-center text-[#014210] font-bold">
                         Update Profile
                     </h1>
+                    {message && (
+                        <Message message={message} messageType={messageType} />
+                    )}
+                    {loading && <Loader />}
                     <form onSubmit={handleSubmit} className="space-y-6 mt-8">
                         {/* Mobile Number Section */}
                         <div className="flex items-center justify-evenly gap-8 w-full">
@@ -363,8 +398,14 @@ export const EditModal = ({ closeModal }) => {
 };
 
 export const AddressModal = ({ closeModal }) => {
+    const dispatch = useDispatch();
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
+    console.log(userInfo);
+    const { userAddresses, loading, error } = useSelector(
+        (state) => state.userAddress
+    );
+
     const [addressLine1, setAddressLine1] = useState("");
     const [addressLine2, setAddressLine2] = useState("");
     const [city, setCity] = useState("");
@@ -372,12 +413,35 @@ export const AddressModal = ({ closeModal }) => {
     const [country, setCountry] = useState("");
     const [pincode, setPincode] = useState("");
 
+    const [editingId, setEditingId] = useState(null);
     const [isFormVisible, setIsFormVisible] = useState(false);
+
+    useEffect(() => {
+        dispatch(fetchAddresses())
+            .then(() => console.log("Addresses fetched successfully"))
+            .catch((err) => console.error("Error fetching addresses:", err));
+    }, [dispatch]);
 
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        setIsFormVisible(false);
+
+        const addressData = {
+            address_line_1: addressLine1,
+            address_line_2: addressLine2,
+            city,
+            state,
+            country,
+            pincode,
+        };
+        if (editingId) {
+            dispatch(
+                editAddress({
+                    id: editingId,
+                    ...addressData,
+                })
+            );
+        } else dispatch(addAddress(addressData));
 
         // Clear the form fields
         setAddressLine1("");
@@ -387,17 +451,39 @@ export const AddressModal = ({ closeModal }) => {
         setCountry("");
         setPincode("");
 
+        setEditingId(null);
+        setIsFormVisible(false);
+
         // Close the modal after submission
         closeModal();
     };
 
+    const handleEdit = (id) => {
+        const address = userAddresses.find((addr) => addr.id === id);
+        if (address) {
+            setAddressLine1(address.address_line_1);
+            setAddressLine2(address.address_line_2);
+            setCity(address.city);
+            setState(address.state);
+            setCountry(address.country);
+            setPincode(address.pincode);
+            setEditingId(id);
+            setIsFormVisible(true);
+        }
+    };
+
+    const handleDelete = (id) => {
+        // setAddresses();
+        dispatch(deleteAddress(id));
+    };
+
     return (
         <div
-            className="fixed w-full inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
+            className="absolute w-[120vw] h-[130vh] top-[35%] -translate-x-[70%] -translate-y-[50%] inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
             onClick={closeModal}
         >
             <div
-                className="absolute w-[250%] right-[72%] top-[20%] bg-[#e4efe4] rounded-lg p-8 border-2 border-[#014210]"
+                className="relative w-[70%]  bg-[#e4efe4] rounded-lg p-8 border-2 border-[#014210]"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="product-form-container p-6">
@@ -411,12 +497,17 @@ export const AddressModal = ({ closeModal }) => {
                     <h1 className="edit-form-title flex items-center justify-center gap-4 text-7xl text-center text-[#014210] font-bold">
                         Saved Addresses
                     </h1>
+                    {loading && <Loader />}
                     <div className="max-h-[50rem] overflow-auto px-8">
                         <h4 className="res-addr my-4 mx-0 text-4xl font-medium flex items-center justify-center gap-4">
                             {userInfo.addresses.map((address, index) => (
                                 <li key={index} className="w-full">
                                     <div className="addr-btns flex items-center justify-end mt-8">
-                                        <button>
+                                        <button
+                                            onClick={() =>
+                                                handleEdit(address.id)
+                                            }
+                                        >
                                             <Edit
                                                 style={{
                                                     fontSize: "3.2rem",
@@ -424,7 +515,11 @@ export const AddressModal = ({ closeModal }) => {
                                                 }}
                                             />
                                         </button>
-                                        <button>
+                                        <button
+                                            onClick={() =>
+                                                handleDelete(address.id)
+                                            }
+                                        >
                                             <Delete
                                                 style={{
                                                     fontSize: "3.2rem",

@@ -6,16 +6,23 @@ import {
     productReducers,
     productsListReducers,
 } from "./reducers/productReducers";
-import { userLogInReducers, userSignUpReducers } from "./reducers/userReducers";
+import {
+    userAddressReducers,
+    userLogInReducers,
+    userProfileReducers,
+    userSignUpReducers,
+} from "./reducers/userReducers";
 import { cart } from "./reducers/cartReducers";
 
 const reducer = combineReducers({
     productsList: productsListReducers,
     productDetails: productDetailsReducers,
+    product: productReducers,
     userLogin: userLogInReducers,
     userSignUp: userSignUpReducers,
     cart: cart,
-    product: productReducers,
+    profile: userProfileReducers,
+    userAddress: userAddressReducers,
 });
 
 const initialState = {};
