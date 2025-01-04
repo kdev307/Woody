@@ -2,7 +2,7 @@ import {
     Add,
     Close,
     Delete,
-    Edit,
+    // Edit
     Visibility,
     VisibilityOff,
 } from "@mui/icons-material";
@@ -12,7 +12,7 @@ import Message from "./Message";
 import {
     addAddress,
     deleteAddress,
-    editAddress,
+    // editAddress,
     fetchAddresses,
     updateProfile,
 } from "../actions/userActions";
@@ -73,15 +73,21 @@ export const EditModal = ({ closeModal }) => {
 
         // Here, you can call your API or handle the submission with updatedData
         console.log("Form submitted with data:", updatedData);
-        dispatch(updateProfile(updatedData));
-
-        setMessage(profileData.details);
-        setMessageType("success");
-        setMobileNumber("");
-        setOldPassword("");
-        setNewPassword("");
+        dispatch(updateProfile(updatedData))
+            .then(() => {
+                setMessage(profileData.details);
+                setMessageType("success");
+                setMobileNumber("");
+                setOldPassword("");
+                setNewPassword("");
+                setConfirmPassword("");
+            })
+            .catch((err) => {
+                setMessage(profileData.details);
+                setMessageType("fail");
+                console.log("Update Profile Error: ", err);
+            });
         // Close the modal after submission
-        // closeModal();
     };
 
     return (
@@ -402,9 +408,8 @@ export const AddressModal = ({ closeModal }) => {
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
     console.log(userInfo);
-    const { userAddresses, loading, error } = useSelector(
-        (state) => state.userAddress
-    );
+    const userAddress = useSelector((state) => state.userAddress);
+    const { userAddresses, loading, error } = userAddress;
 
     const [addressLine1, setAddressLine1] = useState("");
     const [addressLine2, setAddressLine2] = useState("");
@@ -413,13 +418,24 @@ export const AddressModal = ({ closeModal }) => {
     const [country, setCountry] = useState("");
     const [pincode, setPincode] = useState("");
 
-    const [editingId, setEditingId] = useState(null);
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
+
+    // const [editingId, setEditingId] = useState(null);
     const [isFormVisible, setIsFormVisible] = useState(false);
 
     useEffect(() => {
         dispatch(fetchAddresses())
-            .then(() => console.log("Addresses fetched successfully"))
-            .catch((err) => console.error("Error fetching addresses:", err));
+            .then(() => {
+                console.log("Addresses fetched successfully");
+                // setMessage(userAddresses.details);
+                // setMessageType("success");
+            })
+            .catch((err) => {
+                setMessage("Error fetching addresses");
+                setMessageType("fail");
+                console.error("Error fetching addresses:", err);
+            });
     }, [dispatch]);
 
     // Handle form submission
@@ -427,59 +443,84 @@ export const AddressModal = ({ closeModal }) => {
         e.preventDefault();
 
         const addressData = {
-            address_line_1: addressLine1,
-            address_line_2: addressLine2,
+            addressLine1,
+            addressLine2,
             city,
             state,
             country,
             pincode,
         };
-        if (editingId) {
-            dispatch(
-                editAddress({
-                    id: editingId,
-                    ...addressData,
-                })
-            );
-        } else dispatch(addAddress(addressData));
+        // if (editingId) {
+        //     dispatch(
+        //         editAddress({
+        //             id: editingId,
+        //             ...addressData,
+        //         })
+        //     );
+        // } else dispatch(addAddress(addressData));
+        dispatch(addAddress(addressData))
+            .then(() => {
+                // Clear the form fields
+                setAddressLine1("");
+                setAddressLine2("");
+                setCity("");
+                setState("");
+                setCountry("");
+                setPincode("");
 
-        // Clear the form fields
-        setAddressLine1("");
-        setAddressLine2("");
-        setCity("");
-        setState("");
-        setCountry("");
-        setPincode("");
+                // setEditingId(null);
+                setIsFormVisible(false);
+                // setMessage(userAddresses.details);
+                // setMessageType("success");
 
-        setEditingId(null);
-        setIsFormVisible(false);
+                dispatch(fetchAddresses());
+            })
+            .catch((err) => {
+                setMessage(userAddresses.details);
+                // setMessageType("fail");
+                // console.error("Error adding address:", err);
+            });
 
         // Close the modal after submission
-        closeModal();
+        // closeModal();
     };
 
-    const handleEdit = (id) => {
-        const address = userAddresses.find((addr) => addr.id === id);
-        if (address) {
-            setAddressLine1(address.address_line_1);
-            setAddressLine2(address.address_line_2);
-            setCity(address.city);
-            setState(address.state);
-            setCountry(address.country);
-            setPincode(address.pincode);
-            setEditingId(id);
-            setIsFormVisible(true);
-        }
-    };
+    // const handleEdit = (id) => {
+    //     setEditingId(id);
+    //     const address = userAddresses.find((addr) => addr.id === id);
+    //     if (address) {
+    //         setAddressLine1(address.address_line_1);
+    //         setAddressLine2(address.address_line_2);
+    //         setCity(address.city);
+    //         setState(address.state);
+    //         setCountry(address.country);
+    //         setPincode(address.pincode);
+    //     }
+    //     setIsFormVisible(true);
+    // };
 
     const handleDelete = (id) => {
         // setAddresses();
-        dispatch(deleteAddress(id));
+        setMessage("");
+        setMessageType("");
+        console.log("ID being passed:", id);
+        dispatch(deleteAddress(id)).then((response) => {
+            if (response?.payload?.details) {
+            }
+            dispatch(fetchAddresses());
+            // setMessage(userAddresses.details);
+            // setMessageType("success");
+        });
+        // if (error) {
+        //     setMessage(userAddresses.details);
+        //     setMessageType("fail");
+        // } else {
+        // }
     };
 
     return (
         <div
-            className="absolute w-[120vw] h-[130vh] top-[35%] -translate-x-[70%] -translate-y-[50%] inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
+            className="absolute w-[120vw] h-[130vh] top-[35%] -translate-x-[70%] -translate-y-[40%] inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
             onClick={closeModal}
         >
             <div
@@ -498,12 +539,20 @@ export const AddressModal = ({ closeModal }) => {
                         Saved Addresses
                     </h1>
                     {loading && <Loader />}
+                    {message && (
+                        <Message message={message} messageType={messageType} />
+                    )}
+
                     <div className="max-h-[50rem] overflow-auto px-8">
-                        <h4 className="res-addr my-4 mx-0 text-4xl font-medium flex items-center justify-center gap-4">
-                            {userInfo.addresses.map((address, index) => (
-                                <li key={index} className="w-full">
-                                    <div className="addr-btns flex items-center justify-end mt-8">
-                                        <button
+                        <h4 className="res-addr my-4 mx-0 text-4xl font-medium flex flex-col items-center justify-center gap-4">
+                            {!userAddresses || userAddresses.length === 0 ? (
+                                <p>No addresses found.</p>
+                            ) : (
+                                userAddresses.map((address, index) => (
+                                    <li key={index} className="w-full">
+                                        {console.log("Show Address", address)}
+                                        <div className="addr-btns flex items-center justify-end mt-8">
+                                            {/* <button
                                             onClick={() =>
                                                 handleEdit(address.id)
                                             }
@@ -514,86 +563,87 @@ export const AddressModal = ({ closeModal }) => {
                                                     color: "#560000",
                                                 }}
                                             />
-                                        </button>
-                                        <button
-                                            onClick={() =>
-                                                handleDelete(address.id)
-                                            }
-                                        >
-                                            <Delete
+                                        </button> */}
+                                            <button
+                                                onClick={() =>
+                                                    handleDelete(address.id)
+                                                }
+                                            >
+                                                <Delete
+                                                    style={{
+                                                        fontSize: "3.2rem",
+                                                        color: "#560000",
+                                                    }}
+                                                />
+                                            </button>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="flex items-center justify-start gap-4">
+                                                <p className="text-[#560000]">
+                                                    Address Line 1:
+                                                </p>
+                                                <p className="text-[#014210] font-semibold">
+                                                    {address.address_line_1}
+                                                </p>
+                                            </div>
+
+                                            <div className="flex items-center justify-start gap-4">
+                                                <p className="text-[#560000]">
+                                                    Address Line 2:
+                                                </p>
+                                                <p className="text-[#014210] font-semibold">
+                                                    {address.address_line_2}
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center justify-start gap-4">
+                                                <p className="text-[#560000]">
+                                                    City:
+                                                </p>
+                                                <p className="text-[#014210] font-semibold">
+                                                    {address.city}
+                                                </p>
+                                            </div>
+
+                                            <div className="flex items-center justify-start gap-4">
+                                                <p className="text-[#560000]">
+                                                    State:
+                                                </p>
+                                                <p className="text-[#014210] font-semibold">
+                                                    {address.state}
+                                                </p>
+                                            </div>
+
+                                            <div className="flex items-center justify-start gap-4">
+                                                <p className="text-[#560000]">
+                                                    Country:
+                                                </p>
+                                                <p className="text-[#014210] font-semibold">
+                                                    {address.country}
+                                                </p>
+                                            </div>
+
+                                            <div className="flex items-center justify-start gap-4">
+                                                <p className="text-[#560000]">
+                                                    Pincode:
+                                                </p>
+                                                <p className="text-[#014210] font-semibold">
+                                                    {address.pincode}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <p className="endLine  self-center text-xl my-12 mx-0">
+                                            <hr
                                                 style={{
-                                                    fontSize: "3.2rem",
-                                                    color: "#560000",
+                                                    width: "100%",
+                                                    margin: "auto",
+                                                    border: "0.18rem solid #014210",
+                                                    borderRadius: "100rem",
                                                 }}
                                             />
-                                        </button>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="flex items-center justify-start gap-4">
-                                            <p className="text-[#560000]">
-                                                Address Line 1:
-                                            </p>
-                                            <p className="text-[#014210] font-semibold">
-                                                {address.address_line_1}
-                                            </p>
-                                        </div>
-
-                                        <div className="flex items-center justify-start gap-4">
-                                            <p className="text-[#560000]">
-                                                Address Line 2:
-                                            </p>
-                                            <p className="text-[#014210] font-semibold">
-                                                {address.address_line_2}
-                                            </p>
-                                        </div>
-                                        <div className="flex items-center justify-start gap-4">
-                                            <p className="text-[#560000]">
-                                                City:
-                                            </p>
-                                            <p className="text-[#014210] font-semibold">
-                                                {address.city}
-                                            </p>
-                                        </div>
-
-                                        <div className="flex items-center justify-start gap-4">
-                                            <p className="text-[#560000]">
-                                                State:
-                                            </p>
-                                            <p className="text-[#014210] font-semibold">
-                                                {address.state}
-                                            </p>
-                                        </div>
-
-                                        <div className="flex items-center justify-start gap-4">
-                                            <p className="text-[#560000]">
-                                                Country:
-                                            </p>
-                                            <p className="text-[#014210] font-semibold">
-                                                {address.country}
-                                            </p>
-                                        </div>
-
-                                        <div className="flex items-center justify-start gap-4">
-                                            <p className="text-[#560000]">
-                                                Pincode:
-                                            </p>
-                                            <p className="text-[#014210] font-semibold">
-                                                {address.pincode}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <p className="endLine  self-center text-xl my-12 mx-0">
-                                        <hr
-                                            style={{
-                                                width: "100%",
-                                                margin: "auto",
-                                                border: "0.18rem solid #014210",
-                                                borderRadius: "100rem",
-                                            }}
-                                        />
-                                    </p>
-                                </li>
-                            ))}
+                                        </p>
+                                    </li>
+                                ))
+                            )}
                         </h4>
                         <div className="addr-btns flex items-center justify-end mt-8">
                             <button
@@ -751,7 +801,10 @@ export const AddressModal = ({ closeModal }) => {
                                     type="submit"
                                     className="w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000"
                                 >
-                                    Add Address
+                                    {/* {editingId
+                                        ? "Update Existing Address"
+                                        : "Add New Address"} */}
+                                    Add New Address
                                 </button>
                             </form>
                         )}

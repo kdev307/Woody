@@ -286,37 +286,43 @@ def manageAddresses(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == 'POST':
-        data = request.data
-        new_address = UserAddresses.objects.create(
-            user=user,
-            address_line_1=data['addressLine1'],
-            address_line_2=data['addressLine2'],
-            city=data['city'],
-            state=data['state'],
-            country=data['country'],
-            pincode=data['pincode'],
-        )
-        serializer = UserAddressSerializer(new_address)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-    elif request.method == 'PUT':
-        data = request.data
         try:
-            address = UserAddresses.objects.get(id=data['id'], user=user)
-            address.address_line_1 = data['addressLine1']
-            address.address_line_2 = data['addressLine_2']
-            address.city = data['city']
-            address.state = data['state']
-            address.country = data['country']
-            address.pincode = data['pincode']
-            address.save()
-            serializer = UserAddressSerializer(address)
-            return Response(serializer.data, {'details': 'User Address updated.'},status=status.HTTP_200_OK)
-        except UserAddresses.DoesNotExist:
-            return Response({'details': 'User Address not found.'}, status=status.HTTP_404_NOT_FOUND)
+            data = request.data
+            new_address = UserAddresses.objects.create(
+                user=user,
+                address_line_1=data['addressLine1'],
+                address_line_2=data['addressLine2'],
+                city=data['city'],
+                state=data['state'],
+                country=data['country'],
+                pincode=data['pincode'],
+            )
+            serializer = UserAddressSerializer(new_address)
+            return Response({'details': 'New Address added successfully!',"address": serializer.data}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print('Error occured: ', e)
+            return Response({'details': 'Unable to add New Address at the moment.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # elif request.method == 'PUT':
+    #     data = request.data
+    #     try:
+    #         address = UserAddresses.objects.get(id=data['id'], user=user)
+    #         address.address_line_1 = data['addressLine1']
+    #         address.address_line_2 = data['addressLine_2']
+    #         address.city = data['city']
+    #         address.state = data['state']
+    #         address.country = data['country']
+    #         address.pincode = data['pincode']
+    #         address.save()
+    #         serializer = UserAddressSerializer(address)
+    #         return Response(serializer.data, {'details': 'User Address updated.'},status=status.HTTP_200_OK)
+    #     except UserAddresses.DoesNotExist:
+    #         return Response({'details': 'User Address not found.'}, status=status.HTTP_404_NOT_FOUND)
         
     
     elif request.method == 'DELETE':
+        print("DELETE request data:", request.data)
+        # print("Address ID:", address_id)
         try:
             address_id = request.data.get('id')
             address = UserAddresses.objects.get(id=address_id, user=user)
@@ -324,4 +330,7 @@ def manageAddresses(request):
             return Response({'details': 'User Address deleted.'}, status=status.HTTP_200_OK)
         except UserAddresses.DoesNotExist:
             return Response({'details': 'User Address not found.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print("Error occurred:", e)
+            return Response({'details': 'Unable to delete the Address at the moment.'}, status=status.HTTP_400_BAD_REQUEST)
 

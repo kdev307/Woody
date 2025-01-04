@@ -16,9 +16,9 @@ import {
     USER_ADDRESS_ADD_REQUEST,
     USER_ADDRESS_ADD_SUCCESS,
     USER_ADDRESS_ADD_FAIL,
-    USER_ADDRESS_EDIT_REQUEST,
-    USER_ADDRESS_EDIT_SUCCESS,
-    USER_ADDRESS_EDIT_FAIL,
+    // USER_ADDRESS_EDIT_REQUEST,
+    // USER_ADDRESS_EDIT_SUCCESS,
+    // USER_ADDRESS_EDIT_FAIL,
     USER_ADDRESS_DELETE_REQUEST,
     USER_ADDRESS_DELETE_SUCCESS,
     USER_ADDRESS_DELETE_FAIL,
@@ -110,7 +110,7 @@ export const updateProfile = (updatedData) => async (dispatch) => {
             return;
         }
         const response = await axios.put(
-            `/api/users/update-profile`,
+            `/api/users/update-profile/`,
             updatedData,
             {
                 headers: {
@@ -134,7 +134,7 @@ export const updateProfile = (updatedData) => async (dispatch) => {
     }
 };
 
-export const fetchAddresses = async (dispatch) => {
+export const fetchAddresses = () => async (dispatch) => {
     dispatch({ type: USER_ADDRESS_FETCH_REQUEST });
     try {
         const access_token = localStorage.getItem(ACCESS_TOKEN);
@@ -142,9 +142,10 @@ export const fetchAddresses = async (dispatch) => {
             console.error("Access token is missing");
             return;
         }
-        const { data } = await axios.get("/api/users/manage-addresses", {
+        const { data } = await axios.get("/api/users/manage-addresses/", {
             headers: { Authorization: `Bearer ${access_token}` },
         });
+        console.log("Backend Response:", data);
         dispatch({
             type: USER_ADDRESS_FETCH_SUCCESS,
             payload: data,
@@ -169,7 +170,7 @@ export const addAddress = (addressData) => async (dispatch) => {
             return;
         }
         const { data } = await axios.post(
-            "/api/users/manage-addresses",
+            "/api/users/manage-addresses/",
             addressData,
             {
                 headers: { Authorization: `Bearer ${access_token}` },
@@ -190,35 +191,35 @@ export const addAddress = (addressData) => async (dispatch) => {
     }
 };
 
-export const editAddress = (addressData) => async (dispatch) => {
-    dispatch({ type: USER_ADDRESS_EDIT_REQUEST });
-    try {
-        const access_token = localStorage.getItem(ACCESS_TOKEN);
-        if (!access_token) {
-            console.error("Access token is missing");
-            return;
-        }
-        const { data } = await axios.put(
-            "/api/users/manage-addresses",
-            addressData,
-            {
-                headers: { Authorization: `Bearer ${access_token}` },
-            }
-        );
-        dispatch({
-            type: USER_ADDRESS_EDIT_SUCCESS,
-            payload: data,
-        });
-    } catch (error) {
-        dispatch({
-            type: USER_ADDRESS_EDIT_FAIL,
-            payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
-        });
-    }
-};
+// export const editAddress = (addressData) => async (dispatch) => {
+//     dispatch({ type: USER_ADDRESS_EDIT_REQUEST });
+//     try {
+//         const access_token = localStorage.getItem(ACCESS_TOKEN);
+//         if (!access_token) {
+//             console.error("Access token is missing");
+//             return;
+//         }
+//         const { data } = await axios.put(
+//             "/api/users/manage-addresses",
+//             addressData,
+//             {
+//                 headers: { Authorization: `Bearer ${access_token}` },
+//             }
+//         );
+//         dispatch({
+//             type: USER_ADDRESS_EDIT_SUCCESS,
+//             payload: data,
+//         });
+//     } catch (error) {
+//         dispatch({
+//             type: USER_ADDRESS_EDIT_FAIL,
+//             payload:
+//                 error.response && error.response.data.message
+//                     ? error.response.data.message
+//                     : error.message,
+//         });
+//     }
+// };
 
 export const deleteAddress = (addressId) => async (dispatch) => {
     dispatch({ type: USER_ADDRESS_DELETE_REQUEST });
@@ -228,7 +229,7 @@ export const deleteAddress = (addressId) => async (dispatch) => {
             console.error("Access token is missing");
             return;
         }
-        const { data } = await axios.delete("api/users/manage-addresses", {
+        const { data } = await axios.delete("/api/users/manage-addresses/", {
             data: { id: addressId },
             headers: { Authorization: `Bearer ${access_token}` },
         });

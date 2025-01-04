@@ -5,9 +5,9 @@ import {
     USER_ADDRESS_DELETE_FAIL,
     USER_ADDRESS_DELETE_REQUEST,
     USER_ADDRESS_DELETE_SUCCESS,
-    USER_ADDRESS_EDIT_FAIL,
-    USER_ADDRESS_EDIT_REQUEST,
-    USER_ADDRESS_EDIT_SUCCESS,
+    // USER_ADDRESS_EDIT_FAIL,
+    // USER_ADDRESS_EDIT_REQUEST,
+    // USER_ADDRESS_EDIT_SUCCESS,
     USER_ADDRESS_FETCH_FAIL,
     USER_ADDRESS_FETCH_REQUEST,
     USER_ADDRESS_FETCH_SUCCESS,
@@ -89,23 +89,23 @@ export const userAddressReducers = (
             return {
                 ...state,
                 loading: false,
-                addresses: [...state.addresses, action.payload],
+                userAddresses: [...state.userAddresses, action.payload],
             };
         case USER_ADDRESS_ADD_FAIL:
             return { ...state, loading: false, error: action.payload };
 
-        case USER_ADDRESS_EDIT_REQUEST:
-            return { ...state, loading: true };
-        case USER_ADDRESS_EDIT_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                userAddresses: state.addresses.map((address) =>
-                    address.id === action.payload.id ? action.payload : address
-                ),
-            };
-        case USER_ADDRESS_EDIT_FAIL:
-            return { ...state, loading: false, error: action.payload };
+        // case USER_ADDRESS_EDIT_REQUEST:
+        //     return { ...state, loading: true };
+        // case USER_ADDRESS_EDIT_SUCCESS:
+        //     return {
+        //         ...state,
+        //         loading: false,
+        //         userAddresses: state.userAddresses.map((address) =>
+        //             address.id === action.payload.id ? action.payload : address
+        //         ),
+        //     };
+        // case USER_ADDRESS_EDIT_FAIL:
+        //     return { ...state, loading: false, error: action.payload };
 
         case USER_ADDRESS_DELETE_REQUEST:
             return { ...state, loading: true };
@@ -113,7 +113,7 @@ export const userAddressReducers = (
             return {
                 ...state,
                 loading: false,
-                userAddresses: state.addresses.filter(
+                userAddresses: state.userAddresses.filter(
                     (address) => address.id !== action.payload.id
                 ),
             };

@@ -32,12 +32,14 @@ class UserAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAddresses
         fields = [
+            'id',
             'address_line_1',
             'address_line_2',
             'city',
             'state',
             'country',
             'pincode',
+            'user_id'
         ]
 
 

@@ -6,6 +6,7 @@ import {
     listProducts,
     updateProduct,
 } from "../actions/productActions";
+import Message from "./Message";
 
 function ProductForm({ method, toggleProductForm, product }) {
     const title = method === "addProduct" ? "Add Product" : "Edit Product";
@@ -62,6 +63,9 @@ function ProductForm({ method, toggleProductForm, product }) {
         product?.productStockCount || 0
     );
 
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
+
     const handleCheckboxChange = (event) => {
         const { id, checked } = event.target;
         setProductCategories((prevState) => ({
@@ -111,10 +115,14 @@ function ProductForm({ method, toggleProductForm, product }) {
         if (method === "editProduct") {
             formData.append("productId", product.id);
             dispatch(updateProduct(product.id, formData));
+            setMessage(product.details);
+            setMessageType("success");
             console.log("Editing Product: ", [...formData]);
         } else {
             console.log("Adding Product: ", [...formData]);
             dispatch(createProduct(formData));
+            setMessage(product.details);
+            setMessageType("success");
         }
         toggleProductForm();
         dispatch(listProducts());
@@ -141,6 +149,9 @@ function ProductForm({ method, toggleProductForm, product }) {
                     <h1 className="product-form-title flex items-center justify-center gap-4 text-7xl text-center text-[#014210] font-bold">
                         {title}
                     </h1>
+                    {message && (
+                        <Message message={message} messageType={messageType} />
+                    )}
                     <form
                         className="form-container flex flex-col p-4 gap-8 items-center justify-center text-left rounded-2xl"
                         onSubmit={handleProductDataSubmit}
