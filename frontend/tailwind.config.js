@@ -24,6 +24,10 @@ module.exports = {
                 sm_tab: { max: "44em" }, // small tablets (Below 704px)
                 mob: { max: "34em" }, // phones (Below 544px)
             },
+            animation: {
+                // "fast-pulse": "pulse 1s ease-in-out infinite",
+                // "custom-ping": "ping 1s ease-in-out 2",
+            },
         },
     },
     plugins: [scrollbar({ nocompatible: true })],
