@@ -65,7 +65,7 @@ export const createProduct = (formProductData) => async (dispatch) => {
             return;
         }
         const response = await axios.post(
-            "/api/products/add",
+            "/api/products/add/",
             formProductData,
             {
                 headers: {
@@ -100,7 +100,7 @@ export const updateProduct =
                 return;
             }
             const response = await axios.put(
-                `/api/product/edit/${productId}`,
+                `/api/product/edit/${productId}/`,
                 // `http://localhost:8000/api/product/edit/${productId}`,
                 formProductData,
                 {
@@ -135,7 +135,7 @@ export const deleteProduct = (productId) => async (dispatch) => {
             return;
         }
         const { status, response } = await axios.delete(
-            `/api/product/delete/${productId}`,
+            `/api/product/delete/${productId}/`,
             {
                 headers: {
                     Authorization: `Bearer ${access_token}`,

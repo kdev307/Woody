@@ -26,13 +26,13 @@ function Navbar() {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const handleCartToggle = () => {
         setIsCartOpen((prev) => !prev);
-        setIsMenuOpen(!isMenuOpen);
+        // setIsMenuOpen(!isMenuOpen);
     };
 
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const handleProfileToggle = () => {
         setIsProfileOpen((prev) => !prev);
-        setIsMenuOpen(!isMenuOpen);
+        // setIsMenuOpen(!isMenuOpen);
     };
 
     const [scrolled, setScrolled] = useState(false);
@@ -213,7 +213,7 @@ function Navbar() {
                                     className="icon"
                                     style={{ fontSize: "3.2rem" }}
                                 />
-                                <p className="absolute -top-1 left-[60%] text-black hover:text-[#006000] transition-colors duration-200 text-xl font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                <p className="absolute -top-1 left-[60%] text-black hover:text-[#006000] transition-colors duration-200 text-2xl font-bold rounded-full w-5 h-5 flex items-center justify-center">
                                     {userInfo ? totalQuantity : ""}
                                 </p>
                             </button>

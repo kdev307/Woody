@@ -9,7 +9,7 @@ function Message({ messageType, message }) {
                     : "Something went Wrong :("}
             </h2>
             <span className="text-3xl text-[#560000] font-medium">
-                {messageType === "success" ? "✅" : "⛔"} :{message}
+                {messageType === "success" ? "✅" : "⛔"} : {message}
             </span>
         </div>
     );

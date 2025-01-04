@@ -590,7 +590,7 @@ function ProductCard({ product, userInfo, toggleProductForm }) {
                                     </h3>
                                 </>
                             ) : (
-                                <h3 className="product-price text-4xl">
+                                <h3 className="product-price text-4xl font-bold">
                                     ₹{productPrice}
                                 </h3>
                             )}

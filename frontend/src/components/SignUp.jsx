@@ -27,8 +27,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
     const [state, setState] = useState("");
     const [country, setCountry] = useState("");
     const [pincode, setPincode] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [visibleField, setVisibleField] = useState("");
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
     // const [loading, setLoading] = useState(false);
@@ -68,12 +67,8 @@ function SignUp({ onBack, onSignUpSuccess }) {
         // }, [userInfo, redirect, onSignUpSuccess]);
     }, [userInfo, error, onSignUpSuccess]);
 
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
-    };
-
-    const toggleConfirmPasswordVisibility = () => {
-        setShowConfirmPassword(!showConfirmPassword);
+    const toggleVisibility = (field) => {
+        setVisibleField((prevField) => (prevField === field ? "" : field));
     };
 
     const validEmail = new RegExp(
@@ -242,7 +237,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
                             />
                         </div>
 
-                        {/* Password Fields */}
+                        {/* Password Field */}
                         <div className="flex flex-col items-start justify-center">
                             <label
                                 htmlFor="password"
@@ -252,7 +247,11 @@ function SignUp({ onBack, onSignUpSuccess }) {
                             </label>
                             <div className="flex items-center justify-center gap-2 w-full">
                                 <input
-                                    type={showPassword ? "text" : "password"}
+                                    type={
+                                        visibleField === "password"
+                                            ? "text"
+                                            : "password"
+                                    }
                                     name="password"
                                     id="password"
                                     className="form-input w-full p-6 text-[1.8rem] my-4 mx-0 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
@@ -266,14 +265,14 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 <button
                                     type="button"
                                     className="show-password-btn ease-linear duration-1000"
-                                    onClick={togglePasswordVisibility}
+                                    onClick={() => toggleVisibility("password")}
                                     aria-label={
-                                        showPassword
+                                        visibleField === "password"
                                             ? "Hide Password"
                                             : "Show Password"
                                     }
                                 >
-                                    {showPassword ? (
+                                    {visibleField === "password" ? (
                                         <Visibility
                                             style={{
                                                 color: "#014210",
@@ -291,6 +290,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 </button>
                             </div>
                         </div>
+                        {/* Confirm Password Field */}
                         <div className="flex flex-col items-start justify-center">
                             <label
                                 htmlFor="confirmPassword"
@@ -301,7 +301,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
                             <div className="flex items-center justify-center gap-2 w-full">
                                 <input
                                     type={
-                                        showConfirmPassword
+                                        visibleField === "confirmPassword"
                                             ? "text"
                                             : "password"
                                     }
@@ -318,14 +318,16 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 <button
                                     type="button"
                                     className="show-password-btn ease-linear duration-1000"
-                                    onClick={toggleConfirmPasswordVisibility}
+                                    onClick={() =>
+                                        toggleVisibility("confirmPassword")
+                                    }
                                     aria-label={
-                                        showConfirmPassword
+                                        visibleField === "confirmPassword"
                                             ? "Hide Password"
                                             : "Show Password"
                                     }
                                 >
-                                    {showConfirmPassword ? (
+                                    {visibleField === "confirmPassword" ? (
                                         <Visibility
                                             style={{
                                                 color: "#014210",
@@ -384,7 +386,7 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                 placeholder="Address Line 2 (optional)"
                             />
                         </div>
-                        <div className="flex items-center justify-center gap-2">
+                        <div className="grid grid-cols-2 items-center justify-center gap-2">
                             <div className="flex flex-col items-start justify-center">
                                 <label
                                     htmlFor="city"
@@ -421,8 +423,6 @@ function SignUp({ onBack, onSignUpSuccess }) {
                                     required
                                 />
                             </div>
-                        </div>
-                        <div className="flex items-center justify-center gap-2">
                             <div className="flex flex-col items-start justify-center">
                                 <label
                                     htmlFor="country"
