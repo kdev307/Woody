@@ -12,7 +12,7 @@ import {
     updateCartQuantity,
     clearCart,
 } from "../actions/cartActions";
-// import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 function Cart({ handleCartToggle, isOpen }) {
     const cartItemsList = useSelector((state) => state.cart.cartItemsList);
@@ -39,21 +39,16 @@ function Cart({ handleCartToggle, isOpen }) {
     };
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
+    const navigate = useNavigate();
 
-    const handleBuyNow = () => {
+    const handleCheckout = () => {
         if (!userInfo) {
             alert("Please login to your account for placing order");
             // handleCartToggle(false);
         } else {
-            const confirmOrder = window.confirm(
-                "Are you sure you want to proceed with the order?"
-            );
-            if (confirmOrder) {
-                dispatch(clearCart());
-                alert(
-                    "Order Confirmed ! Thank You for Shopping with us. :) :)"
-                );
-            }
+            navigate("/checkout");
+
+            // dispatch(clearCart());
         }
     };
 
@@ -106,15 +101,23 @@ function Cart({ handleCartToggle, isOpen }) {
                 </div>
                 <div className="cart-btns flex flex-col items-center justify-center pl-0 text-center gap-4 ">
                     <button
-                        className="cart-btn buy-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-200"
+                        className={`cart-btn buy-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold  transition-all ease-linear duration-200 ${
+                            cartItemsList.length === 0
+                                ? "cursor-not-allowed text-[#888] border-[#888] hover:text-[#888] hover:border-[#888] hover:bg-transparent"
+                                : "cursor-pointer hover:bg-[#014210] hover:text-white"
+                        }`}
                         disabled={cartItemsList.length === 0}
                         aria-disabled={cartItemsList.length === 0}
-                        onClick={handleBuyNow}
+                        onClick={handleCheckout}
                     >
-                        Buy Now
+                        Checkout
                     </button>
                     <button
-                        className="cart-btn cancel-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#560000] rounded-md text-[#560000] text-[2.4rem] font-semibold hover:bg-[#560000] hover:text-white transition-all ease-linear duration-200"
+                        className={`cart-btn cancel-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#560000] rounded-md text-[#560000] text-[2.4rem] font-semibold transition-all ease-linear duration-200 ${
+                            cartItemsList.length === 0
+                                ? "cursor-not-allowed text-[#888] border-[#888] hover:text-[#888] hover:border-[#888] hover:bg-transparent"
+                                : "cursor-pointer hover:bg-[#560000] hover:text-white"
+                        }`}
                         disabled={cartItemsList.length === 0}
                         aria-disabled={cartItemsList.length === 0}
                         onClick={handleClearCart}
