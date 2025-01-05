@@ -5,6 +5,8 @@ import "./App.css";
 import Store from "./pages/Store";
 import NotFound from "./pages/NotFound";
 import Product from "./pages/Product";
+import Confirmed from "./pages/Confirmed";
+import Checkout from "./pages/Checkout";
 // import Profile from "./components/Profile";
 // import Categories from "./components/Categories";
 
@@ -19,6 +21,8 @@ function App() {
                     <Route path="/product/:id" element={<Product />} />
 
                     <Route path="*" element={<NotFound />} />
+                    <Route path="/confirmed" element={<Confirmed />} />
+                    <Route path="/checkout" element={<Checkout />} />
                 </Routes>
             </BrowserRouter>
         </div>
