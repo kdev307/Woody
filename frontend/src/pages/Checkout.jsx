@@ -6,14 +6,57 @@ import Loader from "../components/Loader";
 import { fetchAddresses } from "../actions/userActions";
 import { clearCart } from "../actions/cartActions";
 import { useNavigate } from "react-router";
+import { createOrder } from "../actions/orderActions";
 
 function Checkout() {
     const cartItemsList = useSelector((state) => state.cart.cartItemsList);
+    const { userInfo } = useSelector((state) => state.userLogin);
+    const { order, loading, error } = useSelector((state) => state.orderCreate);
+
+    const [selectedAddressId, setSelectedAddressId] = useState(null);
+    const [message, setMessage] = useState("");
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handlePayment = () => {
+        // if (!selectedAddressId || cartItemsList.length === 0) return;
+
+        const orderData = {
+            cart_items: cartItemsList.map((item) => ({
+                product_id: item.productId,
+                quantity: item.qty,
+            })),
+            delivery_address: selectedAddressId,
+        };
+        console.log("Order Data: ", orderData);
+        dispatch(createOrder(orderData));
+    };
+
+    useEffect(() => {
+        if (order) {
+            dispatch(clearCart());
+            navigate("/confirmed", {
+                state: { order },
+            });
+        }
+    }, [order, dispatch, navigate]);
+
+    const handleCancel = () => {
+        dispatch(clearCart());
+        navigate("/store");
+    };
+
     return (
         <>
             <Navbar />
             <div className="checkout-conatiner flex items-start justify-center gap-28 p-8">
-                <DeliveryAddresses cartItemsList={cartItemsList} />
+                <DeliveryAddresses
+                    selectedAddressId={selectedAddressId}
+                    setSelectedAddressId={setSelectedAddressId}
+                    cartItemsList={cartItemsList}
+                    userInfo={userInfo}
+                    handlePayment={handlePayment}
+                    handleCancel={handleCancel}
+                />
                 <OrderSummary cartItemsList={cartItemsList} />
             </div>
             <Footer />
@@ -21,27 +64,20 @@ function Checkout() {
     );
 }
 
-function DeliveryAddresses({ cartItemsList }) {
+function DeliveryAddresses({
+    selectedAddressId,
+    setSelectedAddressId,
+    cartItemsList,
+    userInfo,
+    handlePayment,
+    handleCancel,
+}) {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const userLogin = useSelector((state) => state.userLogin);
-
-    const { userInfo } = userLogin;
-    console.log(userInfo);
     const userAddress = useSelector((state) => state.userAddress);
     const { userAddresses, loading, error } = userAddress;
 
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
-
-    const handlePayment = () => {
-        dispatch(clearCart());
-        navigate("/confirmed");
-    };
-
-    const handleCancel = () => {
-        dispatch(clearCart());
-    };
 
     useEffect(() => {
         dispatch(fetchAddresses())
@@ -57,7 +93,7 @@ function DeliveryAddresses({ cartItemsList }) {
             });
     }, [dispatch]);
 
-    const [selectedAddressId, setSelectedAddressId] = useState(null);
+    // const [selectedAddressId, setSelectedAddressId] = useState(null);
 
     // Handle address selection (checkbox logic for one selection)
     const handleAddressSelect = (id) => {
@@ -65,12 +101,11 @@ function DeliveryAddresses({ cartItemsList }) {
     };
 
     return (
-        <div className="delivery-address w-full rounded-md p-8 shadow-[2px_2px_10px_#c0c0c0]">
+        <div className="delivery-address w-full h-full max-h-full rounded-md p-8 shadow-[2px_2px_10px_#c0c0c0]">
             <h2 className="text-[3.2rem] font-semibold text-center p-8">
                 Delivery Address
             </h2>
-            <div className="addresses">
-                {loading && <Loader />}
+            <div className="addresses max-h-[36rem] overflow-auto scrollbar-none">
                 {userAddresses.length === 0 ||
                     (!userAddresses && (
                         <p className="text-4xl font-semibold text-[#560000] text-center p-8">
@@ -114,18 +149,18 @@ function DeliveryAddresses({ cartItemsList }) {
                             </li>
                         );
                     })}
+                {loading && <Loader />}
             </div>
-            <div className="flex justify-center items-center gap-8 w-full">
+            <div className="flex justify-center items-center gap-8 w-full p-1">
                 <button
                     type="submit"
                     disabled={!selectedAddressId || cartItemsList.length === 0}
                     className={`w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-4xl font-semibold transition-all ease-linear duration-1000
-                                ${
-                                    !selectedAddressId ||
-                                    cartItemsList.length === 0
-                                        ? "cursor-not-allowed text-[#888] border-[#888] hover:text-[#888] hover:border-[#888] hover:bg-transparent"
-                                        : "cursor-pointer hover:bg-[#014210] hover:text-white"
-                                }
+                        ${
+                            !selectedAddressId || cartItemsList.length === 0
+                                ? "cursor-not-allowed text-[#888] border-[#888] hover:text-[#888] hover:border-[#888] hover:bg-transparent"
+                                : "cursor-pointer hover:bg-[#014210] hover:text-white"
+                        }
                                 `}
                     onClick={handlePayment}
                 >
@@ -156,8 +191,23 @@ function OrderSummary({ cartItemsList }) {
     const shippingCharges = subTotal <= 15000 ? 0 : 100;
     const grandTotal = subTotal + shippingCharges + tax;
 
+    const futureDate = (() => {
+        let date = new Date();
+        let daysAdded = 0;
+        while (daysAdded < 3) {
+            date.setDate(date.getDate() + 1);
+            if (date.getDay() !== 0 && date.getDay() !== 6) daysAdded++;
+        }
+        return `${date.getFullYear()} ${date.toLocaleString("en-US", {
+            month: "long",
+        })}, ${String(date.getDate()).padStart(2, "0")} (${date.toLocaleString(
+            "en-US",
+            { weekday: "long" }
+        )})`;
+    })();
+
     return (
-        <div className="order-summary w-[50%] rounded-md p-4 shadow-[2px_2px_10px_#c0c0c0]">
+        <div className="order-summary w-[50%] h-full rounded-md p-4 shadow-[2px_2px_10px_#c0c0c0]">
             <h2 className="text-[3.2rem] font-semibold text-center p-8">
                 Order Summary
             </h2>
@@ -239,10 +289,9 @@ function OrderSummary({ cartItemsList }) {
 
             {/* Estimated Delivery */}
             <p className="text-2xl text-gray-700 text-center">
-                Estimated Delivery:{" "}
+                Estimated Delivery: Before{" "}
                 <span className="font-semibold text-[#014210]">
-                    Before (Date of Delivery i.e., within 3 working days from
-                    Date of Purchase)
+                    {futureDate}
                 </span>
             </p>
         </div>

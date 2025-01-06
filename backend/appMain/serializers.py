@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Products, ProductImages, User, UserAddresses
+from .models import Products, ProductImages, User, UserAddresses, OrderItems, Orders
 # from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -83,3 +83,49 @@ class UserSerializerWithToken(UserSerializer):
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
+    
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.productName')
+    product_price = serializers.DecimalField(source='product.productPrice', max_digits=10, decimal_places=2)
+    product_image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = OrderItems
+        fields = ['product_name', 'quantity', 'product_price', 'product_image', 'total_product_price']
+
+    def get_product_image(self, obj):
+        product_image = ProductImages.objects.filter(product=obj.product).first()
+        if product_image:
+            return product_image.image.url
+        return None
+    
+    def get_total_price(self, obj):
+        return obj.quantity * obj.product.productPrice
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    order_items = OrderItemSerializer(many=True)
+    user = serializers.CharField(source='user.username')
+    grand_total = serializers.DecimalField(max_digits=10, decimal_places=2)
+    delivery_address = UserAddressSerializer()
+
+    class Meta:
+        model = Orders
+        fields = ['order_id', 'user', 'order_date', 'status', 'tracking_number', 'delivery_address', 'grand_total', 'order_items']
+
+        def get_delivery_address(self, obj):
+            address = obj.delivery_address
+            return {
+                'address_line_1': address.address_line_1,
+                'address_line_2': address.address_line_2,
+                'city': address.city,
+                'state': address.state,
+                'country': address.country,
+                'pincode': address.pincode
+            }
+        
+        def get_total_price(self, obj):
+            return sum(item.total_price for item in obj.order_items.all())
+
+

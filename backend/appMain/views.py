@@ -1,10 +1,10 @@
 from typing import Any, Dict
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # from .products import products
-from .models import Products, ProductImages, User, UserAddresses
-from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer
+from .models import Products, ProductImages, User, UserAddresses, Orders, OrderItems
+from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -333,4 +333,87 @@ def manageAddresses(request):
         except Exception as e:
             print("Error occurred:", e)
             return Response({'details': 'Unable to delete the Address at the moment.'}, status=status.HTTP_400_BAD_REQUEST)
+        
 
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getOrderHistory(request):
+    try:
+        user = request.user
+        orders = Orders.objects.filter(user=user)
+        serializer = OrderSerializer(orders, many=True)
+        return Response({'details':"Your Past Orders."},serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        print("Error generating your past orders: ", e)
+        return Response({'details': "Error generating your past orders."},status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getOrderDetail(request):
+    try:
+        user = request.user  
+        # order = get_object_or_404(Orders, order_id=Orders.order_id, user=user)
+        order = get_object_or_404(Orders, order_id=request.query_params.get('order_id'), user=user)
+        serializer = OrderSerializer(order)
+        return Response({'details':"Your Order Details."},serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        print("Error generating details for the specific order: ", e)
+        return Response({'details': "Error generating details for the specific order."},status=status.HTTP_404_NOT_FOUND)
+    
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def checkout(request):
+    user = request.user
+    cart_items = request.data.get('cart_items',[])
+    delivery_address_id = request.data.get('delivery_address')
+    order_date=request.data.get('order_date')
+
+    try:
+        delivery_address = UserAddresses.objects.get(id=delivery_address_id, user=user)
+    except UserAddresses.DoesNotExist:
+        return Response({'error': 'Shipping address not found'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    sub_total = 0
+    order_items = []
+
+    for item in cart_items:
+        try:
+            product = Products.objects.get(id=item['product_id'])
+            total_product_price = product.productPrice * item['quantity']
+            order_item = OrderItems(
+                product=product,
+                quantity=item['quantity'],
+                price_at_purchase=product.productPrice,
+                total_product_price=total_product_price,
+            )
+            order_items.append(order_item)
+            sub_total += total_product_price
+        except Products.DoesNotExist:
+            return Response({'error': f'Product {item["product_id"]} not found'}, status=400)
+        
+    tax = sub_total * 0.15
+    shipping_charges = 100 if sub_total >= 15000 else 0
+    grand_total = sub_total + tax + shipping_charges
+
+    order = Orders.objects.create(
+        user=user,
+        delivery_address=delivery_address,
+        status='processing',
+        subtotal=sub_total, 
+        tax=tax,
+        shipping_charges=shipping_charges,
+        grand_total=grand_total,
+        order_date=order_date
+    )
+
+    for order_item in order_items:
+        order_item.order = order
+        order_item.save()
+
+    serializer = OrderSerializer(order)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)

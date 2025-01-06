@@ -13,6 +13,7 @@ urlpatterns = [
     path('users/profile/', views.getUserProfile, name='getUserProfile'),
     path('users/update-profile/', views.updateProfile, name='updateProfile'),
     path('users/manage-addresses/', views.manageAddresses, name='manageAddresses'),
+    path('users/checkout/', views.checkout, name="checkout"),
     path('users/', views.getUsers, name='getUsers'),
     path('users/register/', views.registerUser, name="register"),
     path('activate/<uidb64>/<token>', views.ActivateAccountView.as_view(), name='activate')
