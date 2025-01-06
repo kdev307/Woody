@@ -7,8 +7,27 @@ import {
     Favorite,
     Schedule,
 } from "@mui/icons-material";
+import { useLocation } from "react-router";
+// import { useSelector } from "react-redux";
 
 function Confirmed() {
+    const { state } = useLocation();
+    const order = state?.order;
+    const futureDate = (() => {
+        let date = new Date(order.order_date);
+        let daysAdded = 0;
+        while (daysAdded < 3) {
+            date.setDate(date.getDate() + 1);
+            if (date.getDay() !== 0 && date.getDay() !== 6) daysAdded++;
+        }
+        return `${date.getFullYear()} ${date.toLocaleString("en-US", {
+            month: "long",
+        })}, ${String(date.getDate()).padStart(2, "0")} (${date.toLocaleString(
+            "en-US",
+            { weekday: "long" }
+        )})`;
+    })();
+    console.log(order);
     return (
         <>
             <Navbar />
@@ -23,6 +42,7 @@ function Confirmed() {
                 <h2 class="sub-heading text-5xl font-semibold p-4">
                     Order Confirmed !
                 </h2>
+                {/* <h4>{order.order_id}</h4> */}
                 <img
                     className="w-[30%]"
                     src="images/confirm-truck-2.gif"
@@ -47,10 +67,22 @@ function Confirmed() {
                         <Schedule
                             style={{ fontSize: "3.2rem", color: "#560000" }}
                         />
-                        Your Product will be Delivered{" "}
-                        <b>within the next 72 hours (Working Days)</b> from the
-                        Date of Purchase. You can track the status here (link of
-                        Order History Page).
+                        Your Product will be delivered by <b>{futureDate}</b>{" "}
+                        (link of Order History Page) on your address (whatever
+                        address the user has selected at checkout){" "}
+                        {/* {order.delivery_address.address_line_1 +
+                            ", " +
+                            (order.delivery_address.address_line_2
+                                ? order.delivery_address.address_line_2 + ", "
+                                : "") +
+                            order.delivery_address.city +
+                            ", " +
+                            order.delivery_address.state +
+                            ", " +
+                            order.delivery_address.country +
+                            " - " +
+                            order.delivery_address.pincode}
+                        . */}
                     </p>
                 </div>
             </div>

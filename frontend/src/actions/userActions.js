@@ -127,8 +127,8 @@ export const updateProfile = (updatedData) => async (dispatch) => {
         dispatch({
             type: USER_PROFILE_UPDATE_FAIL,
             payload:
-                error.response && error.response.data.detail
-                    ? error.response.data.detail
+                error.response && error.response.data.details
+                    ? error.response.data.details
                     : error.message,
         });
     }

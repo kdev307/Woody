@@ -1,32 +1,3 @@
-PRODUCT TABLE
-
-- productName
-- productBrand
-- productStockCount
-- createdAT
-- id
-- user_id
-- productNumReviews
-- productCategories
-- productDescription
-- productReviews
-- productSpecifications
-- productPrice
-- productRating
-- updatedAT
-
-
-PRODUCT IMAGES TABLE
-- id
-- image
-- uploadedAT
-- updatedAT
-- product_id
-
-
-
-
-
 "Table and 8 chairs, brown/Gunnared medium grey"	
 "STRANDTORP / BERGMUND"	0	
 "2024-12-18 18:40:31.3489+05:30"	
@@ -84,6 +55,9 @@ PRODUCT IMAGES TABLE
 
 
 
+
+
+------------------------------------------------------------------------------------------------
 
 
 
@@ -194,8 +168,7 @@ Designed to be flexible, you can refresh the look by adding new covers, cushions
 
 
 
-
-
+------------------------------------------------------------------------------------------------
 
 
 
@@ -245,24 +218,14 @@ Designed to be flexible, you can refresh the look by adding new covers, cushions
 
 
 
-USER TABLE
-- id
-- password
-- last_login
-- is_superuser
-- username
-- first_name
-- last_name
-- email
-- is_staff
-- is_active
-- date_joined
-- mobile_number
-- date_of_birth
-- address_line_1
-- address_line_2
-- city
-- state
-- country
-- pincode
-- profile_picture
+
+
+------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
