@@ -108,14 +108,15 @@ class OrderSerializer(serializers.ModelSerializer):
     order_items = OrderItemSerializer(many=True)
     user = serializers.CharField(source='user.username')
     grand_total = serializers.DecimalField(max_digits=10, decimal_places=2)
-    delivery_address = UserAddressSerializer()
+    delivery_address = serializers.SerializerMethodField()
 
     class Meta:
         model = Orders
         fields = ['order_id', 'user', 'order_date', 'status', 'tracking_number', 'delivery_address', 'grand_total', 'order_items']
 
-        def get_delivery_address(self, obj):
-            address = obj.delivery_address
+    def get_delivery_address(self, obj):
+        address = obj.delivery_address
+        if address:
             return {
                 'address_line_1': address.address_line_1,
                 'address_line_2': address.address_line_2,
@@ -124,8 +125,9 @@ class OrderSerializer(serializers.ModelSerializer):
                 'country': address.country,
                 'pincode': address.pincode
             }
-        
-        def get_total_price(self, obj):
-            return sum(item.total_price for item in obj.order_items.all())
+        return None
+    
+    def get_total_price(self, obj):
+        return sum(item.total_price for item in obj.order_items.all())
 
 

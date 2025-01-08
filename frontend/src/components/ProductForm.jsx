@@ -115,14 +115,14 @@ function ProductForm({ method, toggleProductForm, product }) {
         if (method === "editProduct") {
             formData.append("productId", product.id);
             dispatch(updateProduct(product.id, formData));
-            setMessage(product.details);
-            setMessageType("success");
+            // setMessage(product.details);
+            // setMessageType("success");
             console.log("Editing Product: ", [...formData]);
         } else {
             console.log("Adding Product: ", [...formData]);
             dispatch(createProduct(formData));
-            setMessage(product.details);
-            setMessageType("success");
+            // setMessage(product.details);
+            // setMessageType("success");
         }
         toggleProductForm();
         dispatch(listProducts());

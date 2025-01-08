@@ -416,9 +416,18 @@ function ProductCarousel({ productImages, toggleMediaView }) {
                         >
                             {productImages &&
                                 productImages
-                                    .sort((img1, img2) =>
-                                        img1.image.localeCompare(img2.image)
-                                    )
+                                    .sort((img1, img2) => {
+                                        // img1.image.localeCompare(img2.image);
+                                        const num1 = parseInt(
+                                            img1.image.match(/\d+/)[0],
+                                            10
+                                        ); // Extract the number from the image name
+                                        const num2 = parseInt(
+                                            img2.image.match(/\d+/)[0],
+                                            10
+                                        ); // Extract the number from the image name
+                                        return num1 - num2; // Compare the numbers
+                                    })
                                     .map((image) => (
                                         <div
                                             key={image.id}

@@ -99,7 +99,7 @@ def addProduct(request):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         print("Error:", e)
-        return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"details": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['PUT'])
@@ -134,7 +134,7 @@ def deleteProduct(request, pk):
     try:
         product = Products.objects.get(id=pk)
         product.delete()
-        return Response({"detail": "Product deleted successfully"}, status=status.HTTP_200_OK)
+        return Response({"details": "Product deleted successfully"}, status=status.HTTP_200_OK)
     except Products.DoesNotExist:
         return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:

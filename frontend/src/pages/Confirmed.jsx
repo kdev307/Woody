@@ -13,6 +13,7 @@ import { useLocation } from "react-router";
 function Confirmed() {
     const { state } = useLocation();
     const order = state?.order;
+    const delivery_address = order?.delivery_address;
     const futureDate = (() => {
         let date = new Date(order.order_date);
         let daysAdded = 0;
@@ -67,22 +68,25 @@ function Confirmed() {
                         <Schedule
                             style={{ fontSize: "3.2rem", color: "#560000" }}
                         />
-                        Your Product will be delivered by <b>{futureDate}</b>{" "}
-                        (link of Order History Page) on your address (whatever
-                        address the user has selected at checkout){" "}
-                        {/* {order.delivery_address.address_line_1 +
-                            ", " +
-                            (order.delivery_address.address_line_2
-                                ? order.delivery_address.address_line_2 + ", "
-                                : "") +
-                            order.delivery_address.city +
-                            ", " +
-                            order.delivery_address.state +
-                            ", " +
-                            order.delivery_address.country +
-                            " - " +
-                            order.delivery_address.pincode}
-                        . */}
+                        <>
+                            Your Product will be delivered by{" "}
+                            <b>{futureDate}</b> (link of Order History Page) on
+                            your address{" "}
+                            <b>
+                                {delivery_address.address_line_1 +
+                                    ", " +
+                                    (delivery_address.address_line_2
+                                        ? delivery_address.address_line_2 + ", "
+                                        : "") +
+                                    delivery_address.city +
+                                    ", " +
+                                    delivery_address.state +
+                                    ", " +
+                                    delivery_address.country +
+                                    " - " +
+                                    delivery_address.pincode}
+                            </b>
+                        </>
                     </p>
                 </div>
             </div>
