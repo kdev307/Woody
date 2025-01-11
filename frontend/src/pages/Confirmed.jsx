@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import {
     Celebration,
     CheckCircle,
     Favorite,
+    History,
     Schedule,
+    StoreMallDirectory,
 } from "@mui/icons-material";
-import { useLocation } from "react-router";
-// import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { updateOrderStatus } from "../actions/orderActions";
 
 function Confirmed() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { state } = useLocation();
     const order = state?.order;
     const delivery_address = order?.delivery_address;
@@ -28,6 +34,16 @@ function Confirmed() {
             { weekday: "long" }
         )})`;
     })();
+
+    const { success, error } = useSelector((state) => state.orderStatus);
+    useEffect(() => {
+        if (!order) {
+            navigate("/checkout", {
+                state: order,
+            });
+        }
+        dispatch(updateOrderStatus(order.order_id, "placed"));
+    }, [order, navigate, dispatch]);
     console.log(order);
     return (
         <>
@@ -45,7 +61,7 @@ function Confirmed() {
                 </h2>
                 {/* <h4>{order.order_id}</h4> */}
                 <img
-                    className="w-[30%]"
+                    className="w-[30%] object-contain"
                     src="images/confirm-truck-2.gif"
                     alt="Gif of Order Delivery Truck"
                 />
@@ -63,6 +79,14 @@ function Confirmed() {
                         />
                         Thank you for shopping with us !
                     </p>
+                    <Link to="/store">
+                        <button className="profile-btn history-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                            Shop More
+                            <StoreMallDirectory
+                                style={{ fontSize: "3.2rem" }}
+                            />
+                        </button>
+                    </Link>
                     <p className="flex items-center justify-center gap-4 text-[#560000] text-3xl p-4">
                         {" "}
                         <Schedule
@@ -70,8 +94,7 @@ function Confirmed() {
                         />
                         <>
                             Your Product will be delivered by{" "}
-                            <b>{futureDate}</b> (link of Order History Page) on
-                            your address{" "}
+                            <b>{futureDate}</b> on your address{" "}
                             <b>
                                 {delivery_address.address_line_1 +
                                     ", " +
@@ -87,6 +110,15 @@ function Confirmed() {
                                     delivery_address.pincode}
                             </b>
                         </>
+                    </p>
+                    <p className="flex items-center justify-center gap-4 text-[#014210] text-3xl p-4">
+                        You can check your order here :{" "}
+                        <Link to="">
+                            <button className="profile-btn history-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                                My Orders
+                                <History style={{ fontSize: "3.2rem" }} />
+                            </button>
+                        </Link>
                     </p>
                 </div>
             </div>

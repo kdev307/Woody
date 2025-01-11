@@ -5,6 +5,7 @@ import {
     RemoveShoppingCart,
     RemoveCircle,
     AddCircle,
+    ShoppingCartCheckout,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -111,6 +112,7 @@ function Cart({ handleCartToggle, isOpen }) {
                         onClick={handleCheckout}
                     >
                         Checkout
+                        <ShoppingCartCheckout style={{ fontSize: "3.2rem" }} />
                     </button>
                     <button
                         className={`cart-btn cancel-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#560000] rounded-md text-[#560000] text-[2.4rem] font-semibold transition-all ease-linear duration-200 ${
@@ -123,6 +125,7 @@ function Cart({ handleCartToggle, isOpen }) {
                         onClick={handleClearCart}
                     >
                         Cancel
+                        <Close style={{ fontSize: "3.2rem" }} />
                     </button>
                 </div>
             </div>
