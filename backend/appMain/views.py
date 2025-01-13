@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # from .products import products
 from .models import Products, ProductImages, User, UserAddresses, Orders, OrderItems
-from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer
+from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer, OrderItemSerializer
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -358,11 +358,17 @@ def getOrderDetail(request, order_id):
         order = get_object_or_404(Orders, order_id=order_id, user=user)
         # order_id = request.query_params.get('order_id')  # Get the order_id from query params
         if not order_id:
+            print("Order ID missing")
             return Response({'details': 'Order ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # order = get_object_or_404(Orders, order_id=request.query_params.get('order_id'), user=user)
-        serializer = OrderSerializer(order)
-        return Response({'details': "Your Order Details.", 'order': serializer.data}, status=status.HTTP_200_OK)
+        # serializer = OrderSerializer(order)
+        order_items = OrderItems.objects.filter(order_id=order_id)
+        order_serializer = OrderSerializer(order)
+        order_items_serializer = OrderItemSerializer(order_items, many=True)
+        
+        print("Order Details")
+        return Response({'details': "Your Order Details.", 'order': order_serializer.data, 'order_items': order_items_serializer.data }, status=status.HTTP_200_OK)
     except Exception as e:
         print("Error generating details for the specific order: ", e)
         return Response({'details': "Error generating details for the specific order."},status=status.HTTP_404_NOT_FOUND)

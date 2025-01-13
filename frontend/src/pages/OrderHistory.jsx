@@ -22,8 +22,9 @@ function OrderHistory() {
         dispatch(getOrderHistory());
     }, [dispatch]);
 
-    const handleToggleModal = (orderId) => {
+    const handleToggleOrderModal = (orderId) => {
         setSelectedOrderId(orderId);
+        console.log("Selected Order ID:", orderId);
         setToggleOrderModal((prevState) => !prevState);
     };
 
@@ -45,7 +46,7 @@ function OrderHistory() {
                             >
                                 <OrderItem
                                     order={order}
-                                    // onOpenModal={handleToggleModal}
+                                    onOpenModal={handleToggleOrderModal}
                                 />
                             </div>
                         ))
@@ -59,7 +60,7 @@ function OrderHistory() {
             {toggleOrderModal && selectedOrderId && (
                 <OrderDetail
                     orderId={selectedOrderId}
-                    onClose={handleToggleModal}
+                    onClose={handleToggleOrderModal}
                 />
             )}
 
@@ -154,13 +155,18 @@ function OrderItem({ order, onOpenModal }) {
 
 function OrderDetail({ orderId, onClose }) {
     const dispatch = useDispatch();
-    const { orderDetails, loading, error } = useSelector(
-        (state) => state.orderHistory
-    );
-    console.log("Order Details:", orderDetails);
+    const {
+        orderDetails = [],
+        loading,
+        error,
+    } = useSelector((state) => state.orderHistory);
+    console.log("Order Details: ", orderDetails);
 
+    console.log("Order ID: ", orderId);
     useEffect(() => {
+        console.log("Order ID in useEffect: ", orderId);
         if (orderId) {
+            console.log("Fetching order details for order:", orderId);
             dispatch(getOrderDetails(orderId));
         }
     }, [dispatch, orderId]);
@@ -168,11 +174,11 @@ function OrderDetail({ orderId, onClose }) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
+            className="fixed w-full inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
             onClick={onClose}
         >
             <div
-                className="relative w-full max-w-7xl bg-[#e4efe4] rounded-lg p-8 overflow-auto border-2 border-[#014210]"
+                className="relative w-[90%]  bg-[#e4efe4] rounded-lg p-8 overflow-auto border-2 border-[#014210]"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="pt-12 flex items-center justify-end">
@@ -193,50 +199,16 @@ function OrderDetail({ orderId, onClose }) {
                             <h1 className="text-5xl font-bold text-[#014210] text-center">
                                 Order Detail (ID: #{orderId})
                             </h1>
-                            <div className="">
-                                <p>
-                                    <strong>Order ID:</strong>{" "}
-                                    {orderDetails.order_id}
-                                </p>
-                                <p>
-                                    <strong>Status:</strong>{" "}
-                                    {orderDetails.status}
-                                </p>
-                                <p>
-                                    <strong>Tracking Number:</strong>{" "}
-                                    {orderDetails.tracking_number}
-                                </p>
-                                <p>
-                                    <strong>Delivery Address:</strong>{" "}
-                                    {orderDetails.delivery_address}
-                                </p>
-                                <p>
-                                    <strong>Subtotal:</strong> ₹
-                                    {orderDetails.subtotal}
-                                </p>
-                                <p>
-                                    <strong>Tax:</strong> ₹{orderDetails.tax}
-                                </p>
-                                <p>
-                                    <strong>Shipping Charges:</strong> ₹
-                                    {orderDetails.shipping_charges}
-                                </p>
-                                <p>
-                                    <strong>Grand Total:</strong> ₹
-                                    {orderDetails.grand_total}
-                                </p>
-
-                                <h2 className="text-3xl font-semibold">
-                                    Order Items:
-                                </h2>
+                            <div className="max-h-[50rem]">
                                 {orderDetails.order_items &&
                                     orderDetails.order_items.map((item) => (
-                                        <div
-                                            key={item.product.product_id}
-                                            className=""
-                                        >
+                                        <div key={item.product_id} className="">
+                                            <img
+                                                src={item.product_image}
+                                                alt={item.product_name}
+                                            />
                                             <p>
-                                                {item.product.product_name} x{" "}
+                                                {item.product_name} x{" "}
                                                 {item.quantity} - ₹
                                                 {item.total_product_price}
                                             </p>
