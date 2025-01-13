@@ -17,6 +17,8 @@ urlpatterns = [
     path('users/manage-addresses/', views.manageAddresses, name='manageAddresses'),
     path('users/orders/checkout/', views.checkout, name="checkout"),
     path('users/orders/<int:order_id>/status/', views.updateOrderStatus, name='update-order-status'),
+    path('users/orders/order-history', views.getOrderHistory, name='order-history'),
+    path('users/orders/<int:order_id>/order-details', views.getOrderDetail, name='order-details'),
     path('users/orders/cancel/', views.cancelOrder, name='cancel_order'),
     path('activate/<uidb64>/<token>', views.ActivateAccountView.as_view(), name='activate')
 ]

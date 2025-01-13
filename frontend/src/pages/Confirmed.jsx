@@ -113,8 +113,8 @@ function Confirmed() {
                     </p>
                     <p className="flex items-center justify-center gap-4 text-[#014210] text-3xl p-4">
                         You can check your order here :{" "}
-                        <Link to="">
-                            <button className="profile-btn history-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                        <Link to="/order-history">
+                            <button className="history-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
                                 My Orders
                                 <History style={{ fontSize: "3.2rem" }} />
                             </button>

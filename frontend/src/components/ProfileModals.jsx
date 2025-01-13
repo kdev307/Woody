@@ -99,7 +99,7 @@ export const EditModal = ({ closeModal }) => {
                 className="relative w-[70%] bg-[#e4efe4] rounded-lg p-8 overflow-auto border-2 border-[#014210]"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="product-form-container p-6">
+                <div className="update-profile-form-container p-6">
                     <div className="pt-12 flex items-center justify-end">
                         <Close
                             className="cart-close-btn cursor-pointer text-[#014210] text-4xl absolute top-8 right-20"

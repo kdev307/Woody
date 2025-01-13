@@ -15,7 +15,8 @@ import {
 import { cart } from "./reducers/cartReducers";
 import {
     orderCreateReducer,
-    orderDetailsReducer,
+    // orderDetailsReducer,
+    orderHistoryReducer,
     orderStatusReducer,
 } from "./reducers/orderReducers";
 
@@ -30,7 +31,8 @@ const reducer = combineReducers({
     userAddress: userAddressReducers,
     orderCreate: orderCreateReducer,
     orderStatus: orderStatusReducer,
-    orderDetails: orderDetailsReducer,
+    orderHistory: orderHistoryReducer,
+    // orderDetails: orderDetailsReducer,
 });
 
 const initialState = {};

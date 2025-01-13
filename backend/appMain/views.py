@@ -344,7 +344,7 @@ def getOrderHistory(request):
         user = request.user
         orders = Orders.objects.filter(user=user)
         serializer = OrderSerializer(orders, many=True)
-        return Response({'details':"Your Past Orders."},serializer.data, status=status.HTTP_200_OK)
+        return Response({'details': "Your Past Orders.", 'orders': serializer.data}, status=status.HTTP_200_OK)
     except Exception as e:
         print("Error generating your past orders: ", e)
         return Response({'details': "Error generating your past orders."},status=status.HTTP_404_NOT_FOUND)
@@ -352,13 +352,17 @@ def getOrderHistory(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def getOrderDetail(request):
+def getOrderDetail(request, order_id):
     try:
         user = request.user  
-        # order = get_object_or_404(Orders, order_id=Orders.order_id, user=user)
-        order = get_object_or_404(Orders, order_id=request.query_params.get('order_id'), user=user)
+        order = get_object_or_404(Orders, order_id=order_id, user=user)
+        # order_id = request.query_params.get('order_id')  # Get the order_id from query params
+        if not order_id:
+            return Response({'details': 'Order ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # order = get_object_or_404(Orders, order_id=request.query_params.get('order_id'), user=user)
         serializer = OrderSerializer(order)
-        return Response({'details':"Your Order Details."},serializer.data, status=status.HTTP_200_OK)
+        return Response({'details': "Your Order Details.", 'order': serializer.data}, status=status.HTTP_200_OK)
     except Exception as e:
         print("Error generating details for the specific order: ", e)
         return Response({'details': "Error generating details for the specific order."},status=status.HTTP_404_NOT_FOUND)

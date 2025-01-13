@@ -112,7 +112,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Orders
-        fields = ['order_id', 'user', 'order_date', 'status', 'tracking_number', 'delivery_address', 'grand_total', 'order_items']
+        fields = ['order_id', 'user', 'order_date', 'status', 'tracking_number', 'delivery_address', 'subtotal', 'tax', 'shipping_charges', 'grand_total', 'order_items']
 
     def get_delivery_address(self, obj):
         address = obj.delivery_address
