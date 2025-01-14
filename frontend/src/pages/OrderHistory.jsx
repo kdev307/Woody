@@ -18,6 +18,12 @@ function OrderHistory() {
     const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [toggleOrderModal, setToggleOrderModal] = useState(false);
 
+    const [selectedFilter, setSelectedFilter] = useState("All");
+    const [activeFilter, setActiveFilter] = useState("All");
+
+    const [sortBy, setSortBy] = useState("");
+    const [activeSort, setActiveSort] = useState("");
+
     useEffect(() => {
         dispatch(getOrderHistory());
     }, [dispatch]);
@@ -27,6 +33,41 @@ function OrderHistory() {
         console.log("Selected Order ID:", orderId);
         setToggleOrderModal((prevState) => !prevState);
     };
+
+    const orderFilters = ["Cancelled", "Delivered", "Dispatched", "Placed"];
+
+    const sortButtons = [
+        { sortName: "Date -- Newset First", methodName: "newDateFirst" },
+        { sortName: "Date -- Oldest First", methodName: "oldDateFirst" },
+    ];
+
+    const handleOrderFilter = (filter) => {
+        if (selectedFilter === filter) {
+            // If the same filter is clicked again, disable the filter
+            setSelectedFilter("All");
+            setActiveFilter("All");
+        } else {
+            // Otherwise, activate the new filter
+            setSelectedFilter(filter);
+            setActiveFilter(filter);
+        }
+    };
+
+    let filteredOrders = orders.filter(
+        (order) =>
+            selectedFilter === "All" ||
+            order.status.includes(selectedFilter.toLowerCase())
+    );
+    let sortedOrders = [...filteredOrders];
+    if (sortBy === "newDateFirst") {
+        sortedOrders.sort(
+            (a, b) => new Date(b.order_date) - new Date(a.order_date)
+        );
+    } else if (sortBy === "oldDateFirst") {
+        sortedOrders.sort(
+            (a, b) => new Date(a.order_date) - new Date(b.order_date)
+        );
+    }
 
     return (
         <>
@@ -38,8 +79,70 @@ function OrderHistory() {
                 <div className="history-info-container p-12 flex flex-col items-center justify-center gap-12">
                     {loading && <Loader />}
                     {error && <Error message={error} />}
-                    {orders.length > 0 ? (
-                        orders.map((order) => (
+                    <div className="flex items-center justify-center gap-[30rem]">
+                        <ul className="sort-btns flex lg_tab:hidden justify-center items-center gap-8">
+                            {sortButtons.map((sortBtn, index) => (
+                                <li key={index}>
+                                    <button
+                                        className={`relative bg-transparent border-none p-2 cursor-pointer text-[1.8rem]
+                                        ${
+                                            activeSort === sortBtn.methodName
+                                                ? "text-[#014210] font-semibold"
+                                                : ""
+                                        } group
+                                `}
+                                        onClick={() => {
+                                            setActiveSort(sortBtn.methodName);
+                                            setSortBy(sortBtn.methodName);
+                                        }}
+                                    >
+                                        {sortBtn.sortName}
+                                        <span
+                                            className={`absolute left-0 right-0 bottom-[-0.2rem] h-[2px] bg-[#014210] 
+                                            ${
+                                                activeSort ===
+                                                sortBtn.methodName
+                                                    ? "scale-x-100"
+                                                    : "scale-x-0"
+                                            } group-hover:scale-x-100
+                                        transition-transform duration-300`}
+                                        ></span>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                        <ul className="sort-btns flex lg_tab:hidden justify-center items-center gap-8">
+                            {orderFilters.map((orderFilter, index) => (
+                                <li key={index}>
+                                    <button
+                                        className={`relative bg-transparent border-none p-2 cursor-pointer text-[1.8rem]
+                                            ${
+                                                activeFilter === orderFilter
+                                                    ? "text-[#014210] font-semibold"
+                                                    : ""
+                                            } group
+                                            `}
+                                        onClick={() => {
+                                            handleOrderFilter(orderFilter);
+                                        }}
+                                    >
+                                        {orderFilter}
+                                        <span
+                                            className={`absolute left-0 right-0 bottom-[-0.2rem] h-[2px] bg-[#014210] 
+                                                ${
+                                                    activeFilter === orderFilter
+                                                        ? "scale-x-100"
+                                                        : "scale-x-0"
+                                                } group-hover:scale-x-100
+                                                transition-transform duration-300`}
+                                        ></span>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    {sortedOrders.length > 0 ? (
+                        sortedOrders.map((order) => (
                             <div
                                 key={order.order_id}
                                 className="order-card p-8 shadow-[5px_5px_10px_rgba(0,0,0,0.3)] w-full"
@@ -51,7 +154,9 @@ function OrderHistory() {
                             </div>
                         ))
                     ) : (
-                        <p>No orders found</p>
+                        <p className="text-4xl text-[#560000] font-semibold p-16">
+                            No orders found
+                        </p>
                     )}
                 </div>
             </div>
@@ -126,6 +231,7 @@ function OrderItem({ order, onOpenModal }) {
                     margin: "auto",
                     border: "0.19rem solid #560000",
                     borderRadius: "100rem",
+                    boxShadow: "5px 5px 10px #560000",
                 }}
             />
             <div className="flex items-center justify-evenly w-full text-[#014210]">
@@ -199,7 +305,7 @@ function OrderDetail({ orderId, onClose }) {
                             <h1 className="text-5xl font-bold text-[#014210] text-center">
                                 Order Detail (ID: #{orderId})
                             </h1>
-                            <div className="max-h-[50rem]">
+                            {/* <div className="max-h-[50rem]">
                                 {orderDetails.order_items &&
                                     orderDetails.order_items.map((item) => (
                                         <div key={item.product_id} className="">
@@ -214,6 +320,90 @@ function OrderDetail({ orderId, onClose }) {
                                             </p>
                                         </div>
                                     ))}
+                            </div> */}
+                            <div className="max-h-[50rem] overflow-auto scrollbar-none w-full p-8 m-4">
+                                <table className="w-full table-auto shadow-[2px_2px_5px_#014210] p-4">
+                                    <thead className="bg-[#014210] text-white text-4xl font-semibold shadow-[5px_5px_10px_#014210]">
+                                        <tr className="flex items-center justify-center text-center text-shadow-[2px_2px_5px_#fff]">
+                                            <th className="p-4 text-center w-[50%]">
+                                                S.No
+                                            </th>
+                                            <th className="p-4 text-center w-full">
+                                                Product Image
+                                            </th>
+                                            <th className="p-4 text-center w-full">
+                                                Product Name
+                                            </th>
+                                            <th className="p-4 text-center w-full">
+                                                Quantity
+                                            </th>
+                                            <th className="p-4 text-center w-full">
+                                                Total Price
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="text-4xl font-medium">
+                                        {orderDetails.order_items &&
+                                            orderDetails.order_items.map(
+                                                (item, index) => (
+                                                    <>
+                                                        <tr
+                                                            key={
+                                                                item.product_id
+                                                            }
+                                                            className="flex items-center justify-center text-center p-4"
+                                                        >
+                                                            <td className="p-4 text-center w-[50%]">
+                                                                {index + 1}
+                                                            </td>
+                                                            <td className="p-4 text-center w-full">
+                                                                <img
+                                                                    src={
+                                                                        item.product_image
+                                                                    }
+                                                                    alt={
+                                                                        item.product_name
+                                                                    }
+                                                                    className="w-[30rem] object-cover rounded-full shadow-[3px_3px_6px_#014210]"
+                                                                />
+                                                            </td>
+                                                            <td className="p-4 text-center w-full">
+                                                                {
+                                                                    item.product_name
+                                                                }
+                                                            </td>
+                                                            <td className="p-4 text-center w-full">
+                                                                {item.quantity}
+                                                            </td>
+                                                            <td className="p-4 text-center w-full">
+                                                                ₹
+                                                                {
+                                                                    item.total_product_price
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                        {index !==
+                                                            orderDetails
+                                                                .order_items
+                                                                .length -
+                                                                1 && (
+                                                            <hr
+                                                                style={{
+                                                                    width: "90%",
+                                                                    margin: "auto",
+                                                                    border: "0.19rem solid #014210",
+                                                                    borderRadius:
+                                                                        "100rem",
+                                                                    boxShadow:
+                                                                        "5px 5px 10px #014210",
+                                                                }}
+                                                            />
+                                                        )}
+                                                    </>
+                                                )
+                                            )}
+                                    </tbody>
+                                </table>
                             </div>
                         </>
                     )}
