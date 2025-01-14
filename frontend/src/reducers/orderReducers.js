@@ -5,6 +5,14 @@ import {
     ORDER_DETAILS_REQUEST,
     ORDER_DETAILS_SUCCESS,
     ORDER_DETAILS_FAIL,
+    ORDER_STATUS_UPDATE_SUCCESS,
+    ORDER_STATUS_UPDATE_FAIL,
+    CANCEL_ORDER_SUCCESS,
+    CANCEL_ORDER_FAIL,
+    CANCEL_ORDER_REQUEST,
+    ORDER_HISTORY_REQUEST,
+    ORDER_HISTORY_SUCCESS,
+    ORDER_HISTORY_FAIL,
 } from "../constants/orderConstants";
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -20,12 +28,42 @@ export const orderCreateReducer = (state = {}, action) => {
     }
 };
 
-export const orderDetailsReducer = (state = { order: {} }, action) => {
+export const orderStatusReducer = (state = {}, action) => {
     switch (action.type) {
+        case ORDER_STATUS_UPDATE_SUCCESS:
+            return { success: true, message: action.payload.details };
+        case ORDER_STATUS_UPDATE_FAIL:
+            return { success: false, error: action.payload };
+        default:
+            return state;
+    }
+};
+
+export const orderCancelReducer = (state = {}, action) => {
+    switch (action.type) {
+        case CANCEL_ORDER_REQUEST:
+            return { loading: true };
+        case CANCEL_ORDER_SUCCESS:
+            return { loading: false, cancelledOrder: action.payload };
+
+        case CANCEL_ORDER_FAIL:
+            return { loading: false, error: action.payload };
+
+        default:
+            return state;
+    }
+};
+
+export const orderHistoryReducer = (state = {}, action) => {
+    switch (action.type) {
+        case ORDER_HISTORY_REQUEST:
         case ORDER_DETAILS_REQUEST:
             return { ...state, loading: true };
+        case ORDER_HISTORY_SUCCESS:
+            return { ...state, loading: false, orders: action.payload };
         case ORDER_DETAILS_SUCCESS:
-            return { ...state, loading: false, order: action.payload };
+            return { ...state, loading: false, orderDetails: action.payload };
+        case ORDER_HISTORY_FAIL:
         case ORDER_DETAILS_FAIL:
             return { ...state, loading: false, error: action.payload };
         default:

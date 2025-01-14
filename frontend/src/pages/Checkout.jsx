@@ -6,7 +6,8 @@ import Loader from "../components/Loader";
 import { fetchAddresses } from "../actions/userActions";
 import { clearCart } from "../actions/cartActions";
 import { useNavigate } from "react-router";
-import { createOrder } from "../actions/orderActions";
+import { cancelOrder, createOrder } from "../actions/orderActions";
+import { Close, Payments } from "@mui/icons-material";
 
 function Checkout() {
     const cartItemsList = useSelector((state) => state.cart.cartItemsList);
@@ -41,6 +42,14 @@ function Checkout() {
     }, [order, dispatch, navigate]);
 
     const handleCancel = () => {
+        const cancelledData = {
+            cart_items: cartItemsList.map((item) => ({
+                product_id: item.productId,
+                quantity: item.qty,
+            })),
+            delivery_address: selectedAddressId || null,
+        };
+        dispatch(cancelOrder(cancelledData));
         dispatch(clearCart());
         navigate("/store");
     };
@@ -155,7 +164,7 @@ function DeliveryAddresses({
                 <button
                     type="submit"
                     disabled={!selectedAddressId || cartItemsList.length === 0}
-                    className={`w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-4xl font-semibold transition-all ease-linear duration-1000
+                    className={`flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-4xl font-semibold transition-all ease-linear duration-1000
                         ${
                             !selectedAddressId || cartItemsList.length === 0
                                 ? "cursor-not-allowed text-[#888] border-[#888] hover:text-[#888] hover:border-[#888] hover:bg-transparent"
@@ -165,13 +174,15 @@ function DeliveryAddresses({
                     onClick={handlePayment}
                 >
                     Make Payment
+                    <Payments style={{ fontSize: "3.2rem" }} />
                 </button>
                 <button
                     type="button"
-                    className="w-full p-3 border-[3px] border-[#560000] rounded-md text-[#560000] text-4xl font-semibold hover:bg-[#560000] hover:text-white transition-all ease-linear duration-1000"
+                    className="flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#560000] rounded-md text-[#560000] text-4xl font-semibold hover:bg-[#560000] hover:text-white transition-all ease-linear duration-1000"
                     onClick={handleCancel}
                 >
                     Cancel
+                    <Close style={{ fontSize: "3.2rem" }} />
                 </button>
             </div>
         </div>
@@ -208,10 +219,10 @@ function OrderSummary({ cartItemsList }) {
 
     return (
         <div className="order-summary w-[50%] h-full rounded-md p-4 shadow-[2px_2px_10px_#c0c0c0]">
-            <h2 className="text-[3.2rem] font-semibold text-center p-8">
+            <h2 className="text-[3.2rem] font-semibold text-center p-6">
                 Order Summary
             </h2>
-            <ul className="items-summary max-h-[28rem] overflow-auto scrollbar-none">
+            <ul className="items-summary max-h-[30rem] overflow-auto scrollbar-none">
                 {cartItemsList.map((item, index) => (
                     <li key={item.productId} className="p-4">
                         <p className="text-4xl font-semibold text-[#014210]">
@@ -247,7 +258,7 @@ function OrderSummary({ cartItemsList }) {
                 ))}
             </ul>
             {/* Subtotal, Charges, and Grand Total */}
-            <div className="order-summary-details text-2xl p-8 pb-4">
+            <div className="order-summary-details text-2xl p-4">
                 <div className="flex items-center justify-between text-[#560000] font-medium py-1">
                     <span className="text-[1.5rem]">Total Quantity:</span>
                     <span className="font-semibold text-3xl">

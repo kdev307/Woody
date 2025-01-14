@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # from .products import products
 from .models import Products, ProductImages, User, UserAddresses, Orders, OrderItems
-from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer
+from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer, OrderItemSerializer
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -344,7 +344,7 @@ def getOrderHistory(request):
         user = request.user
         orders = Orders.objects.filter(user=user)
         serializer = OrderSerializer(orders, many=True)
-        return Response({'details':"Your Past Orders."},serializer.data, status=status.HTTP_200_OK)
+        return Response({'details': "Your Past Orders.", 'orders': serializer.data}, status=status.HTTP_200_OK)
     except Exception as e:
         print("Error generating your past orders: ", e)
         return Response({'details': "Error generating your past orders."},status=status.HTTP_404_NOT_FOUND)
@@ -352,18 +352,30 @@ def getOrderHistory(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def getOrderDetail(request):
+def getOrderDetail(request, order_id):
     try:
         user = request.user  
-        # order = get_object_or_404(Orders, order_id=Orders.order_id, user=user)
-        order = get_object_or_404(Orders, order_id=request.query_params.get('order_id'), user=user)
-        serializer = OrderSerializer(order)
-        return Response({'details':"Your Order Details."},serializer.data, status=status.HTTP_200_OK)
+        order = get_object_or_404(Orders, order_id=order_id, user=user)
+        # order_id = request.query_params.get('order_id')  # Get the order_id from query params
+        if not order_id:
+            print("Order ID missing")
+            return Response({'details': 'Order ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # order = get_object_or_404(Orders, order_id=request.query_params.get('order_id'), user=user)
+        # serializer = OrderSerializer(order)
+        order_items = OrderItems.objects.filter(order_id=order_id)
+        order_serializer = OrderSerializer(order)
+        order_items_serializer = OrderItemSerializer(order_items, many=True)
+        
+        print("Order Details")
+        return Response({'details': "Your Order Details.", 'order': order_serializer.data, 'order_items': order_items_serializer.data }, status=status.HTTP_200_OK)
     except Exception as e:
         print("Error generating details for the specific order: ", e)
         return Response({'details': "Error generating details for the specific order."},status=status.HTTP_404_NOT_FOUND)
     
 
+
+VALID_ORDER_STATUSES = ['processing', 'placed', 'shipped', 'delivered', 'cancelled']
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -417,3 +429,82 @@ def checkout(request):
 
     serializer = OrderSerializer(order)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateOrderStatus(request, order_id):
+    try:
+        # Retrieve the order
+        order = get_object_or_404(Orders, order_id=order_id, user=request.user)
+
+        # Get the new status from the request data
+        new_status = request.data.get('status')
+        if not new_status:
+            return Response({'details': 'Status is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the status is valid
+        if new_status not in VALID_ORDER_STATUSES:
+            return Response({'details': f'Invalid status. Valid statuses are: {", ".join(VALID_ORDER_STATUSES)}.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Update the status
+        order.status = new_status
+        order.save()
+
+        return Response({'details': 'Order status updated successfully.'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        print("Error updating order status: ", e)
+        return Response({'details': 'Error updating order status.'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def cancelOrder(request):
+    try:
+        user = request.user
+        cart_items=request.data.get('cart_items')  # Pass an empty cart or cart items
+        delivery_address = request.data.get('delivery_address', None)  # Address is null or the selected one, since order was not completed
+        order_date=request.data.get('order_date')
+
+        sub_total = 0
+        order_items = []
+
+        for item in cart_items:
+            try:
+                product = Products.objects.get(id=item['product_id'])
+                total_product_price = product.productPrice * item['quantity']
+                order_item = OrderItems(
+                    product=product,
+                    quantity=item['quantity'],
+                    price_at_purchase=product.productPrice,
+                    total_product_price=total_product_price,
+                )
+                order_items.append(order_item)
+                sub_total += total_product_price
+            except Products.DoesNotExist:
+                return Response({'error': f'Product {item["product_id"]} not found'}, status=400)
+            
+        tax = sub_total * 0.15
+        shipping_charges = 100 if sub_total >= 15000 else 0
+        grand_total = sub_total + tax + shipping_charges
+
+        order = Orders.objects.create(
+            user=user,
+            delivery_address=delivery_address,
+            status='cancelled',
+            subtotal=sub_total, 
+            tax=tax,
+            shipping_charges=shipping_charges,
+            grand_total=grand_total,
+            order_date=order_date
+        )
+
+        for order_item in order_items:
+            order_item.order = order
+            order_item.save()
+
+        serializer = OrderSerializer(order)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    except Exception as e:
+        print("Error creating cancelled order: ", e)
+        return Response({'details': 'Error creating the cancelled order.'}, status=status.HTTP_400_BAD_REQUEST)

@@ -16,6 +16,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../actions/userActions";
 import { AddressModal, EditModal } from "./ProfileModals";
+import { Link } from "react-router-dom";
 
 function Profile({ user }) {
     const userLogin = useSelector((state) => state.userLogin);
@@ -175,10 +176,12 @@ function Profile({ user }) {
                             My Addresses
                             <LocationOn style={{ fontSize: "3.2rem" }} />
                         </button>
-                        <button className="profile-btn history-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
-                            My Orders
-                            <History style={{ fontSize: "3.2rem" }} />
-                        </button>
+                        <Link to="/order-history">
+                            <button className="profile-btn history-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                                My Orders
+                                <History style={{ fontSize: "3.2rem" }} />
+                            </button>
+                        </Link>
                         <button className="profile-btn reviews-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
                             My Reviews
                             <Reviews style={{ fontSize: "3.2rem" }} />

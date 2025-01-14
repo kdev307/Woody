@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Products, ProductImages, User, UserAddresses, OrderItems, Orders
 # from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
+import re
 
 class ProductImagesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -95,13 +96,14 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = ['product_name', 'quantity', 'product_price', 'product_image', 'total_product_price']
 
     def get_product_image(self, obj):
-        product_image = ProductImages.objects.filter(product=obj.product).first()
-        if product_image:
-            return product_image.image.url
+        product_images = ProductImages.objects.filter(product=obj.product)
+        product_images = sorted(product_images, key=lambda img: int(re.search(r'\d+', img.image.name).group(0)))
+        if product_images:
+            return product_images[0].image.url
         return None
     
-    def get_total_price(self, obj):
-        return obj.quantity * obj.product.productPrice
+    # def get_total_price(self, obj):
+    #     return obj.quantity * obj.product.productPrice
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -112,7 +114,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Orders
-        fields = ['order_id', 'user', 'order_date', 'status', 'tracking_number', 'delivery_address', 'grand_total', 'order_items']
+        fields = ['order_id', 'user', 'order_date', 'status', 'tracking_number', 'delivery_address', 'subtotal', 'tax', 'shipping_charges', 'grand_total', 'order_items']
 
     def get_delivery_address(self, obj):
         address = obj.delivery_address
