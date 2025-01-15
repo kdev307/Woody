@@ -9,6 +9,7 @@ import {
     Menu,
     Home,
     AdminPanelSettings,
+    Store,
 } from "@mui/icons-material";
 import { NavLink, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -58,7 +59,12 @@ function Navbar() {
         setIsMenuOpen(!isMenuOpen);
     };
     const location = useLocation();
-    const currentPage = location.pathname === "/" ? "home" : "others";
+    const currentPage =
+        location.pathname === "/"
+            ? "home"
+            : location.pathname === "/store"
+            ? "store"
+            : "others";
     return (
         <>
             <header
@@ -176,6 +182,16 @@ function Navbar() {
                                     className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
                                 >
                                     <Home style={{ fontSize: "3.2rem" }} />
+                                </NavLink>
+                            </li>
+                        )}
+                        {currentPage !== "home" && currentPage !== "store" && (
+                            <li>
+                                <NavLink
+                                    to="/store"
+                                    className="cursor-pointer hover:text-[#006000] hover:underline transition-colors"
+                                >
+                                    <Store style={{ fontSize: "3.2rem" }} />
                                 </NavLink>
                             </li>
                         )}

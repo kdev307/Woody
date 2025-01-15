@@ -19,6 +19,7 @@ import {
     orderHistoryReducer,
     orderStatusReducer,
 } from "./reducers/orderReducers";
+import { adminOrderHistoryReducer } from "./reducers/adminReducers";
 
 const reducer = combineReducers({
     productsList: productsListReducers,
@@ -32,6 +33,7 @@ const reducer = combineReducers({
     orderCreate: orderCreateReducer,
     orderStatus: orderStatusReducer,
     orderHistory: orderHistoryReducer,
+    adminAllOrders: adminOrderHistoryReducer,
     // orderDetails: orderDetailsReducer,
 });
 

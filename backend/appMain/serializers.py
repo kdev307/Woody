@@ -109,6 +109,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     order_items = OrderItemSerializer(many=True)
     user = serializers.CharField(source='user.username')
+    # user_name = serializers.SerializerMethodField()
     grand_total = serializers.DecimalField(max_digits=10, decimal_places=2)
     delivery_address = serializers.SerializerMethodField()
 

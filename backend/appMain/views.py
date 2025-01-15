@@ -369,10 +369,17 @@ def getOrderDetail(request, order_id):
         
         print("Order Details")
         return Response({'details': "Your Order Details.", 'order': order_serializer.data, 'order_items': order_items_serializer.data }, status=status.HTTP_200_OK)
+    except Orders.DoesNotExist:
+        return Response(
+            {'details': 'Order not found.'},
+            status=status.HTTP_404_NOT_FOUND
+        )
     except Exception as e:
-        print("Error generating details for the specific order: ", e)
-        return Response({'details': "Error generating details for the specific order."},status=status.HTTP_404_NOT_FOUND)
-    
+        print(f"Error generating details for the specific order: {str(e)}")
+        return Response(
+            {'details': 'An unexpected error occurred.'},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 
 VALID_ORDER_STATUSES = ['processing', 'placed', 'shipped', 'delivered', 'cancelled']
@@ -508,3 +515,46 @@ def cancelOrder(request):
     except Exception as e:
         print("Error creating cancelled order: ", e)
         return Response({'details': 'Error creating the cancelled order.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getAllOrders(request):
+    try:
+        orders = Orders.objects.all()
+        serializer = OrderSerializer(orders, many=True)
+        return Response({'details': "Successfully Placed Orders.", 'orders': serializer.data}, status=status.HTTP_200_OK)
+    except Exception as e:
+        print("Error retrieving orders: ", e)
+        return Response({'details': "Orders Not Found."},status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getAllOrderDetails(request, order_id):
+    try:
+        order = get_object_or_404(Orders, order_id=order_id)
+        # order_id = request.query_params.get('order_id')  # Get the order_id from query params
+        if not order_id:
+            print("Order ID missing")
+            return Response({'details': 'Order ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # order = get_object_or_404(Orders, order_id=request.query_params.get('order_id'), user=user)
+        # serializer = OrderSerializer(order)
+        order_items = OrderItems.objects.filter(order_id=order_id)
+        order_serializer = OrderSerializer(order)
+        order_items_serializer = OrderItemSerializer(order_items, many=True)
+        
+        print("Order Details")
+        return Response({'details': "Your Order Details.", 'order': order_serializer.data, 'order_items': order_items_serializer.data }, status=status.HTTP_200_OK)
+    except Orders.DoesNotExist:
+        return Response(
+            {'details': 'Order not found.'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    except Exception as e:
+        print(f"Error generating details for the specific order: {str(e)}")
+        return Response(
+            {'details': 'An unexpected error occurred.'},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

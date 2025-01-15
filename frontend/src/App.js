@@ -8,6 +8,7 @@ import Product from "./pages/Product";
 import Confirmed from "./pages/Confirmed";
 import Checkout from "./pages/Checkout";
 import OrderHistory from "./pages/OrderHistory";
+import OrderDispatch from "./pages/OrderDispatch";
 // import Profile from "./components/Profile";
 // import Categories from "./components/Categories";
 
@@ -25,6 +26,10 @@ function App() {
                     <Route path="/confirmed" element={<Confirmed />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/order-history" element={<OrderHistory />} />
+                    <Route
+                        path="/admin/order-dispatch"
+                        element={<OrderDispatch />}
+                    />
                 </Routes>
             </BrowserRouter>
         </div>
