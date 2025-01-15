@@ -198,10 +198,12 @@ function Profile({ user }) {
                         )}
                     </div>
                 ) : (
-                    <button className="profile-btn dispatch-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
-                        View & Dispatch Orders
-                        <LocalShipping style={{ fontSize: "3.2rem" }} />
-                    </button>
+                    <Link to="/admin/order-dispatch" className="w-full">
+                        <button className="profile-btn dispatch-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                            View & Dispatch Orders
+                            <LocalShipping style={{ fontSize: "3.2rem" }} />
+                        </button>
+                    </Link>
                 )}
                 <button
                     className="profile-btn logout-btn flex items-center justify-center gap-8 w-full p-3 border-[3px] border-[#560000] rounded-md text-[#560000] text-[2.4rem] font-semibold hover:bg-[#560000] hover:text-white transition-all ease-linear duration-1000"

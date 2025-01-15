@@ -20,5 +20,8 @@ urlpatterns = [
     path('users/orders/order-history', views.getOrderHistory, name='order-history'),
     path('users/orders/<int:order_id>/order-details', views.getOrderDetail, name='order-details'),
     path('users/orders/cancel/', views.cancelOrder, name='cancel_order'),
+    path('admin/orders/all', views.getAllOrders, name='all-orders'),
+    path('admin/order/<int:order_id>/order-details', views.getAllOrderDetails, name='all-order-details'),
+    path('admin/orders/<int:order_id>/dispatch/', views.dispatchOrder, name='admin-dispatch-order'),
     path('activate/<uidb64>/<token>', views.ActivateAccountView.as_view(), name='activate')
 ]
