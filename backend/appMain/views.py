@@ -14,7 +14,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import status
 # from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-
+from django.db import transaction
 # for sending mail and generate token
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
@@ -558,3 +558,30 @@ def getAllOrderDetails(request, order_id):
             {'details': 'An unexpected error occurred.'},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def dispatchOrder(request, order_id):
+    try:
+        with transaction.atomic():
+            order = Orders.objects.get(order_id=order_id)
+            if order.status == 'dispatched':
+                return Response({"details": "Order already dispatched."}, status=status.HTTP_400_BAD_REQUEST)
+
+            order.status='dispatched'
+            order.updated_tracking_number()
+            order.save()
+
+            for item in order.order_items.all():
+                product = item.product
+                if product.productStockCount >= item.quantity:
+                    product.productStockCount -= item.quantity
+                    product.save()
+                else:
+                    return Response({"details": f"Not enough stock for {product.productName}"}, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response({"details": "Order dispatched successfully."}, status=status.HTTP_200_OK)
+    except Orders.DoesNotExist:
+        return Response({"details": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"details": f"Error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

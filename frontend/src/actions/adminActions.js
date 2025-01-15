@@ -70,3 +70,32 @@ export const getPendingOrderDetails = (orderId) => async (dispatch) => {
         });
     }
 };
+
+export const dispatchOrder = (orderId) => async (dispatch) => {
+    try {
+        dispatch({ type: ADMIN_ORDER_DISPATCH_REQUEST });
+        const access_token = localStorage.getItem(ACCESS_TOKEN);
+        if (!access_token) {
+            console.error("Access token is missing");
+            return;
+        }
+        await axios.post(
+            `/api/admin/orders/${orderId}/dispatch/`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            }
+        );
+        dispatch({ type: ADMIN_ORDER_DISPATCH_SUCCESS, payload: orderId });
+    } catch (error) {
+        dispatch({
+            type: ADMIN_ORDER_DISPATCH_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        });
+    }
+};

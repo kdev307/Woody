@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    dispatchOrder,
     getPendingOrderDetails,
     getPendingOrders,
 } from "../actions/adminActions";
@@ -34,6 +35,18 @@ function OrderDispatch() {
         setToggleOrderModal((prevState) => !prevState);
     };
 
+    const handleDispatch = async (orderId) => {
+        try {
+            await dispatch(dispatchOrder(orderId)); // Dispatch the action to mark the product as dispatched
+            console.log("Order dispatched successfully:", orderId);
+
+            // Fetch pending orders again after successful dispatch
+            dispatch(getPendingOrders());
+        } catch (error) {
+            console.error("Error dispatching order:", error);
+        }
+    };
+
     const orderFilters = ["Cancelled", "Delivered", "Dispatched", "Placed"];
 
     const handleOrderFilter = (filter) => {
@@ -62,8 +75,6 @@ function OrderDispatch() {
                     Pending Orders
                 </h1>
                 <div className="orders-container flex flex-col items-center justify-center">
-                    {loading && <Loader />}
-                    {error && <Error message={error} />}
                     <ul className="px-12 py-0 sort-btns flex lg_tab:hidden justify-start items-center gap-8 w-full">
                         {orderFilters.map((orderFilter, index) => (
                             <li key={index}>
@@ -87,12 +98,14 @@ function OrderDispatch() {
                                                         ? "scale-x-100"
                                                         : "scale-x-0"
                                                 } group-hover:scale-x-100
-                                                transition-transform duration-300`}
+                                                    transition-transform duration-300`}
                                     ></span>
                                 </button>
                             </li>
                         ))}
                     </ul>
+                    {loading && <Loader />}
+                    {error && <Error message={error} />}
                     {filteredOrders.length > 0 ? (
                         <div className="w-full overflow-auto p-12">
                             <table className="table-auto shadow-md border-collapse mx-auto">
@@ -176,17 +189,30 @@ function OrderDispatch() {
                                                 >
                                                     View Order
                                                 </button>
-                                                {order.status === "placed" && (
+                                                {order.status !==
+                                                "dispatched" ? (
                                                     <button
-                                                        className="view-order text-4xl flex items-center justify-center gap-6 w-full p-3 border-2 border-[#560000] rounded-md text-[#560000] font-semibold hover:bg-[#560000] hover:text-white transition-all ease-linear duration-1000"
-                                                        // onClick={() =>
-                                                        //     handleDispatch(
-                                                        //         order.order_id
-                                                        //     )
-                                                        // }
+                                                        className={`dispatch-order text-4xl flex items-center justify-center gap-6 w-full p-3 border-2 border-[#560000] rounded-md text-[#560000] font-semibold transition-all ease-linear duration-1000
+                                                            ${
+                                                                order.status !==
+                                                                "placed"
+                                                                    ? "cursor-not-allowed text-[#888] border-[#888] hover:text-[#888] hover:border-[#888] hover:bg-transparent"
+                                                                    : "cursor-pointer hover:bg-[#560000] hover:text-white"
+                                                            }`}
+                                                        disabled={
+                                                            order.status !==
+                                                            "placed"
+                                                        }
+                                                        onClick={() =>
+                                                            handleDispatch(
+                                                                order.order_id
+                                                            )
+                                                        }
                                                     >
                                                         Dispatch
                                                     </button>
+                                                ) : (
+                                                    ""
                                                 )}
                                             </td>
                                         </tr>

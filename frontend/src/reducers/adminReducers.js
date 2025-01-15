@@ -26,3 +26,16 @@ export const adminOrderHistoryReducer = (state = {}, action) => {
             return state;
     }
 };
+
+export const adminOrderDispatchReducer = (state = {}, action) => {
+    switch (action.type) {
+        case ADMIN_ORDER_DISPATCH_REQUEST:
+            return { ...state, loading: true };
+        case ADMIN_ORDER_DISPATCH_SUCCESS:
+            return { ...state, loading: false, success: true };
+        case ADMIN_ORDER_DISPATCH_FAIL:
+            return { ...state, loading: false, error: action.payload };
+        default:
+            return state;
+    }
+};
