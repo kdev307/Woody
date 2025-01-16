@@ -90,6 +90,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.productName')
     product_price = serializers.DecimalField(source='product.productPrice', max_digits=10, decimal_places=2)
     product_image = serializers.SerializerMethodField()
+    # user = serializers.SerializerMethodField()
 
     class Meta:
         model = OrderItems

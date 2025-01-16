@@ -23,6 +23,7 @@ import {
     adminOrderDispatchReducer,
     adminOrderHistoryReducer,
 } from "./reducers/adminReducers";
+import { purchasedItemsReducer } from "./reducers/reviewReducers";
 
 const reducer = combineReducers({
     productsList: productsListReducers,

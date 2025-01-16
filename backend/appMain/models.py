@@ -107,3 +107,28 @@ class OrderItems(models.Model):
 
     def __str__(self):
         return f"{self.product.product_name} - {self.quantity} pcs"
+    
+
+class Review(models.Model):
+    product = models.ForeignKey(Products, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
+    review_title = models.TextField(blank=True, null=True)
+    review_comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_verified_purchase = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Review by {self.user.username} for {self.product.productName}"
+
+    def save(self, *args, **kwargs):
+        # Check if the user has purchased this product before saving the review
+        purchased_items = OrderItems.objects.filter(
+            order__user=self.user, 
+            product=self.product, 
+            order__status__in=['delivered', 'dispatched']
+        )
+        self.is_verified_purchase = purchased_items.exists()
+        super().save(*args, **kwargs)
+

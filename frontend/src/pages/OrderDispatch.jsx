@@ -9,7 +9,7 @@ import {
 } from "../actions/adminActions";
 import Error from "../components/Error";
 import Loader from "../components/Loader";
-import { Close } from "@mui/icons-material";
+import { Close, ListAlt, LocalShipping } from "@mui/icons-material";
 
 function OrderDispatch() {
     const dispatch = useDispatch();
@@ -110,35 +110,35 @@ function OrderDispatch() {
                         <div className="w-full overflow-auto p-12">
                             <table className="table-auto shadow-md border-collapse mx-auto">
                                 <thead className="bg-[#014210] text-white text-4xl font-semibold">
-                                    <tr className="p-4">
-                                        <th className="p-4">S.No.</th>
-                                        <th className="p-4">Order ID</th>
-                                        <th className="p-4">User</th>
-                                        <th className="p-4 w-[30%]">
-                                            Delivery Address
+                                    <tr className="p-8">
+                                        <th className="p-8">S.No.</th>
+                                        <th className="p-8">Order ID</th>
+                                        <th className="p-8">Order by</th>
+                                        <th className="p-8 w-[30%]">
+                                            Delivery At
                                         </th>
-                                        <th className="p-4">Order Date</th>
-                                        <th className="p-4">Amount Paid</th>
-                                        <th className="p-4">Status</th>
-                                        <th className="p-4">Actions</th>
+                                        <th className="p-8">Order Date</th>
+                                        <th className="p-8">Amount Paid</th>
+                                        <th className="p-8">Status</th>
+                                        <th className="p-8">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody className="text-3xl font-medium">
+                                <tbody className="text-3xl font-medium bg-[#edf2ed]">
                                     {filteredOrders.map((order, index) => (
                                         <tr
                                             key={order.order_id}
-                                            className="border-b border-[#ddd] p-4"
+                                            className="border-b border-[#ddd] p-8"
                                         >
-                                            <td className="p-4 text-center">
+                                            <td className="p-8 text-center">
                                                 {index + 1}
                                             </td>
-                                            <td className="p-4 text-center">
+                                            <td className="p-8 text-center">
                                                 #{order.order_id}
                                             </td>
-                                            <td className="p-4 text-center">
+                                            <td className="p-8 text-center">
                                                 {order.user}
                                             </td>
-                                            <td className="p-4 text-center w-[30%]">
+                                            <td className="p-8 text-center w-[30%]">
                                                 {order?.delivery_address
                                                     ? order.delivery_address
                                                           .address_line_1 +
@@ -163,7 +163,7 @@ function OrderDispatch() {
                                                           .pincode
                                                     : "N/A"}
                                             </td>
-                                            <td className="p-4 text-center">
+                                            <td className="p-8 text-center">
                                                 {new Date(
                                                     order.order_date
                                                 ).toLocaleDateString("en-US", {
@@ -172,13 +172,13 @@ function OrderDispatch() {
                                                     day: "numeric",
                                                 })}
                                             </td>
-                                            <td className="p-4 text-center capitalize">
+                                            <td className="p-8 text-center capitalize">
                                                 ₹ {order.grand_total}
                                             </td>
-                                            <td className="p-4 text-center capitalize">
+                                            <td className="p-8 text-center capitalize">
                                                 {order.status}
                                             </td>
-                                            <td className="p-4 text-center flex flex-col items-center justify-center font-semibold gap-8">
+                                            <td className="p-8 text-center flex flex-col items-center justify-center font-semibold gap-8">
                                                 <button
                                                     className="view-order text-4xl flex items-center justify-center gap-6 w-full p-3 border-2 border-[#014210] rounded-md text-[#014210] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000"
                                                     onClick={() =>
@@ -188,6 +188,11 @@ function OrderDispatch() {
                                                     }
                                                 >
                                                     View Order
+                                                    <ListAlt
+                                                        style={{
+                                                            fontSize: "3.6rem",
+                                                        }}
+                                                    />
                                                 </button>
                                                 {order.status !==
                                                 "dispatched" ? (
@@ -210,6 +215,12 @@ function OrderDispatch() {
                                                         }
                                                     >
                                                         Dispatch
+                                                        <LocalShipping
+                                                            style={{
+                                                                fontSize:
+                                                                    "3.6rem",
+                                                            }}
+                                                        />
                                                     </button>
                                                 ) : (
                                                     ""

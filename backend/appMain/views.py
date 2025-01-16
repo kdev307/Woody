@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # from .products import products
-from .models import Products, ProductImages, User, UserAddresses, Orders, OrderItems
+from .models import Products, ProductImages, User, UserAddresses, Orders, OrderItems, Review
 from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer, OrderItemSerializer
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -546,7 +546,7 @@ def getAllOrderDetails(request, order_id):
         order_items_serializer = OrderItemSerializer(order_items, many=True)
         
         print("Order Details")
-        return Response({'details': "Your Order Details.", 'order': order_serializer.data, 'order_items': order_items_serializer.data }, status=status.HTTP_200_OK)
+        return Response({'details': "All Order Details.", 'order': order_serializer.data, 'order_items': order_items_serializer.data }, status=status.HTTP_200_OK)
     except Orders.DoesNotExist:
         return Response(
             {'details': 'Order not found.'},
@@ -585,3 +585,52 @@ def dispatchOrder(request, order_id):
         return Response({"details": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"details": f"Error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def addReview(request, pk):
+    try:
+        product = Products.objects.get(id=pk)
+
+        user = request.user
+        purchased_items = OrderItems.objects.filter(
+            order__user=user,
+            product=product,
+            order__status__in=['dispatched', 'delivered']
+        )
+
+        if not purchased_items.exists():
+            return Response(
+                {"detail": "You must purchase the product before leaving a review."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        review_title = request.data.get('reviewTitle')
+        review_comment = request.data.get('detailedReview')
+        rating = request.data.get('rating')
+
+        if rating is None or rating < 0 or rating > 5:
+            return Response(
+                {"detail": "Please provide a valid rating between 0 and 5."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        review = Review.objects.create(
+            product=product,
+            user=user,
+            review_title=review_title,
+            review_comment=review_comment,
+            rating=rating,
+            is_verified_purchase=True
+        )
+
+        return Response({"detail": "Review added successfully."}, status=status.HTTP_201_CREATED
+        )
+        
+    except Products.DoesNotExist:
+        return Response({"detail": "Product not found."}, status=status.HTTP_404_NOT_FOUND
+        )
+    except Exception as e:
+        return Response({"detail": f"Error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

@@ -57,7 +57,7 @@ function Checkout() {
     return (
         <>
             <Navbar />
-            <div className="checkout-conatiner flex items-start justify-center gap-28 p-8">
+            <div className="checkout-conatiner flex items-start justify-center gap-28 p-8 min-h-[35rem]">
                 <DeliveryAddresses
                     selectedAddressId={selectedAddressId}
                     setSelectedAddressId={setSelectedAddressId}

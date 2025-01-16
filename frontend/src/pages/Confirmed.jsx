@@ -48,7 +48,7 @@ function Confirmed() {
     return (
         <>
             <Navbar />
-            <div className="order-confirmed-container flex flex-col items-center justify-center">
+            <div className="order-confirmed-container flex flex-col items-center justify-center min-h-[35rem]">
                 <h1 class="sub-heading text-7xl font-extrabold p-8 flex items-center justify-center gap-8">
                     Congratulations{" "}
                     <Celebration

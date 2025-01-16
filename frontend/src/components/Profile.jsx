@@ -182,10 +182,12 @@ function Profile({ user }) {
                                 <History style={{ fontSize: "3.2rem" }} />
                             </button>
                         </Link>
-                        <button className="profile-btn reviews-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
-                            My Reviews
-                            <Reviews style={{ fontSize: "3.2rem" }} />
-                        </button>
+                        <Link to="/reviews">
+                            <button className="profile-btn reviews-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                                My Reviews
+                                <Reviews style={{ fontSize: "3.2rem" }} />
+                            </button>
+                        </Link>
                         {activeModal === "edit" && (
                             <EditModal
                                 closeModal={() => setActiveModal(null)}

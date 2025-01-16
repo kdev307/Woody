@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetails, getOrderHistory } from "../actions/orderActions";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
-import { Close } from "@mui/icons-material";
+import { Close, ListAlt } from "@mui/icons-material";
 
 function OrderHistory() {
     const dispatch = useDispatch();
@@ -72,7 +72,7 @@ function OrderHistory() {
     return (
         <>
             <Navbar />
-            <div className="order-history-container flex flex-col items-center justify-center m-8">
+            <div className="order-history-container flex flex-col items-center justify-center m-8 min-h-[35rem]">
                 <h1 className="sub-heading text-7xl font-bold p-8 flex items-center justify-center gap-8">
                     My Orders
                 </h1>
@@ -253,6 +253,7 @@ function OrderItem({ order, onOpenModal }) {
                     onClick={() => onOpenModal(order.order_id)}
                 >
                     View Order
+                    <ListAlt style={{ fontSize: "3.6rem" }} />
                 </button>
             </div>
         </div>

@@ -124,7 +124,7 @@ export const getOrderHistory = () => async (dispatch) => {
             console.error("Access token is missing");
             return;
         }
-        const { data } = await axios.get(`/api/users/orders/order-history`, {
+        const { data } = await axios.get(`/api/users/orders/order-history/`, {
             headers: {
                 Authorization: `Bearer ${access_token}`,
             },
@@ -153,7 +153,7 @@ export const getOrderDetails = (orderId) => async (dispatch) => {
             return;
         }
         const { data } = await axios.get(
-            `/api/users/orders/${orderId}/order-details`,
+            `/api/users/orders/${orderId}/order-details/`,
             {
                 headers: {
                     Authorization: `Bearer ${access_token}`,

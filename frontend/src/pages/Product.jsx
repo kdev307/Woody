@@ -18,9 +18,11 @@ import {
     Close,
     ChevronLeft,
     ChevronRight,
+    RateReview,
 } from "@mui/icons-material";
 import { listProductDetail } from "../actions/productActions";
 import { addToCart } from "../actions/cartActions";
+import ReviewForm from "../components/ReviewForm";
 // import Message from "../components/Message";
 
 function Product({ params }) {
@@ -38,6 +40,10 @@ function Product({ params }) {
     const [isAddedToCart, setIsAddedToCart] = useState(false);
 
     const [mediaView, setMediaView] = useState(false);
+    const [reviewFormState, setReviewFormState] = useState({
+        isVisible: false,
+        product: null,
+    });
 
     useEffect(() => {
         dispatch(listProductDetail(id));
@@ -63,6 +69,13 @@ function Product({ params }) {
 
     const handleMediaView = () => {
         setMediaView((mediaView) => !mediaView);
+    };
+
+    const handleReviewForm = (product = null) => {
+        setReviewFormState((prev) => ({
+            isVisible: !prev.isVisible,
+            product,
+        }));
     };
 
     const {
@@ -161,7 +174,7 @@ function Product({ params }) {
             ) : error ? (
                 <Error message={error} />
             ) : (
-                <div className="product p-8 grid grid-cols-[2fr_3fr] tab:flex tab:flex-col tab:items-start tab:justify-start gap-8 sm_desk:gap-20 items-start justify-center text-xl bg-[#e4efe4] pt-32">
+                <div className="product p-8 grid grid-cols-[2fr_3fr] tab:flex tab:flex-col tab:items-start tab:justify-start gap-8 sm_desk:gap-20 items-start justify-center text-xl bg-[#e4efe4] pt-32 min-h-[35rem]">
                     <div className="image-container overflow-hidden gap-4 self-center w-[100%] sm_desk:w-[105%] lg_tab:w-[108%] tab:w-[80%] sm_tab:w-[95%]">
                         {productImages?.sort((img1, img2) =>
                             img1.image.localeCompare(img2.image)
@@ -286,7 +299,7 @@ function Product({ params }) {
                                 </ul>
                             )}
                         </div>
-                        <div className="product-action m-auto flex items-center justify-center gap-60 sm_desk:gap-48 lg_tab:gap-24 font-bold text-[#014210]">
+                        <div className="product-action m-auto flex items-center justify-center gap-40 sm_desk:gap-30 lg_tab:gap-20 font-bold text-[#014210]">
                             <div className="rating flex items-center justify-center text-4xl">
                                 <h3>{productRating}</h3>
                                 <Star
@@ -299,6 +312,17 @@ function Product({ params }) {
                                 {` (${productNumReviews})`}
                                 {/* {`from ${numReviews} reviews`} */}
                             </div>
+                            <button
+                                className="add-review-btn flex items-center justify-center gap-8 border-4 rounded-lg shadow-[5px_5px_10px_rgba(86,0,0,0.3)] transition-all ease duration-300 font-semibold text-[2.4rem] lg_tab:text-[2rem] p-4 border-[#560000] text-[#560000] bg-white hover:border-[#014210] hover:text-[#014210] hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)]"
+                                onClick={(e) => {
+                                    e.preventDefault(); // Prevent the link navigation
+                                    handleReviewForm(product); // Toggle the form
+                                }}
+                            >
+                                Write A Review
+                                <RateReview style={{ fontSize: "3rem" }} />
+                            </button>
+
                             <button
                                 className={`add-to-cart-btn flex items-center justify-center gap-8 border-4 rounded-lg shadow-[5px_5px_10px_rgba(86,0,0,0.3)] transition-all ease duration-300 font-semibold text-[2.4rem] lg_tab:text-[2rem] p-4
         ${
@@ -318,6 +342,7 @@ function Product({ params }) {
                                     />
                                 )}
                             </button>
+
                             {/* {isAddedToCart ? (
                                 <Message
                                 messageType={"fail"}
@@ -352,6 +377,15 @@ function Product({ params }) {
                             </div>
                         </div>
                     </div>
+                    {reviewFormState.isVisible && (
+                        <ReviewForm
+                            title="Write A Review"
+                            toggleReviewForm={handleReviewForm}
+                            method="addReview"
+                            product={product}
+                            userInfo={userInfo}
+                        />
+                    )}
                 </div>
             )}
             <Footer />

@@ -141,7 +141,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                 <div className="product-form-container p-6">
                     <div className="pt-12 flex items-center justify-end">
                         <Close
-                            className="cart-close-btn cursor-pointer text-[#014210] text-4xl absolute top-8 right-20"
+                            className="close-btn cursor-pointer text-[#014210] text-4xl absolute top-8 right-20"
                             style={{ fontSize: "3.6rem" }}
                             onClick={toggleProductForm}
                         />
