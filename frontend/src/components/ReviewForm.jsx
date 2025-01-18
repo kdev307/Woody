@@ -25,6 +25,12 @@ function ReviewForm({ title, toggleReviewForm, method, product, userInfo }) {
         e.preventDefault();
         console.log(reviewData);
         dispatch(addReview(product.id, reviewData));
+        setReviewData({
+            reviewTitle: "",
+            detailedReview: "",
+            rating: "",
+        });
+        toggleReviewForm();
     };
 
     const handleChange = (e) => {

@@ -597,6 +597,21 @@ def dispatchOrder(request, order_id):
         return Response({"details": f"Error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserReviews(request, pk):
+    try:
+        # user = request.user
+        user = User.objects.get(id=pk)
+        reviews = Review.objects.filter(user=user)
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        return Response({'detail':'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        print(f'Error: {str(e)}')
+        return Response({'detail':'Cannot fetch user reviews'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def addReview(request, pk):
@@ -609,12 +624,6 @@ def addReview(request, pk):
             product=product,
             order__status__in=['dispatched', 'delivered']
         )
-
-        # if not purchased_items.exists():
-        #     return Response(
-        #         {"detail": "You must purchase the product before leaving a review."},
-        #         status=status.HTTP_400_BAD_REQUEST
-        #     )
         
         review_title = request.data.get('reviewTitle')
         review_comment = request.data.get('detailedReview')

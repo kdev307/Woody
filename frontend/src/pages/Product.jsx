@@ -310,7 +310,7 @@ function Product({ params }) {
                                                         alt={review.user_name}
                                                         className="w-40 rounded-full"
                                                     />
-                                                    <strong className="text-4xl text-[#014210]">
+                                                    <strong className="text-4xl text-[#014210] font-merriweather">
                                                         {review.user_name}
                                                     </strong>
                                                     <div className="flex items-center justify-center gap-30">
@@ -336,11 +336,11 @@ function Product({ params }) {
                                                         }
                                                     </div>
                                                 </div>
-                                                <div className="flex flex-col items-start justify-center gap-6 p-4 pl-48 pb-8">
-                                                    <h3 className="text-4xl font-semibold text-[#560000]">
+                                                <div className="flex flex-col items-start justify-center gap-6 p-4 pl-40 pb-8">
+                                                    <h3 className="text-4xl font-semibold text-[#560000] font-playfair">
                                                         {review.review_title}
                                                     </h3>
-                                                    <p className="text-3xl font-medium text-[#560000]">
+                                                    <p className="text-3xl font-medium text-[#560000] font-mono">
                                                         "{review.review_comment}
                                                         "
                                                     </p>
@@ -348,7 +348,7 @@ function Product({ params }) {
 
                                                 <hr
                                                     style={{
-                                                        width: "90%",
+                                                        width: "95%",
                                                         margin: "auto",
                                                         border: "0.19rem solid #014210",
                                                         borderRadius: "100rem",

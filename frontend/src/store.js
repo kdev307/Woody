@@ -23,7 +23,10 @@ import {
     adminOrderDispatchReducer,
     adminOrderHistoryReducer,
 } from "./reducers/adminReducers";
-import { purchasedItemsReducer } from "./reducers/reviewReducers";
+import {
+    purchasedItemsReducer,
+    reviewReducers,
+} from "./reducers/reviewReducers";
 
 const reducer = combineReducers({
     productsList: productsListReducers,
@@ -34,6 +37,7 @@ const reducer = combineReducers({
     cart: cart,
     profile: userProfileReducers,
     userAddress: userAddressReducers,
+    userReviews: reviewReducers,
     orderCreate: orderCreateReducer,
     orderStatus: orderStatusReducer,
     orderHistory: orderHistoryReducer,

@@ -20,6 +20,7 @@ urlpatterns = [
     path('users/orders/order-history/', views.getOrderHistory, name='order-history'),
     path('users/orders/<int:order_id>/order-details/', views.getOrderDetail, name='order-details'),
     path('users/orders/cancel/', views.cancelOrder, name='cancel_order'),
+    path('user/<str:pk>/reviews/', views.getUserReviews, name='user-reviews'),
     path('users/product/<str:pk>/review/add/', views.addReview, name='add-review'),
     path('admin/orders/all/', views.getAllOrders, name='all-orders'),
     path('admin/order/<int:order_id>/order-details/', views.getAllOrderDetails, name='all-order-details'),
