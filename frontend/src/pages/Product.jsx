@@ -19,10 +19,12 @@ import {
     ChevronLeft,
     ChevronRight,
     RateReview,
+    CheckCircle,
 } from "@mui/icons-material";
 import { listProductDetail } from "../actions/productActions";
 import { addToCart } from "../actions/cartActions";
 import ReviewForm from "../components/ReviewForm";
+import Ratings from "../components/Ratings";
 // import Message from "../components/Message";
 
 function Product({ params }) {
@@ -279,7 +281,7 @@ function Product({ params }) {
                                 </li>
                             ))}
                         </ul>
-                        <div className="content py-4 px-8 max-h-[30rem] min-h-[30rem] mx-auto w-[95%] text-left indent-4 overflow-y-auto scrollbar">
+                        <div className="content py-4 px-8 max-h-[40rem] min-h-[40rem] mx-auto w-[95%] text-left indent-4 overflow-y-auto scrollbar">
                             {activeTab === "description" && (
                                 <div className="description text-3xl">
                                     {productDescription}
@@ -291,13 +293,79 @@ function Product({ params }) {
                                         formatText(productSpecifications)}
                                 </ul>
                             )}
+                            <ul className="flex flex-col items-center justify-center gap-30">
+                                {activeTab === "reviews" &&
+                                    (productReviews &&
+                                    productReviews.length > 0 ? (
+                                        productReviews.map((review) => (
+                                            <li
+                                                key={review.id}
+                                                className="p-8 w-full"
+                                            >
+                                                <div className="flex items-center justify-start gap-32">
+                                                    <img
+                                                        src={
+                                                            review.user_profile
+                                                        }
+                                                        alt={review.user_name}
+                                                        className="w-40 rounded-full"
+                                                    />
+                                                    <strong className="text-4xl text-[#014210]">
+                                                        {review.user_name}
+                                                    </strong>
+                                                    <div className="flex items-center justify-center gap-30">
+                                                        <Ratings
+                                                            rating={
+                                                                review.rating
+                                                            }
+                                                        />
+                                                    </div>
+                                                    {review.is_verified_purchase ? (
+                                                        <CheckCircle
+                                                            style={{
+                                                                fontSize:
+                                                                    "3rem",
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        ""
+                                                    )}
+                                                    <div className="text-2xl text-[#014210] font-medium">
+                                                        {
+                                                            review.created_at_formatted
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col items-start justify-center gap-6 p-4 pl-48 pb-8">
+                                                    <h3 className="text-4xl font-semibold text-[#560000]">
+                                                        {review.review_title}
+                                                    </h3>
+                                                    <p className="text-3xl font-medium text-[#560000]">
+                                                        "{review.review_comment}
+                                                        "
+                                                    </p>
+                                                </div>
 
-                            {activeTab === "reviews" && (
-                                <ul className="specification text-3xl list-disc list-inside">
-                                    {productReviews &&
-                                        formatText(productReviews)}
-                                </ul>
-                            )}
+                                                <hr
+                                                    style={{
+                                                        width: "90%",
+                                                        margin: "auto",
+                                                        border: "0.19rem solid #014210",
+                                                        borderRadius: "100rem",
+                                                        boxShadow:
+                                                            "5px 5px 10px #014210",
+                                                    }}
+                                                />
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <p className="text-4xl font-medium p-32 text-center">
+                                            No reviews yet.
+                                            <br />
+                                            Be the first to review this product!
+                                        </p>
+                                    ))}
+                            </ul>
                         </div>
                         <div className="product-action m-auto flex items-center justify-center gap-40 sm_desk:gap-30 lg_tab:gap-20 font-bold text-[#014210]">
                             <div className="rating flex items-center justify-center text-4xl">

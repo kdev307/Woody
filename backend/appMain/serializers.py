@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Products, ProductImages, User, UserAddresses, OrderItems, Orders
+from .models import Products, ProductImages, User, UserAddresses, OrderItems, Orders, Review
 # from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 import re
@@ -135,3 +135,29 @@ class OrderSerializer(serializers.ModelSerializer):
         return sum(item.total_price for item in obj.order_items.all())
 
 
+class ReviewSerializer(serializers.ModelSerializer):
+    # user_name = serializers.CharField(source='user.username', read_only=True)  # Add user name
+    user_name = serializers.SerializerMethodField() 
+    user_profile = serializers.SerializerMethodField()
+    # created_at_formatted = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", source='created_at', read_only=True)  # Optional
+    created_at_formatted = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Review
+        fields = ['id','rating','review_title','review_comment','is_verified_purchase','created_at_formatted', 'user_name', 'user_profile']
+
+    def get_user_name(self, obj):
+        if obj.user:  # Ensure user exists
+            return obj.user.get_full_name() or obj.user.username
+        return "Anonymous"  # Default if no user is linked
+
+    def get_user_profile(self, obj):
+        if obj.user and obj.user.profile_picture:  # Ensure user and profile picture exist
+            return obj.user.profile_picture.url
+        return "/static/images/user_profiles/default-avatar.png"  # Default avatar
+    
+    def get_created_at_formatted(self, obj):
+        # Format the datetime in the desired format
+        if obj.created_at:
+            return obj.created_at.strftime("%B %d, %Y | %I:%M:%S %p")
+        return ""

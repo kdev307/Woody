@@ -34,7 +34,7 @@ class Products(models.Model):
     productCategories = models.JSONField(default=list, null=True, blank=True)
     productDescription = models.TextField(null=True, blank=True)
     productSpecifications = models.TextField(null=True, blank=True)
-    productReviews = models.TextField(null=True, blank=True)
+    # productReviews = models.TextField(null=True, blank=True)
     productRating = models.FloatField(default=0.0,
         null=True, blank=True)
     productNumReviews = models.IntegerField(null=True, blank=True, default=0)
@@ -47,6 +47,12 @@ class Products(models.Model):
 
     def __str__(self):
         return self.productName
+    
+    def update_review_stats(self):
+        reviews = self.productReviews.all()
+        self.productNumReviews = reviews.count()
+        self.productRating = reviews.aggregate(average_rating=models.Avg('rating'))['average_rating'] or 0.0
+        self.save()
 
 class ProductImages(models.Model):
     product = models.ForeignKey(Products, related_name="productImages", on_delete=models.CASCADE)
@@ -110,7 +116,7 @@ class OrderItems(models.Model):
     
 
 class Review(models.Model):
-    product = models.ForeignKey(Products, related_name='reviews', on_delete=models.CASCADE)
+    product = models.ForeignKey(Products, related_name='productReviews', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
     review_title = models.TextField(blank=True, null=True)
@@ -131,4 +137,10 @@ class Review(models.Model):
         )
         self.is_verified_purchase = purchased_items.exists()
         super().save(*args, **kwargs)
+        self.product.update_review_stats()
+
+        def delete(self, *args, **kwargs):
+            product = self.product
+            super().delete(*args, **kwargs)
+            product.update_review_stats() 
 

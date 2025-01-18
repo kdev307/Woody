@@ -15,7 +15,8 @@ export const addReview = (productId, reviewFormData) => async (dispatch) => {
             return;
         }
         const response = await axios.post(
-            `http://localhost:8000/api/users/product/${productId}/review/add/`,
+            `/api/users/product/${productId}/review/add/`,
+            // `http://localhost:8000/api/users/product/${productId}/review/add/`,
             reviewFormData,
             {
                 headers: {

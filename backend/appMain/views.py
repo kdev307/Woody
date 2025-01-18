@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # from .products import products
 from .models import Products, ProductImages, User, UserAddresses, Orders, OrderItems, Review
-from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer, OrderItemSerializer
+from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -56,10 +56,20 @@ def getProducts(request):
 @api_view(['GET'])
 @permission_classes([AllowAny]) 
 def getProduct(request, pk):
-    product = Products.objects.get(id=pk)
-    serializer = ProductSerializer(product, many=False)
-    # serializer = ProductSerializer(product, many=True)
-    return Response(serializer.data)
+    try:
+        product = Products.objects.get(id=pk)
+        reviews = Review.objects.filter(product=product)
+        productSerializer = ProductSerializer(product, many=False)
+        reviewSerializer = ReviewSerializer(reviews, many=True)
+        productData = productSerializer.data
+        productData['productReviews'] = reviewSerializer.data
+        # serializer = ProductSerializer(product, many=True)
+        return Response(productData, status=status.HTTP_200_OK)
+    except Products.DoesNotExist:
+        return Response({"detail": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        print("Error:", e)
+        return Response({"details": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
@@ -600,11 +610,11 @@ def addReview(request, pk):
             order__status__in=['dispatched', 'delivered']
         )
 
-        if not purchased_items.exists():
-            return Response(
-                {"detail": "You must purchase the product before leaving a review."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        # if not purchased_items.exists():
+        #     return Response(
+        #         {"detail": "You must purchase the product before leaving a review."},
+        #         status=status.HTTP_400_BAD_REQUEST
+        #     )
         
         review_title = request.data.get('reviewTitle')
         review_comment = request.data.get('detailedReview')
@@ -622,7 +632,7 @@ def addReview(request, pk):
             review_title=review_title,
             review_comment=review_comment,
             rating=rating,
-            is_verified_purchase=True
+            is_verified_purchase=purchased_items.exists()
         )
 
         return Response({"detail": "Review added successfully."}, status=status.HTTP_201_CREATED
