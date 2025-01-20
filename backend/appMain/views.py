@@ -603,8 +603,11 @@ def getUserReviews(request, pk):
     try:
         # user = request.user
         user = User.objects.get(id=pk)
-        reviews = Review.objects.filter(user=user)
+        reviews = Review.objects.filter(user=user).select_related('product')
+        # for review in reviews:
+        #     print(review.product) 
         serializer = ReviewSerializer(reviews, many=True)
+        # print(serializer.data) 
         return Response(serializer.data, status=status.HTTP_200_OK)
     except User.DoesNotExist:
         return Response({'detail':'User not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -653,3 +656,23 @@ def addReview(request, pk):
     except Exception as e:
         return Response({"detail": f"Error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+    
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def editReview(request, productPK, reviewPK):
+    try:
+        user=request.user
+        product = Products.objects.get(id=productPK)
+        review = Review.objects.get(id=reviewPK, product=product, user=user)
+        serializer = ReviewSerializer(review, data=request.data, partial=True)
+        review.save()
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Review.DoesNotExist:
+        return Response({"error": "Review not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Products.DoesNotExist:
+        return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

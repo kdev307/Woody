@@ -117,7 +117,7 @@ class OrderItems(models.Model):
 
 class Review(models.Model):
     product = models.ForeignKey(Products, related_name='productReviews', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='user_reviews', on_delete=models.CASCADE)
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
     review_title = models.TextField(blank=True, null=True)
     review_comment = models.TextField(blank=True, null=True)

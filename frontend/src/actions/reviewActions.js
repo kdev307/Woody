@@ -4,6 +4,9 @@ import {
     REVIEW_ADD_FAIL,
     REVIEW_ADD_REQUEST,
     REVIEW_ADD_SUCCESS,
+    REVIEW_UPDATE_FAIL,
+    REVIEW_UPDATE_REQUEST,
+    REVIEW_UPDATE_SUCCESS,
     USER_REVIEWS_LIST_FAIL,
     USER_REVIEWS_LIST_REQUEST,
     USER_REVIEWS_LIST_SUCCESS,
@@ -68,3 +71,37 @@ export const addReview = (productId, reviewFormData) => async (dispatch) => {
         });
     }
 };
+
+export const editReview =
+    (productId, reviewId, reviewFormData) => async (dispatch) => {
+        try {
+            dispatch({ type: REVIEW_UPDATE_REQUEST });
+            const access_token = localStorage.getItem(ACCESS_TOKEN);
+            if (!access_token) {
+                console.error("Access token is missing");
+                return;
+            }
+            const response = await axios.put(
+                `/api/users/product/${productId}/review/${reviewId}/edit/`,
+                reviewFormData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            dispatch({
+                type: REVIEW_UPDATE_SUCCESS,
+                payload: response.data,
+            });
+        } catch (error) {
+            dispatch({
+                type: REVIEW_UPDATE_FAIL,
+                payload:
+                    error.response && error.response.data.detail
+                        ? error.response.data.detail
+                        : error.message,
+            });
+        }
+    };

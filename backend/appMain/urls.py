@@ -22,6 +22,7 @@ urlpatterns = [
     path('users/orders/cancel/', views.cancelOrder, name='cancel_order'),
     path('user/<str:pk>/reviews/', views.getUserReviews, name='user-reviews'),
     path('users/product/<str:pk>/review/add/', views.addReview, name='add-review'),
+    path('users/product/<str:productPK>/review/<str:reviewPK>/edit/', views.editReview, name='edit-review'),
     path('admin/orders/all/', views.getAllOrders, name='all-orders'),
     path('admin/order/<int:order_id>/order-details/', views.getAllOrderDetails, name='all-order-details'),
     path('admin/orders/<int:order_id>/dispatch/', views.dispatchOrder, name='admin-dispatch-order'),

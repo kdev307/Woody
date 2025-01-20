@@ -1,36 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Message from "./Message";
-import {
-    Close,
-    Edit,
-    RateReview,
-    Star,
-    StarBorder,
-    StarHalf,
-} from "@mui/icons-material";
+import { Close, Star, StarBorder, StarHalf } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { addReview } from "../actions/reviewActions";
+import { addReview, editReview } from "../actions/reviewActions";
+import { listProductDetail } from "../actions/productActions";
 
-function ReviewForm({ title, toggleReviewForm, method, product, userInfo }) {
+function ReviewForm({
+    title,
+    toggleReviewForm,
+    method,
+    product,
+    userInfo,
+    review = null,
+}) {
+    console.log("Product & review  received:", review);
     const [reviewData, setReviewData] = useState({
         product: product,
-        reviewTitle: "",
-        detailedReview: "",
-        rating: "",
+        review_title: review?.review_title || "",
+        review_comment: review?.review_comment || "",
+        rating: review?.rating || "",
     });
+
+    // useEffect(() => {
+    //     if (review) {
+    //         console.log("Review received in ReviewForm:", review?.id, review);
+    //         setReviewData({
+    //             product: review.product,
+    //             review_title: review?.review_title || "",
+    //             review_comment: review?.review_comment || "",
+    //             rating: review?.rating || "",
+    //         });
+    //     }
+    // }, [review]);
 
     const dispatch = useDispatch();
 
     const handleReviewSubmit = (e) => {
         e.preventDefault();
         console.log(reviewData);
-        dispatch(addReview(product.id, reviewData));
+        if (method === "addReview") dispatch(addReview(product.id, reviewData));
+        else dispatch(editReview(product.id, review.id, reviewData));
         setReviewData({
-            reviewTitle: "",
-            detailedReview: "",
+            review_title: "",
+            review_comment: "",
             rating: "",
         });
         toggleReviewForm();
+        dispatch(listProductDetail(product.id));
     };
 
     const handleChange = (e) => {
@@ -46,7 +62,7 @@ function ReviewForm({ title, toggleReviewForm, method, product, userInfo }) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75 shadow-none"
             onClick={toggleReviewForm}
         >
             <div
@@ -56,7 +72,7 @@ function ReviewForm({ title, toggleReviewForm, method, product, userInfo }) {
                 <div className="review-form-container p-6">
                     <div className="pt-12 flex items-center justify-end">
                         <Close
-                            className="close-btn cursor-pointer text-[#014210] text-4xl absolute top-8 right-20"
+                            className="close-btn cursor-pointer text-[#014210] text-4xl absolute top-8 right-10"
                             style={{ fontSize: "3.6rem" }}
                             onClick={toggleReviewForm}
                         />
@@ -65,7 +81,7 @@ function ReviewForm({ title, toggleReviewForm, method, product, userInfo }) {
                         {title}
                     </h1>
                     <h2 className="flex items-center justify-center gap-4 p-4 text-3xl text-center text-[#560000] font-semibold">
-                        {product.productName}
+                        {product.productBrand + " - " + product.productName}
                     </h2>
                     {message && (
                         <Message message={message} messageType={messageType} />
@@ -78,16 +94,16 @@ function ReviewForm({ title, toggleReviewForm, method, product, userInfo }) {
                             {/* Review Title */}
                             <div className="input-group mb-4">
                                 <label
-                                    htmlFor="reviewTitle"
+                                    htmlFor="review_title"
                                     className="text-[1.8rem] font-semibold text-[#014210]"
                                 >
                                     Review Title:
                                 </label>
                                 <input
                                     type="text"
-                                    id="reviewTitle"
-                                    name="reviewTitle"
-                                    value={reviewData.reviewTitle}
+                                    id="review_title"
+                                    name="review_title"
+                                    value={reviewData.review_title}
                                     onChange={handleChange}
                                     className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
                                     placeholder="Enter Review Title"
@@ -98,17 +114,17 @@ function ReviewForm({ title, toggleReviewForm, method, product, userInfo }) {
                             {/* Detailed Review */}
                             <div className="input-group mb-4">
                                 <label
-                                    htmlFor="detailedReview"
+                                    htmlFor="review_comment"
                                     className="text-[1.8rem] font-semibold text-[#014210]"
                                 >
                                     Detailed Review:
                                 </label>
                                 <textarea
-                                    id="detailedReview"
-                                    name="detailedReview"
-                                    value={reviewData.detailedReview}
+                                    id="review_comment"
+                                    name="review_comment"
+                                    value={reviewData.review_comment}
                                     onChange={handleChange}
-                                    className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    className="form-input w-full min-h-[4rem] p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
                                     placeholder="Enter your detailed review here"
                                     required
                                 />
@@ -178,7 +194,7 @@ function ReviewForm({ title, toggleReviewForm, method, product, userInfo }) {
 
                         {/* Submit Button */}
                         <button
-                            className={`form-btn flex items-center justify-center gap-4 w-full p-6 border-[3px] rounded-md text-[2.4rem] font-semibold transition-all ease-linear duration-1000 ${
+                            className={`form-btn flex items-center justify-center gap-4 w-full p-3 border-[3px] rounded-md text-[2.4rem] font-semibold transition-all ease-linear duration-1000 ${
                                 !userInfo
                                     ? "cursor-not-allowed text-[#888] border-[#888] hover:text-[#888] hover:border-[#888]"
                                     : "border-[#014210] text-[#014210] hover:bg-[#014210] hover:text-white"

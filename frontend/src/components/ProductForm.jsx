@@ -47,15 +47,6 @@ function ProductForm({ method, toggleProductForm, product }) {
     const [productSpecifications, setProductSpecifications] = useState(
         product?.productSpecifications || ""
     );
-    const [productReviews, setProductReviews] = useState(
-        product?.productReviews || ""
-    );
-    const [productRating, setProductRating] = useState(
-        product?.productRating || 0.0
-    );
-    const [productNumReviews, setProductNumReviews] = useState(
-        product?.productNumReviews || 0
-    );
     const [productPrice, setProductPrice] = useState(
         product?.productPrice || 0
     );
@@ -97,9 +88,6 @@ function ProductForm({ method, toggleProductForm, product }) {
         formData.append("productName", productName);
         formData.append("productDescription", productDescription);
         formData.append("productSpecifications", productSpecifications);
-        formData.append("productReviews", productReviews);
-        formData.append("productRating", parseFloat(productRating).toFixed(1));
-        formData.append("productNumReviews", parseInt(productNumReviews, 10));
         formData.append("productPrice", parseFloat(productPrice).toFixed(2));
         formData.append("productStockCount", parseInt(productStockCount, 10));
         formData.append(
@@ -288,137 +276,59 @@ function ProductForm({ method, toggleProductForm, product }) {
                                 ></textarea>
                             </div>
 
-                            {/* Product Reviews */}
+                            {/* Product Price*/}
                             <div className="input-group mb-4">
                                 <label
-                                    htmlFor="productReviews"
+                                    htmlFor="productPrice"
                                     className="text-[1.8rem] font-semibold text-[#014210]"
                                 >
-                                    Product Reviews:
+                                    Product Price:
                                 </label>
-                                <textarea
-                                    name="productReviews"
-                                    id="productReviews"
+                                <input
+                                    type="number"
+                                    name="productPrice"
+                                    id="productPrice"
                                     className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                    value={productReviews}
-                                    onChange={(e) =>
-                                        setProductReviews(e.target.value)
+                                    value={
+                                        productPrice === 0 ? "" : productPrice
                                     }
-                                    placeholder="Enter product reviews or customer feedback"
+                                    onChange={(e) =>
+                                        setProductPrice(
+                                            parseInt(e.target.value)
+                                        )
+                                    }
+                                    placeholder=" (in ₹)"
                                     required
-                                ></textarea>
+                                />
                             </div>
 
-                            {/* Product Price and Rating */}
-                            <div className="flex items-center justify-center gap-2 mb-4">
-                                <div className="input-group">
-                                    <label
-                                        htmlFor="productPrice"
-                                        className="text-[1.8rem] font-semibold text-[#014210]"
-                                    >
-                                        Product Price:
-                                    </label>
-                                    <input
-                                        type="number"
-                                        name="productPrice"
-                                        id="productPrice"
-                                        className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                        value={
-                                            productPrice === 0
-                                                ? ""
-                                                : productPrice
-                                        }
-                                        onChange={(e) =>
-                                            setProductPrice(
-                                                parseInt(e.target.value)
-                                            )
-                                        }
-                                        placeholder=" (in ₹)"
-                                        required
-                                    />
-                                </div>
-                                <div className="input-group">
-                                    <label
-                                        htmlFor="productRating"
-                                        className="text-[1.8rem] font-semibold text-[#014210]"
-                                    >
-                                        Product Rating:
-                                    </label>
-                                    <input
-                                        type="number"
-                                        name="productRating"
-                                        id="productRating"
-                                        className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                        value={
-                                            productRating === 0.0
-                                                ? ""
-                                                : productRating
-                                        }
-                                        onChange={(e) =>
-                                            setProductRating(
-                                                parseFloat(e.target.value)
-                                            )
-                                        }
-                                        placeholder="4.5"
-                                        required
-                                    />
-                                </div>
-                            </div>
+                            {/* Product Stock Count */}
 
-                            {/* Product Stock Count and Number of Reviews */}
-                            <div className="flex items-center justify-center gap-2 mb-4">
-                                <div className="input-group">
-                                    <label
-                                        htmlFor="productNumReviews"
-                                        className="text-[1.8rem] font-semibold text-[#014210]"
-                                    >
-                                        Product Number of Reviews:
-                                    </label>
-                                    <input
-                                        type="number"
-                                        name="productNumReviews"
-                                        id="productNumReviews"
-                                        className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                        value={
-                                            productNumReviews === 0
-                                                ? ""
-                                                : productNumReviews
-                                        }
-                                        onChange={(e) =>
-                                            setProductNumReviews(
-                                                parseInt(e.target.value)
-                                            )
-                                        }
-                                        placeholder="100"
-                                        required
-                                    />
-                                </div>
-                                <div className="input-group">
-                                    <label
-                                        htmlFor="productStockCount"
-                                        className="text-[1.8rem] font-semibold text-[#014210]"
-                                    >
-                                        Product Stock Count:
-                                    </label>
-                                    <input
-                                        type="number"
-                                        name="productStockCount"
-                                        id="productStockCount"
-                                        className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
-                                        value={
-                                            productStockCount === 0
-                                                ? ""
-                                                : productStockCount
-                                        }
-                                        onChange={(e) =>
-                                            setProductStockCount(
-                                                parseInt(e.target.value)
-                                            )
-                                        }
-                                        placeholder="50"
-                                        required
-                                    />
-                                </div>
+                            <div className="input-group mb-4">
+                                <label
+                                    htmlFor="productStockCount"
+                                    className="text-[1.8rem] font-semibold text-[#014210]"
+                                >
+                                    Product Stock Count:
+                                </label>
+                                <input
+                                    type="number"
+                                    name="productStockCount"
+                                    id="productStockCount"
+                                    className="form-input w-full p-6 text-[1.8rem] mt-2 box-border border rounded-md border-[#ccc] text-[#000] bg-[#f8f6f6]"
+                                    value={
+                                        productStockCount === 0
+                                            ? ""
+                                            : productStockCount
+                                    }
+                                    onChange={(e) =>
+                                        setProductStockCount(
+                                            parseInt(e.target.value)
+                                        )
+                                    }
+                                    placeholder="50"
+                                    required
+                                />
                             </div>
 
                             {/* Product Image */}

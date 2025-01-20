@@ -141,11 +141,12 @@ class ReviewSerializer(serializers.ModelSerializer):
     user_profile = serializers.SerializerMethodField()
     # created_at_formatted = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", source='created_at', read_only=True)  # Optional
     created_at_formatted = serializers.SerializerMethodField()
-    product_image = serializers.SerializerMethodField()
-
+    updated_at_formatted = serializers.SerializerMethodField()
+    
+    product = ProductSerializer(read_only=True)
     class Meta:
         model = Review
-        fields = ['id','rating','review_title','review_comment','is_verified_purchase','created_at_formatted', 'user_name', 'user_profile', 'product_image']
+        fields = ['id','rating','review_title','review_comment','is_verified_purchase','created_at_formatted', 'user_name', 'user_profile', 'product', 'updated_at_formatted']
 
     def get_user_name(self, obj):
         if obj.user:  # Ensure user exists
@@ -163,9 +164,9 @@ class ReviewSerializer(serializers.ModelSerializer):
             return obj.created_at.strftime("%B %d, %Y | %I:%M:%S %p")
         return ""
     
-    def get_product_image(self, obj):
-        product_images = ProductImages.objects.filter(product=obj.product)
-        product_images = sorted(product_images, key=lambda img: int(re.search(r'\d+', img.image.name).group(0)))
-        if product_images:
-            return product_images[0].image.url
-        return None
+    def get_updated_at_formatted(self, obj):
+        # Format the datetime in the desired format
+        if obj.updated_at:
+            return obj.updated_at.strftime("%B %d, %Y | %I:%M:%S %p")
+        return ""
+    

@@ -45,6 +45,7 @@ function Product({ params }) {
     const [reviewFormState, setReviewFormState] = useState({
         isVisible: false,
         product: null,
+        review: null,
     });
 
     useEffect(() => {
@@ -73,10 +74,11 @@ function Product({ params }) {
         setMediaView((mediaView) => !mediaView);
     };
 
-    const handleReviewForm = (product = null) => {
+    const handleReviewForm = (product = null, review = null) => {
         setReviewFormState((prev) => ({
             isVisible: !prev.isVisible,
             product,
+            review,
         }));
     };
 
@@ -331,9 +333,10 @@ function Product({ params }) {
                                                         ""
                                                     )}
                                                     <div className="text-2xl text-[#014210] font-medium">
-                                                        {
-                                                            review.created_at_formatted
-                                                        }
+                                                        {review.created_at_formatted ===
+                                                        review.updated_at_formatted
+                                                            ? review.created_at_formatted
+                                                            : review.updated_at_formatted}
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col items-start justify-center gap-6 p-4 pl-40 pb-8">
@@ -445,16 +448,16 @@ function Product({ params }) {
                             </div>
                         </div>
                     </div>
-                    {reviewFormState.isVisible && (
-                        <ReviewForm
-                            title="Write A Review"
-                            toggleReviewForm={handleReviewForm}
-                            method="addReview"
-                            product={product}
-                            userInfo={userInfo}
-                        />
-                    )}
                 </div>
+            )}
+            {reviewFormState.isVisible && (
+                <ReviewForm
+                    title="Write A Review"
+                    toggleReviewForm={handleReviewForm}
+                    method="addReview"
+                    product={product}
+                    userInfo={userInfo}
+                />
             )}
             <Footer />
         </>
