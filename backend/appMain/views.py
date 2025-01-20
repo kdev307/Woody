@@ -628,8 +628,8 @@ def addReview(request, pk):
             order__status__in=['dispatched', 'delivered']
         )
         
-        review_title = request.data.get('reviewTitle')
-        review_comment = request.data.get('detailedReview')
+        review_title = request.data.get('review_title')
+        review_comment = request.data.get('review_comment')
         rating = request.data.get('rating')
 
         if rating is None or rating < 0 or rating > 5:
@@ -646,6 +646,7 @@ def addReview(request, pk):
             rating=rating,
             is_verified_purchase=purchased_items.exists()
         )
+        product.update_review_stats()
 
         return Response({"detail": "Review added successfully."}, status=status.HTTP_201_CREATED
         )
@@ -676,3 +677,20 @@ def editReview(request, productPK, reviewPK):
         return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteReview(request, pk):
+    try:
+        review = Review.objects.get(id=pk)
+        product = Products.objects.get(id=review.product_id)
+        review.delete()
+        product.update_review_stats()
+        return Response({"details": "Review deleted successfully"}, status=status.HTTP_200_OK)
+    except Review.DoesNotExist:
+        return Response({"error": "Review not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+            return Response(
+                {"detail": f"An error occurred: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

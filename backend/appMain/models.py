@@ -50,7 +50,7 @@ class Products(models.Model):
     
     def update_review_stats(self):
         reviews = self.productReviews.all()
-        self.productNumReviews = reviews.count()
+        self.productNumReviews = reviews.count() or 0
         self.productRating = reviews.aggregate(average_rating=models.Avg('rating'))['average_rating'] or 0.0
         self.save()
 

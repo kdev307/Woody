@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import Message from "./Message";
 import { Close, Star, StarBorder, StarHalf } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { addReview, editReview } from "../actions/reviewActions";
+import {
+    addReview,
+    editReview,
+    fetchUserReviews,
+} from "../actions/reviewActions";
 import { listProductDetail } from "../actions/productActions";
 
 function ReviewForm({
@@ -46,6 +50,7 @@ function ReviewForm({
             rating: "",
         });
         toggleReviewForm();
+        dispatch(fetchUserReviews(userInfo.id));
         dispatch(listProductDetail(product.id));
     };
 
