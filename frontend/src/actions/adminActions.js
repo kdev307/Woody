@@ -20,7 +20,7 @@ export const getPendingOrders = () => async (dispatch) => {
             console.error("Access token is missing");
             return;
         }
-        const { data } = await axios.get(`/api/admin/orders/all`, {
+        const { data } = await axios.get(`/api/admin/orders/all/`, {
             headers: {
                 Authorization: `Bearer ${access_token}`,
             },
@@ -49,7 +49,7 @@ export const getPendingOrderDetails = (orderId) => async (dispatch) => {
             return;
         }
         const { data } = await axios.get(
-            `/api/admin/order/${orderId}/order-details`,
+            `/api/admin/order/${orderId}/order-details/`,
             {
                 headers: {
                     Authorization: `Bearer ${access_token}`,

@@ -3,8 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # from .products import products
-from .models import Products, ProductImages, User, UserAddresses, Orders, OrderItems
-from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer, OrderItemSerializer
+from .models import Products, ProductImages, User, UserAddresses, Orders, OrderItems, Review
+from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -56,10 +56,20 @@ def getProducts(request):
 @api_view(['GET'])
 @permission_classes([AllowAny]) 
 def getProduct(request, pk):
-    product = Products.objects.get(id=pk)
-    serializer = ProductSerializer(product, many=False)
-    # serializer = ProductSerializer(product, many=True)
-    return Response(serializer.data)
+    try:
+        product = Products.objects.get(id=pk)
+        reviews = Review.objects.filter(product=product)
+        productSerializer = ProductSerializer(product, many=False)
+        reviewSerializer = ReviewSerializer(reviews, many=True)
+        productData = productSerializer.data
+        productData['productReviews'] = reviewSerializer.data
+        # serializer = ProductSerializer(product, many=True)
+        return Response(productData, status=status.HTTP_200_OK)
+    except Products.DoesNotExist:
+        return Response({"detail": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        print("Error:", e)
+        return Response({"details": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
@@ -546,7 +556,7 @@ def getAllOrderDetails(request, order_id):
         order_items_serializer = OrderItemSerializer(order_items, many=True)
         
         print("Order Details")
-        return Response({'details': "Your Order Details.", 'order': order_serializer.data, 'order_items': order_items_serializer.data }, status=status.HTTP_200_OK)
+        return Response({'details': "All Order Details.", 'order': order_serializer.data, 'order_items': order_items_serializer.data }, status=status.HTTP_200_OK)
     except Orders.DoesNotExist:
         return Response(
             {'details': 'Order not found.'},
@@ -585,3 +595,102 @@ def dispatchOrder(request, order_id):
         return Response({"details": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"details": f"Error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserReviews(request, pk):
+    try:
+        # user = request.user
+        user = User.objects.get(id=pk)
+        reviews = Review.objects.filter(user=user).select_related('product')
+        # for review in reviews:
+        #     print(review.product) 
+        serializer = ReviewSerializer(reviews, many=True)
+        # print(serializer.data) 
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        return Response({'detail':'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        print(f'Error: {str(e)}')
+        return Response({'detail':'Cannot fetch user reviews'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def addReview(request, pk):
+    try:
+        product = Products.objects.get(id=pk)
+
+        user = request.user
+        purchased_items = OrderItems.objects.filter(
+            order__user=user,
+            product=product,
+            order__status__in=['dispatched', 'delivered']
+        )
+        
+        review_title = request.data.get('review_title')
+        review_comment = request.data.get('review_comment')
+        rating = request.data.get('rating')
+
+        if rating is None or rating < 0 or rating > 5:
+            return Response(
+                {"detail": "Please provide a valid rating between 0 and 5."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        review = Review.objects.create(
+            product=product,
+            user=user,
+            review_title=review_title,
+            review_comment=review_comment,
+            rating=rating,
+            is_verified_purchase=purchased_items.exists()
+        )
+        product.update_review_stats()
+
+        return Response({"detail": "Review added successfully."}, status=status.HTTP_201_CREATED
+        )
+        
+    except Products.DoesNotExist:
+        return Response({"detail": "Product not found."}, status=status.HTTP_404_NOT_FOUND
+        )
+    except Exception as e:
+        return Response({"detail": f"Error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+    
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def editReview(request, productPK, reviewPK):
+    try:
+        user=request.user
+        product = Products.objects.get(id=productPK)
+        review = Review.objects.get(id=reviewPK, product=product, user=user)
+        serializer = ReviewSerializer(review, data=request.data, partial=True)
+        review.save()
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Review.DoesNotExist:
+        return Response({"error": "Review not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Products.DoesNotExist:
+        return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteReview(request, pk):
+    try:
+        review = Review.objects.get(id=pk)
+        product = Products.objects.get(id=review.product_id)
+        review.delete()
+        product.update_review_stats()
+        return Response({"details": "Review deleted successfully"}, status=status.HTTP_200_OK)
+    except Review.DoesNotExist:
+        return Response({"error": "Review not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+            return Response(
+                {"detail": f"An error occurred: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

@@ -444,6 +444,7 @@ function ProductCard({ product, userInfo, toggleProductForm }) {
         if (window.confirm("Are you sure you want to delete this product?")) {
             dispatch(deleteProduct(product.id));
         }
+        dispatch(listProducts());
     };
 
     return (

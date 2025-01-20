@@ -18,9 +18,13 @@ import {
     Close,
     ChevronLeft,
     ChevronRight,
+    RateReview,
+    CheckCircle,
 } from "@mui/icons-material";
 import { listProductDetail } from "../actions/productActions";
 import { addToCart } from "../actions/cartActions";
+import ReviewForm from "../components/ReviewForm";
+import Ratings from "../components/Ratings";
 // import Message from "../components/Message";
 
 function Product({ params }) {
@@ -38,6 +42,11 @@ function Product({ params }) {
     const [isAddedToCart, setIsAddedToCart] = useState(false);
 
     const [mediaView, setMediaView] = useState(false);
+    const [reviewFormState, setReviewFormState] = useState({
+        isVisible: false,
+        product: null,
+        review: null,
+    });
 
     useEffect(() => {
         dispatch(listProductDetail(id));
@@ -63,6 +72,14 @@ function Product({ params }) {
 
     const handleMediaView = () => {
         setMediaView((mediaView) => !mediaView);
+    };
+
+    const handleReviewForm = (product = null, review = null) => {
+        setReviewFormState((prev) => ({
+            isVisible: !prev.isVisible,
+            product,
+            review,
+        }));
     };
 
     const {
@@ -161,7 +178,7 @@ function Product({ params }) {
             ) : error ? (
                 <Error message={error} />
             ) : (
-                <div className="product p-8 grid grid-cols-[2fr_3fr] tab:flex tab:flex-col tab:items-start tab:justify-start gap-8 sm_desk:gap-20 items-start justify-center text-xl bg-[#e4efe4] pt-32">
+                <div className="product p-8 grid grid-cols-[2fr_3fr] tab:flex tab:flex-col tab:items-start tab:justify-start gap-8 sm_desk:gap-20 items-start justify-center text-xl bg-[#e4efe4] pt-32 min-h-[35rem]">
                     <div className="image-container overflow-hidden gap-4 self-center w-[100%] sm_desk:w-[105%] lg_tab:w-[108%] tab:w-[80%] sm_tab:w-[95%]">
                         {productImages?.sort((img1, img2) =>
                             img1.image.localeCompare(img2.image)
@@ -266,7 +283,7 @@ function Product({ params }) {
                                 </li>
                             ))}
                         </ul>
-                        <div className="content py-4 px-8 max-h-[30rem] min-h-[30rem] mx-auto w-[95%] text-left indent-4 overflow-y-auto scrollbar">
+                        <div className="content py-4 px-8 max-h-[40rem] min-h-[40rem] mx-auto w-[95%] text-left indent-4 overflow-y-auto scrollbar">
                             {activeTab === "description" && (
                                 <div className="description text-3xl">
                                     {productDescription}
@@ -278,15 +295,82 @@ function Product({ params }) {
                                         formatText(productSpecifications)}
                                 </ul>
                             )}
+                            <ul className="flex flex-col items-center justify-center gap-30">
+                                {activeTab === "reviews" &&
+                                    (productReviews &&
+                                    productReviews.length > 0 ? (
+                                        productReviews.map((review) => (
+                                            <li
+                                                key={review.id}
+                                                className="p-8 w-full"
+                                            >
+                                                <div className="flex items-center justify-start gap-32">
+                                                    <img
+                                                        src={
+                                                            review.user_profile
+                                                        }
+                                                        alt={review.user_name}
+                                                        className="w-40 rounded-full"
+                                                    />
+                                                    <strong className="text-4xl text-[#014210] font-merriweather">
+                                                        {review.user_name}
+                                                    </strong>
+                                                    <div className="flex items-center justify-center gap-30">
+                                                        <Ratings
+                                                            rating={
+                                                                review.rating
+                                                            }
+                                                        />
+                                                    </div>
+                                                    {review.is_verified_purchase ? (
+                                                        <CheckCircle
+                                                            style={{
+                                                                fontSize:
+                                                                    "3rem",
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        ""
+                                                    )}
+                                                    <div className="text-2xl text-[#014210] font-medium">
+                                                        {review.created_at_formatted ===
+                                                        review.updated_at_formatted
+                                                            ? review.created_at_formatted
+                                                            : review.updated_at_formatted}
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col items-start justify-center gap-6 p-4 pl-40 pb-8">
+                                                    <h3 className="text-4xl font-semibold text-[#560000] font-playfair">
+                                                        {review.review_title}
+                                                    </h3>
+                                                    <p className="text-3xl font-medium text-[#560000] font-mono">
+                                                        "{review.review_comment}
+                                                        "
+                                                    </p>
+                                                </div>
 
-                            {activeTab === "reviews" && (
-                                <ul className="specification text-3xl list-disc list-inside">
-                                    {productReviews &&
-                                        formatText(productReviews)}
-                                </ul>
-                            )}
+                                                <hr
+                                                    style={{
+                                                        width: "95%",
+                                                        margin: "auto",
+                                                        border: "0.19rem solid #014210",
+                                                        borderRadius: "100rem",
+                                                        boxShadow:
+                                                            "5px 5px 10px #014210",
+                                                    }}
+                                                />
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <p className="text-4xl font-medium p-32 text-center">
+                                            No reviews yet.
+                                            <br />
+                                            Be the first to review this product!
+                                        </p>
+                                    ))}
+                            </ul>
                         </div>
-                        <div className="product-action m-auto flex items-center justify-center gap-60 sm_desk:gap-48 lg_tab:gap-24 font-bold text-[#014210]">
+                        <div className="product-action m-auto flex items-center justify-center gap-40 sm_desk:gap-30 lg_tab:gap-20 font-bold text-[#014210]">
                             <div className="rating flex items-center justify-center text-4xl">
                                 <h3>{productRating}</h3>
                                 <Star
@@ -299,6 +383,17 @@ function Product({ params }) {
                                 {` (${productNumReviews})`}
                                 {/* {`from ${numReviews} reviews`} */}
                             </div>
+                            <button
+                                className="add-review-btn flex items-center justify-center gap-8 border-4 rounded-lg shadow-[5px_5px_10px_rgba(86,0,0,0.3)] transition-all ease duration-300 font-semibold text-[2.4rem] lg_tab:text-[2rem] p-4 border-[#560000] text-[#560000] bg-white hover:border-[#014210] hover:text-[#014210] hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)]"
+                                onClick={(e) => {
+                                    e.preventDefault(); // Prevent the link navigation
+                                    handleReviewForm(product); // Toggle the form
+                                }}
+                            >
+                                Write A Review
+                                <RateReview style={{ fontSize: "3rem" }} />
+                            </button>
+
                             <button
                                 className={`add-to-cart-btn flex items-center justify-center gap-8 border-4 rounded-lg shadow-[5px_5px_10px_rgba(86,0,0,0.3)] transition-all ease duration-300 font-semibold text-[2.4rem] lg_tab:text-[2rem] p-4
         ${
@@ -318,6 +413,7 @@ function Product({ params }) {
                                     />
                                 )}
                             </button>
+
                             {/* {isAddedToCart ? (
                                 <Message
                                 messageType={"fail"}
@@ -353,6 +449,15 @@ function Product({ params }) {
                         </div>
                     </div>
                 </div>
+            )}
+            {reviewFormState.isVisible && (
+                <ReviewForm
+                    title="Write A Review"
+                    toggleReviewForm={handleReviewForm}
+                    method="addReview"
+                    product={product}
+                    userInfo={userInfo}
+                />
             )}
             <Footer />
         </>

@@ -9,6 +9,7 @@ import Confirmed from "./pages/Confirmed";
 import Checkout from "./pages/Checkout";
 import OrderHistory from "./pages/OrderHistory";
 import OrderDispatch from "./pages/OrderDispatch";
+import UserReviews from "./pages/UserReviews";
 // import Profile from "./components/Profile";
 // import Categories from "./components/Categories";
 
@@ -30,6 +31,7 @@ function App() {
                         path="/admin/order-dispatch"
                         element={<OrderDispatch />}
                     />
+                    <Route path="/reviews" element={<UserReviews />} />
                 </Routes>
             </BrowserRouter>
         </div>
