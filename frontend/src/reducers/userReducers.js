@@ -28,9 +28,9 @@ export const userSignUpReducers = (state = {}, action) => {
         case USER_SIGNUP_REQUEST:
             return { loading: true };
         case USER_SIGNUP_SUCCESS:
-            return { loading: false, userInfo: action.payload };
+            return { loading: false, userInfo: action.payload, error: null };
         case USER_SIGNUP_FAIL:
-            return { loading: false, error: action.payload };
+            return { loading: false, userInfo: null, error: action.payload };
         default:
             return state;
     }
@@ -41,9 +41,9 @@ export const userLogInReducers = (state = {}, action) => {
         case USER_LOGIN_REQUEST:
             return { loading: true };
         case USER_LOGIN_SUCCESS:
-            return { loading: false, userInfo: action.payload };
+            return { loading: false, userInfo: action.payload, error: null };
         case USER_LOGIN_FAIL:
-            return { loading: false, error: action.payload };
+            return { loading: false, userInfo: null, error: action.payload };
         case USER_LOGOUT:
             return {};
         default:
@@ -51,17 +51,24 @@ export const userLogInReducers = (state = {}, action) => {
     }
 };
 
-export const userProfileReducers = (
-    state = { profileData: [], loading: false, error: null },
-    action
-) => {
+export const userProfileReducers = (state = {}, action) => {
     switch (action.type) {
         case USER_PROFILE_UPDATE_REQUEST:
             return { ...state, loading: true };
         case USER_PROFILE_UPDATE_SUCCESS:
-            return { ...state, loading: false, profileData: action.payload };
+            return {
+                ...state,
+                loading: false,
+                profileData: action.payload,
+                error: null,
+            };
         case USER_PROFILE_UPDATE_FAIL:
-            return { ...state, loading: false, error: action.payload };
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+                profileData: null,
+            };
         default:
             return state;
     }
