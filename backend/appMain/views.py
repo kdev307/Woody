@@ -10,9 +10,9 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework import status
-# from django.contrib.auth.models import User
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
 # for sending mail and generate token
@@ -268,14 +268,61 @@ def updateProfile(request):
     user = request.user
     data = request.data
 
+    old_password = data.get('oldPassword')
+    new_password = data.get('newPassword')
+    confirm_password = data.get('confirmPassword')
+
+
     try:
         if "mobileNumber" in data:
             user.mobile_number = data['mobileNumber']
 
-        if "password" in data:
-            user.set_password(data['password'])
+        if "oldPassword" in data and "newPassword" in data and "confirmPassword" in data:
+            old_password = data['oldPassword']
+            new_password = data['newPassword']
+            confirm_password = data['confirmPassword']
 
+            # Check if the old password is correct
+            if not user.check_password(old_password):
+                return Response(
+                    {'details': "Old password is incorrect."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            
+            if old_password == new_password or old_password == confirm_password:
+                return Response(
+                    {'details': "Password already exists."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+
+            # Check if new password and confirm password match
+            if new_password != confirm_password:
+                return Response(
+                    {'details': "New password and confirm password do not match."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # Validate new password
+            try:
+                # Check if old password is correct
+                if not user.check_password(old_password):
+                    return Response({'message': 'Old password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
+            except ValidationError as e:
+                return Response(
+                    {'details': f"Password validation error: {', '.join(e)}"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # Set the new password
+            user.set_password(new_password)
+
+        # Save user changes
         user.save()
+
+        update_session_auth_hash(request, user)
+        
         return Response({'details': "Profile updated successfully!"}, status=status.HTTP_200_OK)
     except Exception as e:
         print(f"Error Updating Profile: {str(e)}"),
@@ -468,10 +515,65 @@ def updateOrderStatus(request, order_id):
         order.status = new_status
         order.save()
 
+        send_order_status_email(order, 'status_update')
+
         return Response({'details': 'Order status updated successfully.'}, status=status.HTTP_200_OK)
+    except Orders.DoesNotExist:
+        return Response({'details': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        print("Error updating order status: ", e)
-        return Response({'details': 'Error updating order status.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'details': f'Error updating order status: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+    
+def send_order_status_email(order, event_type):
+    """Send an email notification based on the event type (dispatch or status update)."""
+    try:
+        # Get the order items
+        order_items = order.order_items.all()
+
+        # Check the event type and render the appropriate template
+        if event_type == 'dispatched':
+            # Event is dispatch
+            subject = f"Your Order #{order.order_id} Has Been Dispatched"
+            html_message = render_to_string(
+                'orderDispatched.html', {
+                    'first_name': order.user.first_name,
+                    'order_id': order.order_id,
+                    'tracking_number': order.tracking_number,
+                    'order_items': order_items,
+                }
+            )
+        elif event_type == 'status_update':
+            # Event is status update
+            subject = f"Your Order #{order.order_id} Status Has Been Updated"
+            html_message = render_to_string(
+                'orderStatusUpdate.html', {
+                    'first_name': order.user.first_name,
+                    'order_id': order.order_id,
+                    'current_status': order.status,
+                    'order_items': order_items.all(),
+                }
+            )
+        else:
+            raise ValueError("Invalid event type")
+
+        # Generate plain text version by stripping the HTML tags
+        # plain_message = strip_tags(html_message)
+
+        # Create the email message
+        email_message = EmailMessage(
+            subject, html_message, settings.EMAIL_HOST_USER, [order.user.email]
+        )
+        email_message.content_subtype = 'html'
+        # email_message.attach_alternative(html_message, "text/html")
+
+        # Send the email in a separate thread to avoid blocking the main thread
+        EmailThread(email_message).start()
+
+        return Response({'details': f'Order email for {event_type} sent successfully.'}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print("Error sending order email:", e)
+        return Response({'details': 'Error sending order email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -581,6 +683,7 @@ def dispatchOrder(request, order_id):
             order.status='dispatched'
             order.updated_tracking_number()
             order.save()
+            send_order_status_email(order, 'dispatched')
 
             for item in order.order_items.all():
                 product = item.product

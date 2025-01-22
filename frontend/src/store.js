@@ -23,10 +23,7 @@ import {
     adminOrderDispatchReducer,
     adminOrderHistoryReducer,
 } from "./reducers/adminReducers";
-import {
-    purchasedItemsReducer,
-    reviewReducers,
-} from "./reducers/reviewReducers";
+import { reviewReducers } from "./reducers/reviewReducers";
 
 const reducer = combineReducers({
     productsList: productsListReducers,
@@ -48,10 +45,19 @@ const reducer = combineReducers({
 
 const initialState = {};
 const middleware = [thunk];
+
+const devTools =
+    process.env.NODE_ENV === "development" &&
+    typeof window !== "undefined" &&
+    window.__REDUX_DEVTOOLS_EXTENSION__
+        ? composeWithDevTools
+        : (f) => f;
+
 const store = createStore(
     reducer,
     initialState,
-    composeWithDevTools(applyMiddleware(...middleware))
+    // composeWithDevTools(applyMiddleware(...middleware))
+    devTools(applyMiddleware(...middleware))
 );
 
 export default store;

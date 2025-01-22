@@ -37,6 +37,18 @@ export const EditModal = ({ closeModal }) => {
         (state) => state.profile
     );
 
+    useEffect(() => {
+        if (profileData && profileData.details) {
+            setMessage(profileData.details);
+            setMessageType("success");
+        }
+
+        if (error) {
+            setMessage(error);
+            setMessageType("fail");
+        }
+    }, [profileData, error]);
+
     const dispatch = useDispatch();
 
     // Handle form submission
@@ -68,31 +80,34 @@ export const EditModal = ({ closeModal }) => {
                 setMessageType("fail");
                 return;
             }
-            updatedData.password = newPassword;
+            updatedData.oldPassword = oldPassword;
+            updatedData.newPassword = newPassword;
+            updatedData.confirmPassword = confirmPassword;
         }
 
         // Here, you can call your API or handle the submission with updatedData
         console.log("Form submitted with data:", updatedData);
-        dispatch(updateProfile(updatedData))
-            .then(() => {
-                setMessage(profileData.details);
-                setMessageType("success");
-                setMobileNumber("");
-                setOldPassword("");
-                setNewPassword("");
-                setConfirmPassword("");
-            })
-            .catch((err) => {
-                setMessage(profileData.details);
-                setMessageType("fail");
-                console.log("Update Profile Error: ", err);
-            });
+        dispatch(updateProfile(updatedData));
+        // .then(() => {
+        //     setMessage(profileData.details);
+        //     setMessageType("success");
+        setMobileNumber("");
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        //     console.log("Update Profile Success: ", profileData.details);
+        // })
+        // .catch(() => {
+        //     setMessage(error);
+        //     setMessageType("fail");
+        //     console.log("Update Profile Error: ", error);
+        // });
         // Close the modal after submission
     };
 
     return (
         <div
-            className="absolute w-[120vw] h-[130vh] top-[35%] -translate-x-[70%] -translate-y-[50%] inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
+            className="absolute w-[120vw] h-[130vh] top-[50%] -translate-x-[70%] -translate-y-[50%] inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm bg-opacity-75"
             onClick={closeModal}
         >
             <div
