@@ -49,7 +49,7 @@ function App() {
                         element={
                             <ProtectedRoute
                                 redirectTo="/store"
-                                condition={() => order}
+                                // condition={() => order}
                             >
                                 <Confirmed />
                             </ProtectedRoute>

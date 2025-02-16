@@ -29,12 +29,13 @@ export const reviewReducers = (state = {}, action) => {
             return {
                 ...state,
                 loading: false,
-                reviews: state.reviews.map(
-                    (review) =>
-                        review.id === action.payload.id
-                            ? action.payload
-                            : review // Update the specific review
-                ),
+                // reviews: state.reviews.map(
+                //     (review) =>
+                //         review.id === action.payload.id
+                //             ? action.payload
+                //             : review // Update the specific review
+                // ),
+                reviews: [...state.reviews, action.payload],
             };
         case REVIEW_ADD_FAIL:
             return { ...state, loading: false, error: action.payload };

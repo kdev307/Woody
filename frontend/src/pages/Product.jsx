@@ -372,7 +372,7 @@ function Product({ params }) {
                         </div>
                         <div className="product-action m-auto flex items-center justify-center gap-40 sm_desk:gap-30 lg_tab:gap-20 font-bold text-[#014210]">
                             <div className="rating flex items-center justify-center text-4xl">
-                                <h3>{productRating}</h3>
+                                <h3>{productRating.toFixed(1)}</h3>
                                 <Star
                                     style={{
                                         textAlign: "center",

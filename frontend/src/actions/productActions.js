@@ -78,6 +78,7 @@ export const createProduct = (formProductData) => async (dispatch) => {
             type: PRODUCT_CREATE_SUCCESS,
             payload: response.data,
         });
+        dispatch(listProducts());
     } catch (error) {
         dispatch({
             type: PRODUCT_CREATE_FAIL,
@@ -114,6 +115,7 @@ export const updateProduct =
                 type: PRODUCT_UPDATE_SUCCESS,
                 payload: response.data,
             });
+            dispatch(listProducts());
         } catch (error) {
             console.error("Error:", error);
             dispatch({
@@ -149,6 +151,7 @@ export const deleteProduct = (productId) => async (dispatch) => {
             console.warn("Unexpected response status: ", status);
             dispatch({ type: PRODUCT_DELETE_SUCCESS }); // Handle gracefully
         }
+        dispatch(listProducts());
     } catch (error) {
         console.error(
             "Delete Product Error: ",

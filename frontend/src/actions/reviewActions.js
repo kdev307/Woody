@@ -14,6 +14,7 @@ import {
     USER_REVIEWS_LIST_REQUEST,
     USER_REVIEWS_LIST_SUCCESS,
 } from "../constants/reviewConstants";
+import { listProductDetail } from "./productActions";
 
 export const fetchUserReviews = (userId) => async (dispatch) => {
     try {
@@ -64,6 +65,7 @@ export const addReview = (productId, reviewFormData) => async (dispatch) => {
             type: REVIEW_ADD_SUCCESS,
             payload: response.data,
         });
+        dispatch(listProductDetail(productId));
     } catch (error) {
         dispatch({
             type: REVIEW_ADD_FAIL,
@@ -98,6 +100,7 @@ export const editReview =
                 type: REVIEW_UPDATE_SUCCESS,
                 payload: response.data,
             });
+            dispatch(listProductDetail(productId));
         } catch (error) {
             dispatch({
                 type: REVIEW_UPDATE_FAIL,

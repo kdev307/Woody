@@ -9,7 +9,7 @@ import {
 import Message from "./Message";
 
 function ProductForm({ method, toggleProductForm, product }) {
-    const title = method === "addProduct" ? "Add Product" : "Edit Product";
+    const title = method === "addProduct" ? "Add Product" : "Update Product";
     const icon =
         method === "addProduct" ? (
             <Add style={{ fontSize: "3.6rem" }} />
@@ -112,9 +112,8 @@ function ProductForm({ method, toggleProductForm, product }) {
             // setMessage(product.details);
             // setMessageType("success");
         }
+        dispatch(listProducts());
         toggleProductForm();
-        dispatch(listProducts());
-        dispatch(listProducts());
     }
 
     return (
@@ -342,14 +341,25 @@ function ProductForm({ method, toggleProductForm, product }) {
                                             >
                                                 <img
                                                     src={
-                                                        typeof image.image ===
-                                                        "string"
-                                                            ? image.image
-                                                            : URL.createObjectURL(
-                                                                  image
-                                                              ).image
+                                                        method === "addProduct"
+                                                            ? typeof image ===
+                                                              "string"
+                                                                ? image
+                                                                : URL.createObjectURL(
+                                                                      image
+                                                                  )
+                                                            : image.image
+                                                            ? typeof image.image ===
+                                                              "string"
+                                                                ? image.image
+                                                                : URL.createObjectURL(
+                                                                      image.image
+                                                                  )
+                                                            : ""
                                                     }
-                                                    alt={`${productName} Preview`}
+                                                    alt={`${productName} Preview ${
+                                                        index + 1
+                                                    }`}
                                                     className="w-full"
                                                 />
                                                 <button

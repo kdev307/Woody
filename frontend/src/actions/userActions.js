@@ -250,5 +250,6 @@ export const deleteAddress = (addressId) => async (dispatch) => {
 
 export const logOut = () => (dispatch) => {
     localStorage.removeItem("userInfo");
+    localStorage.removeItem(ACCESS_TOKEN);
     dispatch({ type: USER_LOGOUT });
 };
