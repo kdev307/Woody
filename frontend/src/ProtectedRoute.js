@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function ProtectedRoute({
@@ -8,7 +8,7 @@ function ProtectedRoute({
     condition,
     redirectTo = "/",
 }) {
-    const location = useLocation();
+    // const location = useLocation();
     const { userInfo } = useSelector((state) => state.userLogin); // Assuming `userInfo` contains the user data, including role.
 
     if (!userInfo) {

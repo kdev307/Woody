@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 function App() {
     const cartItemsList = useSelector((state) => state.cart.cartItemsList);
     const { userInfo } = useSelector((state) => state.userLogin);
-    const { order } = useSelector((state) => state.orderCreate);
+    // const { order } = useSelector((state) => state.orderCreate);
 
     console.log("User Info: ", userInfo);
     const isAdmin = userInfo ? userInfo.isAdmin : false;
