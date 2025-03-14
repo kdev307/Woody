@@ -67,6 +67,7 @@ export const logIn = (email, password) => async (dispatch) => {
         dispatch({
             type: USER_LOGIN_REQUEST,
         });
+
         const config = {
             headers: {
                 "Content-type": "application/json",
@@ -80,9 +81,7 @@ export const logIn = (email, password) => async (dispatch) => {
             },
             config
         );
-        // if (data.isAdmin) {
         localStorage.setItem(ACCESS_TOKEN, data.token);
-        // }
         localStorage.setItem("userInfo", JSON.stringify(data));
 
         dispatch({
