@@ -223,7 +223,7 @@ function UserReviews() {
                                                     className="w-[40rem] border-r-2 border-r-[#560000]"
                                                 />
                                             )}
-                                            <div className="flex flex-col items-start justify-start p-8 w-full gap-5 h-auto">
+                                            <div className="flex flex-col items-start justify-start px-8 w-full gap-5 h-auto">
                                                 <div className="review-btns flex self-end items-center justify-center gap-8">
                                                     <button
                                                         onClick={(e) => {

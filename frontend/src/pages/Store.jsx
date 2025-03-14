@@ -598,7 +598,7 @@ function ProductCard({ product, userInfo, toggleProductForm }) {
                         </div>
                         {/* <InfoOutlined style={{ fontSize: "2.4rem" }} className="info-icon" /> */}
                         <div className="rating flex items-center justify-center gap-2 text-[#560000] rounded-[4rem] font-semibold text-[1.8rem]">
-                            <h3>{productRating}</h3>
+                            <h3>{Number(productRating).toFixed(1)}</h3>
                             <Star
                                 style={{
                                     textAlign: "center",

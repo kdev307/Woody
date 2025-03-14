@@ -39,7 +39,7 @@
             </p>
             <div style="text-align: center; margin: 20px 0">
                 <a
-                    href="http://{{ domain }}/activate/{{ uid }}/{{ token }}"
+                    href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}"
                     style="
                         display: inline-block;
                         background: #4caf50;

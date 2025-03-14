@@ -122,7 +122,7 @@ function ProductForm({ method, toggleProductForm, product }) {
             onClick={toggleProductForm}
         >
             <div
-                className="relative w-11/12 max-w-4xl bg-[#e4efe4] rounded-lg p-8 overflow-auto border-2 border-[#014210]"
+                className="relative w-11/12 max-w-5xl bg-[#e4efe4] rounded-lg p-8 overflow-y-auto overflow-x-hidden border-2 border-[#014210]"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="product-form-container p-6">
@@ -205,7 +205,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                         "Storage",
                                         "Workspace",
                                     ].map((category) => (
-                                        <labesl
+                                        <label
                                             key={category}
                                             htmlFor={category}
                                             className="flex items-center space-x-2"
@@ -228,7 +228,7 @@ function ProductForm({ method, toggleProductForm, product }) {
                                                     " $1"
                                                 )}
                                             </span>
-                                        </labesl>
+                                        </label>
                                     ))}
                                 </div>
                             </div>
