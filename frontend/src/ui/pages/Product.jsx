@@ -6,6 +6,8 @@ import Footer from "../components/Footer";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
 import Tags from "../components/Tags";
+import ReviewForm from "../components/ReviewForm";
+import Ratings from "../components/Ratings";
 import {
     Star,
     AddShoppingCart,
@@ -21,10 +23,8 @@ import {
     RateReview,
     CheckCircle,
 } from "@mui/icons-material";
-import { listProductDetail } from "../actions/productActions";
-import { addToCart } from "../actions/cartActions";
-import ReviewForm from "../components/ReviewForm";
-import Ratings from "../components/Ratings";
+import { listProductDetail } from "../../redux/actions/productActions";
+import { addToCart } from "../../redux/actions/cartActions";
 // import Message from "../components/Message";
 
 function Product({ params }) {

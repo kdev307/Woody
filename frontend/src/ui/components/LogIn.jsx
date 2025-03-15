@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
 import Message from "./Message";
 // import { useLocation, useNavigate } from "react-router";
-import { logIn } from "../actions/userActions";
+import { logIn } from "../../redux/actions/userActions";
 
 function LogIn({ onBack }) {
     const [email, setEmail] = useState("");

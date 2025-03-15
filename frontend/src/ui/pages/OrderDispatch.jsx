@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Error from "../components/Error";
+import Loader from "../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import {
     dispatchOrder,
     getPendingOrderDetails,
     getPendingOrders,
-} from "../actions/adminActions";
-import Error from "../components/Error";
-import Loader from "../components/Loader";
+} from "../../redux/actions/adminActions";
 import { Close, ListAlt, LocalShipping } from "@mui/icons-material";
 
 function OrderDispatch() {

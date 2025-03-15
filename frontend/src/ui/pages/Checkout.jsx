@@ -3,10 +3,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
-import { fetchAddresses } from "../actions/userActions";
-import { clearCart } from "../actions/cartActions";
+import { fetchAddresses } from "../../redux/actions/userActions";
+import { clearCart } from "../../redux/actions/cartActions";
 import { useNavigate } from "react-router";
-import { cancelOrder, createOrder } from "../actions/orderActions";
+import { cancelOrder, createOrder } from "../../redux/actions/orderActions";
 import { Close, Payments } from "@mui/icons-material";
 
 function Checkout() {

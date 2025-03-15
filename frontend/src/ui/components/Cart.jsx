@@ -12,7 +12,7 @@ import {
     removeFromCart,
     updateCartQuantity,
     clearCart,
-} from "../actions/cartActions";
+} from "../../redux/actions/cartActions";
 import { useNavigate } from "react-router-dom";
 
 function Cart({ handleCartToggle, isOpen }) {

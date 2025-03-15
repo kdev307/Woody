@@ -1,20 +1,20 @@
 import React, { useEffect, Suspense, lazy } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { USER_LOGIN_SUCCESS } from "./constants/userConstants";
+import { USER_LOGIN_SUCCESS } from "./redux/constants/userConstants";
 import ProtectedRoute from "./ProtectedRoute";
-import Loader from "./components/Loader";
+import Loader from "./ui/components/Loader";
 
 // Lazy load components
-const Home = lazy(() => import("./pages/Home"));
-const Store = lazy(() => import("./pages/Store"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const Product = lazy(() => import("./pages/Product"));
-const Confirmed = lazy(() => import("./pages/Confirmed"));
-const Checkout = lazy(() => import("./pages/Checkout"));
-const OrderHistory = lazy(() => import("./pages/OrderHistory"));
-const OrderDispatch = lazy(() => import("./pages/OrderDispatch"));
-const UserReviews = lazy(() => import("./pages/UserReviews"));
+const Home = lazy(() => import("./ui/pages/Home"));
+const Store = lazy(() => import("./ui/pages/Store"));
+const NotFound = lazy(() => import("./ui/pages/NotFound"));
+const Product = lazy(() => import("./ui/pages/Product"));
+const Confirmed = lazy(() => import("./ui/pages/Confirmed"));
+const Checkout = lazy(() => import("./ui/pages/Checkout"));
+const OrderHistory = lazy(() => import("./ui/pages/OrderHistory"));
+const OrderDispatch = lazy(() => import("./ui/pages/OrderDispatch"));
+const UserReviews = lazy(() => import("./ui/pages/UserReviews"));
 
 function App() {
     const cartItemsList = useSelector((state) => state.cart.cartItemsList);

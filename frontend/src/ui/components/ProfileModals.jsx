@@ -15,7 +15,7 @@ import {
     // editAddress,
     fetchAddresses,
     updateProfile,
-} from "../actions/userActions";
+} from "../../redux/actions/userActions";
 import Loader from "./Loader";
 
 export const EditModal = ({ closeModal }) => {

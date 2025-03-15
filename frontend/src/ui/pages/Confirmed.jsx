@@ -12,7 +12,7 @@ import {
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { updateOrderStatus } from "../actions/orderActions";
+import { updateOrderStatus } from "../../redux/actions/orderActions";
 
 function Confirmed() {
     const navigate = useNavigate();

@@ -5,7 +5,10 @@ import ReviewForm from "../components/ReviewForm";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
-import { deleteReview, fetchUserReviews } from "../actions/reviewActions";
+import {
+    deleteReview,
+    fetchUserReviews,
+} from "../../redux/actions/reviewActions";
 import { Delete, Edit } from "@mui/icons-material";
 import Ratings from "../components/Ratings";
 

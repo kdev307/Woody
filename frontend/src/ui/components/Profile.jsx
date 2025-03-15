@@ -14,7 +14,7 @@ import {
 import React, { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { logOut } from "../actions/userActions";
+import { logOut } from "../../redux/actions/userActions";
 import { AddressModal, EditModal } from "./ProfileModals";
 import { Link } from "react-router-dom";
 

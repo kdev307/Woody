@@ -12,7 +12,10 @@ import {
     Star,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { deleteProduct, listProducts } from "../actions/productActions";
+import {
+    deleteProduct,
+    listProducts,
+} from "../../redux/actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import Tags from "../components/Tags";
 import ProductForm from "../components/ProductForm";

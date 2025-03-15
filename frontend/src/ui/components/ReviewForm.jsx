@@ -6,8 +6,8 @@ import {
     addReview,
     editReview,
     fetchUserReviews,
-} from "../actions/reviewActions";
-import { listProductDetail } from "../actions/productActions";
+} from "../../redux/actions/reviewActions";
+import { listProductDetail } from "../../redux/actions/productActions";
 
 function ReviewForm({
     title,

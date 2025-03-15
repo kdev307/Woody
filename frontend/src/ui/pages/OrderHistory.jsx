@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useDispatch, useSelector } from "react-redux";
-import { getOrderDetails, getOrderHistory } from "../actions/orderActions";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    getOrderDetails,
+    getOrderHistory,
+} from "../../redux/actions/orderActions";
 import { Close, ListAlt } from "@mui/icons-material";
 
 function OrderHistory() {

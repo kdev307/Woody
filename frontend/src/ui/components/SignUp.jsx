@@ -8,7 +8,7 @@ import {
     Visibility,
     VisibilityOff,
 } from "@mui/icons-material";
-import { signUp } from "../actions/userActions";
+import { signUp } from "../../redux/actions/userActions";
 
 function SignUp({ onBack, onSignUpSuccess }) {
     // const navigate = useNavigate();

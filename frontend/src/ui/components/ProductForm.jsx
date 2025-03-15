@@ -5,7 +5,7 @@ import {
     createProduct,
     listProducts,
     updateProduct,
-} from "../actions/productActions";
+} from "../../redux/actions/productActions";
 import Message from "./Message";
 
 function ProductForm({ method, toggleProductForm, product }) {
