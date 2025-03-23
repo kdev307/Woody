@@ -42,12 +42,12 @@ function App() {
             <Router>
                 <Suspense
                     fallback={
-                        <>
+                        <div className="my-auto mx-auto">
                             <Loader />
                             <h2 className="text-3xl font-semibold text-center">
-                                Hold On, Loading Resources
+                                Hold On
                             </h2>
-                        </>
+                        </div>
                     }
                 >
                     <Routes>

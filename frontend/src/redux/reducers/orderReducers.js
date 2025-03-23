@@ -13,6 +13,7 @@ import {
     ORDER_HISTORY_REQUEST,
     ORDER_HISTORY_SUCCESS,
     ORDER_HISTORY_FAIL,
+    ORDER_CREATE_RESET,
 } from "../constants/orderConstants";
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -23,6 +24,8 @@ export const orderCreateReducer = (state = {}, action) => {
             return { loading: false, order: action.payload };
         case ORDER_CREATE_FAIL:
             return { loading: false, error: action.payload };
+        case ORDER_CREATE_RESET:
+            return {};
         default:
             return state;
     }

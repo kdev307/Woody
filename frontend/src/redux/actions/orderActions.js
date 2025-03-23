@@ -15,6 +15,7 @@ import {
     ORDER_HISTORY_REQUEST,
     ORDER_HISTORY_SUCCESS,
     ORDER_HISTORY_FAIL,
+    ORDER_CREATE_RESET,
 } from "../constants/orderConstants";
 
 import { ACCESS_TOKEN } from "../constants/constants";
@@ -114,6 +115,10 @@ export const cancelOrder = (cancelOrderData) => async (dispatch) => {
                     : error.message,
         });
     }
+};
+
+export const resetOrder = () => (dispatch) => {
+    dispatch({ type: ORDER_CREATE_RESET });
 };
 
 export const getOrderHistory = () => async (dispatch) => {

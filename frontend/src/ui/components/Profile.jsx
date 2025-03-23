@@ -47,41 +47,28 @@ function Profile({ user }) {
                 </h1>
             )}
             <div
-                className={`info-container flex flex-col ${
-                    userInfo.isAdmin
-                        ? "items-center justify-center gap-10"
-                        : "items-start justify-start gap-4"
-                } p-4`}
+                className={`info-container flex flex-col
+                        items-center justify-center gap-2
+             p-4`}
             >
+                {/* <div
+                    className={`basic-info flex items-center
+                        flex-col justify-center
+                 mt-8 gap-8`}
+                > */}
+                <img
+                    src={userInfo.profile_picture}
+                    alt={`${userInfo.name}"'s image"`}
+                    className="profile-img border-4 border-[#014210] shadow-[2px_2px_5px_#014210] w-[60%] rounded-[50%]"
+                />
                 <div
-                    className={`basic-info flex items-center justify-between ${
-                        userInfo.isAdmin && "flex-col justify-center"
-                    } mt-8 gap-8 w-[50%]`}
+                    className={`main-info flex flex-col ${
+                        userInfo.isAdmin
+                            ? "items-center justify-center"
+                            : "items-start justify-start"
+                    } gap-4`}
                 >
-                    <img
-                        src={userInfo.profile_picture}
-                        alt={`${userInfo.name}"'s image"`}
-                        className="profile-img border-4 border-[#014210] shadow-[2px_2px_5px_#014210] w-full rounded-[50%]"
-                    />
-                    <div
-                        className={`main-info flex flex-col ${
-                            userInfo.isAdmin
-                                ? "items-center justify-center"
-                                : "items-start justify-start"
-                        } gap-4 mt-4 -mb-4`}
-                    >
-                        {!userInfo.isAdmin && (
-                            <h3 className="mobile text-left my-4 mx-0 text-4xl font-bold text-[#560000] flex items-center justify-center gap-4">
-                                <PhoneAndroid
-                                    style={{
-                                        fontSize: "3.2rem",
-                                        color: "#014210",
-                                    }}
-                                />{" "}
-                                {userInfo.mobile_number}
-                            </h3>
-                        )}
-                    </div>
+                    {/* </div> */}
                 </div>
 
                 <div className="additional-info w-full flex flex-col items-center justify-center text-center mx-auto">
@@ -94,12 +81,26 @@ function Profile({ user }) {
                         {user.name}
                         {/* Hubert Blaine Wolfeschlegelsteinhausenbergerdroff Sr. */}
                     </h2>
+
                     <h3 className="mail text-left self-center my-4 mx-0 text-4xl font-semibold text-[#560000] flex items-center justify-center gap-4">
                         <Email
                             style={{ fontSize: "3.6rem", color: "#014210" }}
                         />{" "}
                         {user.email}
                     </h3>
+
+                    {!userInfo.isAdmin && (
+                        <h3 className="mobile text-left mx-0 text-4xl font-bold text-[#560000] flex items-center justify-center gap-4">
+                            <PhoneAndroid
+                                style={{
+                                    fontSize: "3.2rem",
+                                    color: "#014210",
+                                }}
+                            />{" "}
+                            {userInfo.mobile_number}
+                        </h3>
+                    )}
+
                     {/* <p className="endLine  self-center text-xl m-0">
                         <hr
                             style={{

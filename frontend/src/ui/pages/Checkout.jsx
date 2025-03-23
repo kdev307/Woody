@@ -6,7 +6,11 @@ import Loader from "../components/Loader";
 import { fetchAddresses } from "../../redux/actions/userActions";
 import { clearCart } from "../../redux/actions/cartActions";
 import { useNavigate } from "react-router";
-import { cancelOrder, createOrder } from "../../redux/actions/orderActions";
+import {
+    cancelOrder,
+    createOrder,
+    resetOrder,
+} from "../../redux/actions/orderActions";
 import { Close, Payments } from "@mui/icons-material";
 
 function Checkout() {
@@ -38,6 +42,7 @@ function Checkout() {
             navigate("/confirmed", {
                 state: { order },
             });
+            dispatch(resetOrder());
         }
     }, [order, dispatch, navigate]);
 
@@ -51,6 +56,7 @@ function Checkout() {
         };
         dispatch(cancelOrder(cancelledData));
         dispatch(clearCart());
+        dispatch(resetOrder());
         navigate("/store");
     };
 
