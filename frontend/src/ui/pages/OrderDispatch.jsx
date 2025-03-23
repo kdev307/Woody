@@ -105,7 +105,7 @@ function OrderDispatch() {
                             </li>
                         ))}
                     </ul>
-                    {!loading ? (
+                    {loading ? (
                         <ShimmerOrderDispatch />
                     ) : error ? (
                         <Error message={error} />
