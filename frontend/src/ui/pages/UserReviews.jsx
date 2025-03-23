@@ -123,7 +123,7 @@ function UserReviews() {
                         My Reviews
                     </h1>
                     <div className="reviews-container p-16">
-                        {userInfo && loading ? (
+                        {loading ? (
                             <ShimmerReviews />
                         ) : error ? (
                             <Error message={error} />
