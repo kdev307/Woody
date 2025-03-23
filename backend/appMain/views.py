@@ -276,7 +276,14 @@ def updateProfile(request):
 
     try:
         if "mobileNumber" in data:
-            user.mobile_number = data['mobileNumber']
+            # if user.mobile_number == data["mobileNumber"]:
+            #     return Response(
+            #         {'details': "Cannot update the mobile number with the existing one."},
+            #         status=status.HTTP_400_BAD_REQUEST,
+            #     )
+            # else:
+                user.mobile_number = data['mobileNumber']
+
 
         if "oldPassword" in data and "newPassword" in data and "confirmPassword" in data:
             old_password = data['oldPassword']

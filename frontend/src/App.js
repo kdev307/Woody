@@ -40,7 +40,16 @@ function App() {
     return (
         <div className="App">
             <Router>
-                <Suspense fallback={<Loader />}>
+                <Suspense
+                    fallback={
+                        <>
+                            <Loader />
+                            <h2 className="text-3xl font-semibold text-center">
+                                Hold On, Loading Resources
+                            </h2>
+                        </>
+                    }
+                >
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/store" element={<Store />} />

@@ -11,6 +11,7 @@ import {
 } from "../../redux/actions/reviewActions";
 import { Delete, Edit } from "@mui/icons-material";
 import Ratings from "../components/Ratings";
+import ShimmerReviews from "../layouts/ShimmerReviews";
 
 function UserReviews() {
     const dispatch = useDispatch();
@@ -123,7 +124,7 @@ function UserReviews() {
                     </h1>
                     <div className="reviews-container p-16">
                         {userInfo && loading ? (
-                            <Loader />
+                            <ShimmerReviews />
                         ) : error ? (
                             <Error message={error} />
                         ) : reviews.lenght === 0 ? (

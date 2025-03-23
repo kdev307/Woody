@@ -25,6 +25,7 @@ import {
 } from "@mui/icons-material";
 import { listProductDetail } from "../../redux/actions/productActions";
 import { addToCart } from "../../redux/actions/cartActions";
+import ShimmerProduct from "../layouts/ShimmerProduct";
 // import Message from "../components/Message";
 
 function Product({ params }) {
@@ -174,7 +175,8 @@ function Product({ params }) {
                 <West style={{ fontSize: "3.6rem" }} />
             </Link>
             {loading ? (
-                <Loader />
+                // <Loader />
+                <ShimmerProduct />
             ) : error ? (
                 <Error message={error} />
             ) : (

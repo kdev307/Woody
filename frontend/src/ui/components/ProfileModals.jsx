@@ -563,6 +563,7 @@ export const AddressModal = ({ closeModal }) => {
                             {!userAddresses || userAddresses.length === 0 ? (
                                 <p>No addresses found.</p>
                             ) : (
+                                !loading &&
                                 userAddresses.map((address, index) => (
                                     <li key={index} className="w-full">
                                         {console.log("Show Address", address)}

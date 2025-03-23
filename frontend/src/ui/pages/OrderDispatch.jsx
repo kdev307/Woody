@@ -10,6 +10,7 @@ import {
     getPendingOrders,
 } from "../../redux/actions/adminActions";
 import { Close, ListAlt, LocalShipping } from "@mui/icons-material";
+import ShimmerOrderDispatch from "../layouts/ShimmerOrderDispatch";
 
 function OrderDispatch() {
     const dispatch = useDispatch();
@@ -104,9 +105,11 @@ function OrderDispatch() {
                             </li>
                         ))}
                     </ul>
-                    {loading && <Loader />}
-                    {error && <Error message={error} />}
-                    {filteredOrders.length > 0 ? (
+                    {!loading ? (
+                        <ShimmerOrderDispatch />
+                    ) : error ? (
+                        <Error message={error} />
+                    ) : filteredOrders.length > 0 ? (
                         <div className="w-full overflow-auto p-12">
                             <table className="table-auto shadow-md border-collapse mx-auto">
                                 <thead className="bg-[#014210] text-white text-4xl font-semibold">

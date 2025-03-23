@@ -19,6 +19,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Tags from "../components/Tags";
 import ProductForm from "../components/ProductForm";
+import ShimmerStore from "../layouts/ShimmerStore";
 
 function Store() {
     const productFilters = [
@@ -376,7 +377,7 @@ function Products({ productsList, loading, error, userInfo = {} }) {
     return (
         <>
             {loading ? (
-                <Loader />
+                <ShimmerStore />
             ) : error ? (
                 <Error message={error} />
             ) : (
