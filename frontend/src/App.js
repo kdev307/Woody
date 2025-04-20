@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { USER_LOGIN_SUCCESS } from "./redux/constants/userConstants";
 import ProtectedRoute from "./ProtectedRoute";
 import Loader from "./ui/components/Loader";
+import { ToastContainer } from "react-toastify";
 
 // Lazy load components
 const Home = lazy(() => import("./ui/pages/Home"));
@@ -39,6 +40,20 @@ function App() {
 
     return (
         <div className="App">
+            {/* <ToastContainer position="top-center" autoClose={3000} /> */}
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={true}
+                rtl={false}
+                pauseOnFocusLoss={true}
+                draggable={true}
+                pauseOnHover={true}
+                theme="light"
+            />
+
             <Router>
                 <Suspense
                     fallback={

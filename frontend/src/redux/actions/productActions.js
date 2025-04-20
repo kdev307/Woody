@@ -17,6 +17,7 @@ import {
     PRODUCT_DELETE_FAIL,
 } from "../constants/productConstants";
 import { ACCESS_TOKEN } from "../constants/constants";
+import { toast } from "react-toastify";
 
 export const listProducts = () => async (dispatch) => {
     try {
@@ -78,6 +79,7 @@ export const createProduct = (formProductData) => async (dispatch) => {
             type: PRODUCT_CREATE_SUCCESS,
             payload: response.data,
         });
+        toast.success("Product created successfully!");
         dispatch(listProducts());
     } catch (error) {
         dispatch({
@@ -88,6 +90,7 @@ export const createProduct = (formProductData) => async (dispatch) => {
                     : error.message,
         });
         console.error("Error creating product:", error);
+        toast.error(`Product creation failed: ${error}`);
     }
 };
 
@@ -115,6 +118,7 @@ export const updateProduct =
                 type: PRODUCT_UPDATE_SUCCESS,
                 payload: response.data,
             });
+            toast.success("Product updated successfully!");
             dispatch(listProducts());
         } catch (error) {
             console.error("Error:", error);
@@ -125,6 +129,7 @@ export const updateProduct =
                         ? error.response.data.detail
                         : error.message,
             });
+            toast.error(`Product update failed: ${error}`);
         }
     };
 
@@ -151,6 +156,7 @@ export const deleteProduct = (productId) => async (dispatch) => {
             console.warn("Unexpected response status: ", status);
             dispatch({ type: PRODUCT_DELETE_SUCCESS }); // Handle gracefully
         }
+        toast.success("Product deleted successfully!");
         dispatch(listProducts());
     } catch (error) {
         console.error(
@@ -164,5 +170,6 @@ export const deleteProduct = (productId) => async (dispatch) => {
                     ? error.response.data.detail
                     : error.message,
         });
+        toast.error(`Product deletion failed: ${error}`);
     }
 };

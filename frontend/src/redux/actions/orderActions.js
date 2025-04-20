@@ -19,6 +19,7 @@ import {
 } from "../constants/orderConstants";
 
 import { ACCESS_TOKEN } from "../constants/constants";
+import { toast } from "react-toastify";
 
 export const createOrder = (orderData) => async (dispatch) => {
     try {
@@ -43,11 +44,13 @@ export const createOrder = (orderData) => async (dispatch) => {
             type: ORDER_CREATE_SUCCESS,
             payload: data,
         });
+        toast.success("Order placed successfully!");
     } catch (error) {
         dispatch({
             type: ORDER_CREATE_FAIL,
             payload: error.message,
         });
+        toast.error("Failed to place order");
     }
 };
 
@@ -73,6 +76,7 @@ export const updateOrderStatus = (orderId, status) => async (dispatch) => {
             type: ORDER_STATUS_UPDATE_SUCCESS,
             payload: data,
         });
+        toast.success("Order status updated!");
     } catch (error) {
         dispatch({
             type: ORDER_STATUS_UPDATE_FAIL,
@@ -81,6 +85,7 @@ export const updateOrderStatus = (orderId, status) => async (dispatch) => {
                     ? error.response.data.detail
                     : error.message,
         });
+        toast.error("Failed to update order status");
     }
 };
 
@@ -106,6 +111,7 @@ export const cancelOrder = (cancelOrderData) => async (dispatch) => {
             type: CANCEL_ORDER_SUCCESS,
             payload: response.data.order,
         });
+        toast.info("Order cancelled successfully");
     } catch (error) {
         dispatch({
             type: CANCEL_ORDER_FAIL,
@@ -114,6 +120,7 @@ export const cancelOrder = (cancelOrderData) => async (dispatch) => {
                     ? error.response.data.details
                     : error.message,
         });
+        toast.error("Failed to cancel order");
     }
 };
 
@@ -138,6 +145,7 @@ export const getOrderHistory = () => async (dispatch) => {
             type: ORDER_HISTORY_SUCCESS,
             payload: data.orders,
         });
+        toast.success("Order history loaded", { autoClose: 1500 });
     } catch (error) {
         dispatch({
             type: ORDER_HISTORY_FAIL,
@@ -146,6 +154,7 @@ export const getOrderHistory = () => async (dispatch) => {
                     ? error.response.data.message
                     : error.message,
         });
+        toast.error("Failed to load order history");
     }
 };
 
@@ -169,6 +178,7 @@ export const getOrderDetails = (orderId) => async (dispatch) => {
             type: ORDER_DETAILS_SUCCESS,
             payload: data.order,
         });
+        toast.success("Order details fetched");
     } catch (error) {
         dispatch({
             type: ORDER_DETAILS_FAIL,
@@ -177,5 +187,6 @@ export const getOrderDetails = (orderId) => async (dispatch) => {
                     ? error.response.data.message
                     : error.message,
         });
+        toast.error("Failed to fetch order details");
     }
 };

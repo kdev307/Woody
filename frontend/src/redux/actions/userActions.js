@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import {
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
@@ -47,8 +48,7 @@ export const signUp = (formData) => async (dispatch) => {
             type: USER_SIGNUP_SUCCESS,
             payload: data,
         });
-        // localStorage.setItem("userInfo", JSON.stringify(data));
-        // localStorage.setItem("activatationMessage", "Check your mail to verify your mail.");
+        toast.success("Registration successful! Please verify your email.");
     } catch (error) {
         const message =
             error.response && error.response.data && error.response.data.details
@@ -59,6 +59,7 @@ export const signUp = (formData) => async (dispatch) => {
             type: USER_SIGNUP_FAIL,
             payload: message,
         });
+        toast.error(message || "Signup failed. Try again.");
     }
 };
 
@@ -89,6 +90,7 @@ export const logIn = (email, password) => async (dispatch) => {
             payload: data,
         });
         localStorage.setItem("userInfo", JSON.stringify(data));
+        toast.success("Login successful!");
     } catch (error) {
         dispatch({
             type: USER_LOGIN_FAIL,
@@ -97,6 +99,7 @@ export const logIn = (email, password) => async (dispatch) => {
                     ? error.response.data.details
                     : error.message,
         });
+        toast.error(error || "Login failed. Please check your credentials.");
     }
 };
 
@@ -122,14 +125,17 @@ export const updateProfile = (updatedData) => async (dispatch) => {
             type: USER_PROFILE_UPDATE_SUCCESS,
             payload: response.data,
         });
+        toast.success("Profile updated successfully.");
     } catch (error) {
+        const message =
+            error.response && error.response.data.details
+                ? error.response.data.details
+                : error.message;
         dispatch({
             type: USER_PROFILE_UPDATE_FAIL,
-            payload:
-                error.response && error.response.data.details
-                    ? error.response.data.details
-                    : error.message,
+            payload: message,
         });
+        toast.error(message || "Failed to update profile.");
     }
 };
 
@@ -157,6 +163,7 @@ export const fetchAddresses = () => async (dispatch) => {
                     ? error.response.data.message
                     : error.message,
         });
+        toast.error(error || "Failed to fetch addresses.");
     }
 };
 
@@ -179,6 +186,7 @@ export const addAddress = (addressData) => async (dispatch) => {
             type: USER_ADDRESS_ADD_SUCCESS,
             payload: data,
         });
+        toast.success("Address added successfully.");
     } catch (error) {
         dispatch({
             type: USER_ADDRESS_ADD_FAIL,
@@ -187,6 +195,7 @@ export const addAddress = (addressData) => async (dispatch) => {
                     ? error.response.data.message
                     : error.message,
         });
+        toast.error(error || "Failed to add address.");
     }
 };
 
@@ -236,6 +245,7 @@ export const deleteAddress = (addressId) => async (dispatch) => {
             type: USER_ADDRESS_DELETE_SUCCESS,
             payload: data,
         });
+        toast.success("Address deleted successfully.");
     } catch (error) {
         dispatch({
             type: USER_ADDRESS_DELETE_FAIL,
@@ -244,6 +254,7 @@ export const deleteAddress = (addressId) => async (dispatch) => {
                     ? error.response.data.message
                     : error.message,
         });
+        toast.error(error || "Failed to delete address.");
     }
 };
 
@@ -251,4 +262,5 @@ export const logOut = () => (dispatch) => {
     localStorage.removeItem("userInfo");
     localStorage.removeItem(ACCESS_TOKEN);
     dispatch({ type: USER_LOGOUT });
+    toast.success("Logged out successfully.");
 };

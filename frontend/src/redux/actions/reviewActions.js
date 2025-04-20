@@ -15,6 +15,7 @@ import {
     USER_REVIEWS_LIST_SUCCESS,
 } from "../constants/reviewConstants";
 import { listProductDetail } from "./productActions";
+import { toast } from "react-toastify";
 
 export const fetchUserReviews = (userId) => async (dispatch) => {
     try {
@@ -65,7 +66,9 @@ export const addReview = (productId, reviewFormData) => async (dispatch) => {
             type: REVIEW_ADD_SUCCESS,
             payload: response.data,
         });
+        toast.success("Review added!");
         dispatch(listProductDetail(productId));
+        // dispatch(fetchUserReviews());
     } catch (error) {
         dispatch({
             type: REVIEW_ADD_FAIL,
@@ -74,6 +77,7 @@ export const addReview = (productId, reviewFormData) => async (dispatch) => {
                     ? error.response.data.detail
                     : error.message,
         });
+        toast.error("Failed to add review");
     }
 };
 
@@ -100,7 +104,9 @@ export const editReview =
                 type: REVIEW_UPDATE_SUCCESS,
                 payload: response.data,
             });
+            toast.success("Review updated!");
             dispatch(listProductDetail(productId));
+            dispatch(fetchUserReviews());
         } catch (error) {
             dispatch({
                 type: REVIEW_UPDATE_FAIL,
@@ -109,6 +115,7 @@ export const editReview =
                         ? error.response.data.detail
                         : error.message,
             });
+            toast.error("Failed to update review");
         }
     };
 
@@ -135,6 +142,8 @@ export const deleteReview = (reviewId) => async (dispatch) => {
             console.warn("Unexpected response status: ", status);
             dispatch({ type: REVIEW_DELETE_SUCCESS });
         }
+        toast.success("Review deleted!");
+        // dispatch(fetchUserReviews());
     } catch (error) {
         console.error("Delete Review Error: ", error.response || error.message);
         dispatch({
@@ -144,5 +153,6 @@ export const deleteReview = (reviewId) => async (dispatch) => {
                     ? error.response.data.detail
                     : error.message,
         });
+        toast.error("Failed to delete review");
     }
 };

@@ -79,14 +79,7 @@ function Confirmed() {
                         />
                         Thank you for shopping with us !
                     </p>
-                    <Link to="/store">
-                        <button className="profile-btn history-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
-                            Shop More
-                            <StoreMallDirectory
-                                style={{ fontSize: "3.2rem" }}
-                            />
-                        </button>
-                    </Link>
+
                     <p className="flex items-center justify-center gap-4 text-[#560000] text-3xl p-4">
                         {" "}
                         <Schedule
@@ -111,15 +104,23 @@ function Confirmed() {
                             </b>
                         </>
                     </p>
-                    <p className="flex items-center justify-center gap-4 text-[#014210] text-3xl p-4">
-                        You can check your order here :{" "}
+                    <div className="flex items-center justify-center gap-4 text-[#014210] text-3xl p-4">
+                        <Link to="/store">
+                            <button className="profile-btn history-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
+                                Shop More
+                                <StoreMallDirectory
+                                    style={{ fontSize: "3.2rem" }}
+                                />
+                            </button>
+                        </Link>
+
                         <Link to="/order-history">
                             <button className="history-btn flex items-center justify-center gap-6 w-full p-3 border-[3px] border-[#014210] rounded-md text-[#014210] text-[2.4rem] font-semibold hover:bg-[#014210] hover:text-white transition-all ease-linear duration-1000">
                                 My Orders
                                 <History style={{ fontSize: "3.2rem" }} />
                             </button>
                         </Link>
-                    </p>
+                    </div>
                 </div>
             </div>
             <Footer />

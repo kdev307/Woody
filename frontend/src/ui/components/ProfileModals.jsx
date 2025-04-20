@@ -17,6 +17,7 @@ import {
     updateProfile,
 } from "../../redux/actions/userActions";
 import Loader from "./Loader";
+import { toast } from "react-toastify";
 
 export const EditModal = ({ closeModal }) => {
     const userLogin = useSelector((state) => state.userLogin);
@@ -26,8 +27,6 @@ export const EditModal = ({ closeModal }) => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [visibleField, setVisibleField] = useState("");
-    const [message, setMessage] = useState("");
-    const [messageType, setMessageType] = useState("");
 
     // State for checkboxes (whether the user wants to update mobile number and/or password)
     const [updateMobile, setUpdateMobile] = useState(false);
@@ -37,17 +36,17 @@ export const EditModal = ({ closeModal }) => {
         (state) => state.profile
     );
 
-    useEffect(() => {
-        if (profileData && profileData.details) {
-            setMessage(profileData.details);
-            setMessageType("success");
-        }
+    // useEffect(() => {
+    //     if (profileData && profileData.details) {
+    //         setMessage(profileData.details);
+    //         setMessageType("success");
+    //     }
 
-        if (error) {
-            setMessage(error);
-            setMessageType("fail");
-        }
-    }, [profileData, error]);
+    //     if (error) {
+    //         setMessage(error);
+    //         setMessageType("fail");
+    //     }
+    // }, [profileData, error]);
 
     const dispatch = useDispatch();
 
@@ -62,8 +61,7 @@ export const EditModal = ({ closeModal }) => {
             if (/^[0-9\- ]+$/.test(mobileNumber))
                 updatedData.mobileNumber = mobileNumber;
             else {
-                setMessage("Invalid Input, not a Mobile Number.");
-                setMessageType("fail");
+                toast.error("Invalid Input, not a Mobile Number.");
                 return;
             }
         }
@@ -71,13 +69,11 @@ export const EditModal = ({ closeModal }) => {
         // If updatePassword is checked, include the password details
         if (updatePassword) {
             if (!oldPassword || !newPassword || !confirmPassword) {
-                setMessage("All password fields are required.");
-                setMessageType("fail");
+                toast.error("All password fields are required.");
                 return;
             }
             if (newPassword !== confirmPassword) {
-                setMessage("New password and confirm password do not match.");
-                setMessageType("fail");
+                toast.error("New password and confirm password do not match.");
                 return;
             }
             updatedData.oldPassword = oldPassword;
@@ -126,9 +122,6 @@ export const EditModal = ({ closeModal }) => {
                     <h1 className="edit-form-title flex items-center justify-center gap-4 text-7xl text-center text-[#014210] font-bold">
                         Update Profile
                     </h1>
-                    {message && (
-                        <Message message={message} messageType={messageType} />
-                    )}
                     {loading && <Loader />}
                     <form onSubmit={handleSubmit} className="space-y-6 mt-8">
                         {/* Mobile Number Section */}

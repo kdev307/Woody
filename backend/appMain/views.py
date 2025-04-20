@@ -2,7 +2,6 @@ from typing import Any, Dict
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-# from .products import products
 from .models import Products, ProductImages, User, UserAddresses, Orders, OrderItems, Review
 from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer
 from rest_framework import serializers
@@ -15,7 +14,6 @@ from rest_framework import status
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
-# for sending mail and generate token
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
 from .utils import TokenGenerator,generate_token
@@ -73,16 +71,6 @@ def getProduct(request, pk):
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
-# def addProduct(request):
-#         if not request.user.is_authenticated:
-#             print(f"Received data: {request.data}")
-#             parser_classes = [MultiPartParser, FormParser]
-#             serializer = ProductSerializer(data=request.data)
-#             if serializer.is_valid:
-#                 serializer.save()
-#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-#             else:
-#                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 def addProduct(request):
     try:
         print(f"Received data: {request.data}")
@@ -92,11 +80,9 @@ def addProduct(request):
         
         parser_classes = [MultiPartParser, FormParser]
 
-        request.data._mutable = True  # Make data mutable (if QueryDict)
-        request.data['user'] = request.user.id  # Set the user ID
+        request.data._mutable = True 
+        request.data['user'] = request.user.id
         request.data._mutable = False
-        # data = deepcopy(request.data)  # Copy data to a mutable dictionary
-        # data['user'] = request.user.id  # Add user to the data
 
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid(): 
@@ -120,22 +106,22 @@ def editProduct(request, pk):
     except Products.DoesNotExist:
         return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    print("Incoming data:", request.data)  # Logs form data
-    print("Incoming files:", request.FILES)  # Logs uploaded files
+    print("Incoming data:", request.data)
+    print("Incoming files:", request.FILES)
 
-    serializer = ProductSerializer(product, data=request.data, partial=True)  # `partial=True` allows partial updates
+    serializer = ProductSerializer(product, data=request.data, partial=True)
     if serializer.is_valid():
         product = serializer.save()
-        new_images = request.FILES.getlist("productImages")  # Fetch new uploaded files
+        new_images = request.FILES.getlist("productImages")
         for image in new_images:
             ProductImages.objects.create(product=product, image=image)
 
-        images_to_delete = request.data.getlist("deleteImages", [])  # IDs of images to delete
+        images_to_delete = request.data.getlist("deleteImages", [])
         ProductImages.objects.filter(id__in=images_to_delete, product=product).delete()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
-        print("Serializer errors:", serializer.errors)  # Logs validation errors
+        print("Serializer errors:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
@@ -192,9 +178,15 @@ def registerUser(request):
     profile_picture = request.FILES.get('profilePicture', None)
     print(data)
     try:
-        # user = User.objects.create(first_name=data['firstName'], last_name=data['lastName'], username=data['email'], email=data['email'], password=make_password(data['password']))
         if User.objects.filter(email=data['email']).exists():
             return Response({'details': 'Try another email, this email is already registered.'}, status=status.HTTP_400_BAD_REQUEST)
+        if User.objects.filter(mobile_number=data['mobileNumber']).exists():
+            return Response({'details': 'Try another number, this number is already registered.'}, status=status.HTTP_400_BAD_REQUEST)
+        if data['password'] != data['confirmPassword']:
+            return Response(
+                {'details': "Passwords do not match."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         user = User.objects.create(
             first_name=data['firstName'], 
             last_name=data['lastName'], 
@@ -276,12 +268,12 @@ def updateProfile(request):
 
     try:
         if "mobileNumber" in data:
-            # if user.mobile_number == data["mobileNumber"]:
-            #     return Response(
-            #         {'details': "Cannot update the mobile number with the existing one."},
-            #         status=status.HTTP_400_BAD_REQUEST,
-            #     )
-            # else:
+            if user.mobile_number == data["mobileNumber"]:
+                return Response(
+                    {'details': "Cannot update the mobile number with the existing one."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            else:
                 user.mobile_number = data['mobileNumber']
 
 
@@ -290,10 +282,9 @@ def updateProfile(request):
             new_password = data['newPassword']
             confirm_password = data['confirmPassword']
 
-            # Check if the old password is correct
             if not user.check_password(old_password):
                 return Response(
-                    {'details': "Old password is incorrect."},
+                    {'details': "Current password is incorrect."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             
@@ -304,18 +295,15 @@ def updateProfile(request):
                 )
 
 
-            # Check if new password and confirm password match
             if new_password != confirm_password:
                 return Response(
                     {'details': "New password and confirm password do not match."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            # Validate new password
             try:
-                # Check if old password is correct
                 if not user.check_password(old_password):
-                    return Response({'message': 'Old password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'message': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
 
             except ValidationError as e:
                 return Response(
@@ -323,10 +311,8 @@ def updateProfile(request):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            # Set the new password
             user.set_password(new_password)
 
-        # Save user changes
         user.save()
 
         update_session_auth_hash(request, user)

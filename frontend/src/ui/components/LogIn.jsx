@@ -1,31 +1,17 @@
 import { Login, Visibility, VisibilityOff } from "@mui/icons-material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "./Loader";
-import Message from "./Message";
-// import { useLocation, useNavigate } from "react-router";
 import { logIn } from "../../redux/actions/userActions";
 
 function LogIn({ onBack }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    // const [message, setMessage] = useState("");
-    const [messageType, setMessageType] = useState("");
-    // const [loading, setLoading] = useState(false);
 
     const dispatch = useDispatch();
     const userLogin = useSelector((state) => state.userLogin);
     const { error, loading, userInfo } = userLogin;
-    // const navigate = useNavigate();
-    // const location = useLocation();
-    // const redirect = location.search ? location.search.split("=")[1] : "/profile";
-
-    useEffect(() => {
-        if (userInfo) {
-            // navigate("/");
-        }
-    }, [userInfo]);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -33,8 +19,6 @@ function LogIn({ onBack }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Email: ", email);
-        console.log("Password: ", password);
         dispatch(logIn(email, password));
     };
 
@@ -47,7 +31,6 @@ function LogIn({ onBack }) {
                     className="form-icon"
                 />
             </h1>
-            {error && <Message message={error} messageType={messageType} />}
             <form
                 action="post"
                 className="form-container flex flex-col gap-12 items-center justify-center text-left rounded-2xl"

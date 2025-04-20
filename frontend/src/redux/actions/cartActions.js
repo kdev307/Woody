@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import {
     CART_ADD_ITEM,
     CART_REMOVE_ITEM,
@@ -30,26 +31,35 @@ export const addToCart = (product) => (dispatch, getState) => {
                 qty: 1,
             },
         });
+        toast.success(`${product.productName} added to cart`);
     } else {
         console.log("Item already exists in cart, not adding:", product);
+        toast.warning(`${product.productName} is already in your cart`);
     }
 };
 
-export const updateCartQuantity = (productId, qty) => ({
-    type: CART_UPDATE_QUANTITY,
-    payload: {
-        productId,
-        qty,
-    },
-});
+export const updateCartQuantity = (productId, qty) => (dispatch) => {
+    dispatch({
+        type: CART_UPDATE_QUANTITY,
+        payload: { productId, qty },
+    });
+    toast.info("Cart quantity updated");
+};
 
-export const removeFromCart = (productId) => ({
-    type: CART_REMOVE_ITEM,
-    payload: productId,
-});
+export const removeFromCart = (productId) => (dispatch, getState) => {
+    const item = getState().cart.cartItemsList.find(
+        (i) => i.productId === productId
+    );
 
-export const clearCart = () => {
-    return {
-        type: CLEAR_CART,
-    };
+    dispatch({
+        type: CART_REMOVE_ITEM,
+        payload: productId,
+    });
+
+    if (item) toast.error(`${item.productName} removed from cart`);
+};
+
+export const clearCart = () => (dispatch) => {
+    dispatch({ type: CLEAR_CART });
+    toast.info("Cart cleared");
 };

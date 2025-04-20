@@ -9,13 +9,12 @@ import {
     VisibilityOff,
 } from "@mui/icons-material";
 import { signUp } from "../../redux/actions/userActions";
+import { toast } from "react-toastify";
 
-function SignUp({ onBack, onSignUpSuccess }) {
-    // const navigate = useNavigate();
+function SignUp({ onSignUpSuccess }) {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    // const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [mobileNumber, setMobileNumber] = useState("");
@@ -28,28 +27,13 @@ function SignUp({ onBack, onSignUpSuccess }) {
     const [country, setCountry] = useState("");
     const [pincode, setPincode] = useState("");
     const [visibleField, setVisibleField] = useState("");
-    const [message, setMessage] = useState("");
-    const [messageType, setMessageType] = useState("");
-    // const [loading, setLoading] = useState(false);
+
     const dispatch = useDispatch();
-    // const location = useLocation();
-    // const redirect = location.search ? location.search.split("=")[1] : "/signUp";
 
     const userSignUp = useSelector((state) => state.userSignUp);
     const { error, loading, userInfo } = userSignUp;
 
     useEffect(() => {
-        if (userInfo) {
-            // onSignUpSuccess();
-            // navigate("/");
-            // navigate(redirect);
-            setMessage(userInfo.details);
-            setMessageType("success");
-        }
-        if (error) {
-            setMessage(error);
-            setMessageType("fail");
-        }
         setFirstName("");
         setLastName("");
         setEmail("");
@@ -64,7 +48,6 @@ function SignUp({ onBack, onSignUpSuccess }) {
         setCountry("");
         setPincode("");
         setProfilePicture(null);
-        // }, [userInfo, redirect, onSignUpSuccess]);
     }, [userInfo, error, onSignUpSuccess]);
 
     const toggleVisibility = (field) => {
@@ -78,20 +61,14 @@ function SignUp({ onBack, onSignUpSuccess }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setMessage("");
-        setMessageType("");
         if (password !== confirmPassword) {
-            setMessage("Passwords do not match !");
-            setMessageType("fail");
-            // navigate();
+            toast.error("Passwords do not match !");
         } else if (!validEmail.test(email)) {
-            setMessage("Invalid Email Address !");
-            setMessageType("fail");
+            toast.info("Invalid Email Address !");
         } else if (!validPassword.test(password)) {
-            setMessage(
+            toast.info(
                 "Password must be at least 8 characters long, with at least one uppercase letter, one lowercase letter, one number, and one special character."
             );
-            setMessageType("fail");
         } else {
             const formData = new FormData();
             formData.append("firstName", firstName);
@@ -111,9 +88,6 @@ function SignUp({ onBack, onSignUpSuccess }) {
             formData.append("pincode", pincode);
             dispatch(signUp(formData));
             console.log("Sign Up Data: ", [...formData]);
-            // setMessage("SignUp is Success !");
-            // setMessageType("success");
-            // onSignUpSuccess();
         }
     };
 
@@ -127,10 +101,6 @@ function SignUp({ onBack, onSignUpSuccess }) {
                         className="form-icon"
                     />
                 </h1>
-                {message && (
-                    <Message message={message} messageType={messageType} />
-                )}
-
                 <form
                     action="post"
                     className="form-container flex flex-col gap-12 items-center justify-center text-left rounded-2xl mt-4"

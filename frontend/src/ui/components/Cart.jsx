@@ -6,6 +6,7 @@ import {
     RemoveCircle,
     AddCircle,
     ShoppingCartCheckout,
+    ClearAll,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -124,8 +125,8 @@ function Cart({ handleCartToggle, isOpen }) {
                         aria-disabled={cartItemsList.length === 0}
                         onClick={handleClearCart}
                     >
-                        Cancel
-                        <Close style={{ fontSize: "3.2rem" }} />
+                        Clear Cart
+                        <ClearAll style={{ fontSize: "3.2rem" }} />
                     </button>
                 </div>
             </div>

@@ -11,6 +11,7 @@ import {
     ADMIN_ORDER_DISPATCH_FAIL,
 } from "../constants/adminConstants";
 import { ACCESS_TOKEN } from "../constants/constants";
+import { toast } from "react-toastify";
 
 export const getPendingOrders = () => async (dispatch) => {
     try {
@@ -89,6 +90,7 @@ export const dispatchOrder = (orderId) => async (dispatch) => {
             }
         );
         dispatch({ type: ADMIN_ORDER_DISPATCH_SUCCESS, payload: orderId });
+        toast.success("Order dispatched successfully!");
     } catch (error) {
         dispatch({
             type: ADMIN_ORDER_DISPATCH_FAIL,
@@ -97,5 +99,6 @@ export const dispatchOrder = (orderId) => async (dispatch) => {
                     ? error.response.data.message
                     : error.message,
         });
+        toast.error("Failed to dispatch order");
     }
 };

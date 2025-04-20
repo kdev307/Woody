@@ -3,8 +3,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ReviewForm from "../components/ReviewForm";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "../components/Loader";
-import Error from "../components/Error";
 import {
     deleteReview,
     fetchUserReviews,
@@ -12,6 +10,7 @@ import {
 import { Delete, Edit } from "@mui/icons-material";
 import Ratings from "../components/Ratings";
 import ShimmerReviews from "../layouts/ShimmerReviews";
+import { toast } from "react-toastify";
 
 function UserReviews() {
     const dispatch = useDispatch();
@@ -22,7 +21,8 @@ function UserReviews() {
 
     useEffect(() => {
         if (userInfo.id) dispatch(fetchUserReviews(userInfo.id));
-    }, [dispatch, userInfo.id]);
+        // if (error) toast.error("No Reviews found.");
+    }, [dispatch, userInfo.id, error]);
 
     const [reviewFormState, setReviewFormState] = useState({
         isVisible: false,
@@ -125,8 +125,6 @@ function UserReviews() {
                     <div className="reviews-container p-16">
                         {loading ? (
                             <ShimmerReviews />
-                        ) : error ? (
-                            <Error message={error} />
                         ) : reviews.lenght === 0 ? (
                             <p className="text-4xl font-medium p-32 text-center">
                                 No reviews yet.
