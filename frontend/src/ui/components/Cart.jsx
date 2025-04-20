@@ -33,7 +33,7 @@ function Cart({ handleCartToggle, isOpen }) {
 
     const handleClearCart = () => {
         const confirmClear = window.confirm(
-            "Are you sure you want to cancel your order ?"
+            "Are you sure you want to clear the cart ?"
         );
         if (confirmClear) {
             dispatch(clearCart());

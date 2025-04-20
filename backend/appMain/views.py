@@ -167,7 +167,7 @@ def send_product_update_email(product):
         return Response({'details': f'New Product email sent successfully.'}, status=status.HTTP_200_OK)
 
     except Exception as e:
-        print("Error sending order email:", e)
+        print("Error sending new product email:", e)
         return Response({'details': 'Error sending new product email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -303,6 +303,11 @@ def updateProfile(request):
                     {'details': "Cannot update the mobile number with the existing one."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+            if User.objects.filter(mobile_number=data['mobileNumber']).exists():
+                return Response(
+                    {'details': 'This mobile number is already registered. Please enter a different number.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             else:
                 user.mobile_number = data['mobileNumber']
 
@@ -346,6 +351,7 @@ def updateProfile(request):
         user.save()
 
         update_session_auth_hash(request, user)
+        send_profile_update_email(user, update_type='both' if 'mobileNumber' in data and 'oldPassword' in data else 'mobile' if 'mobileNumber' in data else 'password')
         
         return Response({'details': "Profile updated successfully!"}, status=status.HTTP_200_OK)
     except Exception as e:
@@ -379,6 +385,7 @@ def manageAddresses(request):
                 pincode=data['pincode'],
             )
             serializer = UserAddressSerializer(new_address)
+            send_address_update_email(user, 'add', new_address)
             return Response({'details': 'New Address added successfully!',"address": serializer.data}, status=status.HTTP_201_CREATED)
         except Exception as e:
             print('Error occured: ', e)
@@ -407,6 +414,7 @@ def manageAddresses(request):
         try:
             address_id = request.data.get('id')
             address = UserAddresses.objects.get(id=address_id, user=user)
+            send_address_update_email(user, 'delete', address)
             address.delete()
             return Response({'details': 'User Address deleted.'}, status=status.HTTP_200_OK)
         except UserAddresses.DoesNotExist:
@@ -416,7 +424,88 @@ def manageAddresses(request):
             return Response({'details': 'Unable to delete the Address at the moment.'}, status=status.HTTP_400_BAD_REQUEST)
         
 
+def send_profile_update_email(user, update_type):
+    try:
+        subject_map = {
+            'mobile': "Mobile Number Updated",
+            'password': "Password Changed",
+            'both': "Profile Updated",
+        }
 
+        message_map = {
+            'mobile': "Your mobile number has been successfully updated.",
+            'password': "Your password has been successfully changed.",
+            'both': "Your mobile number and password have both been successfully updated.",
+        }
+
+        subject = subject_map.get(update_type, "Profile Update Notification")
+        message = message_map.get(update_type, "Your profile has been updated.")
+
+        html_message = render_to_string(
+            'profileUpdate.html',
+            {
+                'user': user,
+                'email': user.email,
+                'message': message,
+            }
+        )
+
+        email_message = EmailMessage(
+            subject,
+            html_message,
+            settings.EMAIL_HOST_USER,
+            [user.email],
+        )
+        email_message.content_subtype = 'html'
+        EmailThread(email_message).start()
+
+    except Exception as e:
+        print("Error sending profile update email:", e)
+        return Response({'details': 'Error sending profile update email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def send_address_update_email(user, update_type, address):
+    try:
+        # Mapping for different update types (add, update, delete)
+        subject_map = {
+            'add': "New Address Added",
+            'delete': "Address Deleted",
+        }
+
+        message_map = {
+            'add': "Your address has been successfully added.",
+            'delete': "Your address has been successfully deleted.",
+        }
+
+        subject = subject_map.get(update_type, "Address Update Notification")
+        message = message_map.get(update_type, "Your address has been updated.")
+
+        html_message = render_to_string(
+            'addressUpdate.html',
+            {
+                'user': user,
+                'email': user.email,
+                'action_message': message,
+                'address_line_1': address.address_line_1,
+                'address_line_2': address.address_line_2,
+                'city': address.city,
+                'state': address.state,
+                'country': address.country,
+                'pincode': address.pincode,
+            }
+        )
+
+        email_message = EmailMessage(
+            subject,
+            html_message,
+            settings.EMAIL_HOST_USER,
+            [user.email],
+        )
+        email_message.content_subtype = 'html' 
+        EmailThread(email_message).start()
+
+    except Exception as e:
+        print("Error sending address update email:", e)
+        return Response({'details': 'Error sending address update email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
