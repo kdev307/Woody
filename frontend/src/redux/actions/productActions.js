@@ -79,7 +79,7 @@ export const createProduct = (formProductData) => async (dispatch) => {
             type: PRODUCT_CREATE_SUCCESS,
             payload: response.data,
         });
-        toast.success("Product created successfully!");
+        toast.success("Product added successfully!");
         dispatch(listProducts());
     } catch (error) {
         dispatch({

@@ -90,6 +90,7 @@ def addProduct(request):
             images = request.FILES.getlist("productImages")
             for image in images:
                 ProductImages.objects.create(product=product, image=image)
+            send_product_update_email(product)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -139,6 +140,35 @@ def deleteProduct(request, pk):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
+def send_product_update_email(product):
+    try:
+        users = User.objects.all()
+        subject = "🆕 New Product Added!"
+
+        html_message = render_to_string(
+            'newProductAdded.html',
+            {
+                'product_name': product.productName,
+                'product_price': product.productPrice,
+                'product_description': product.productDescription,
+                'product_image': product.productImages.first().image.url if product.productImages.exists() else '',
+            }
+        )
+
+        for user in users:
+            email_message = EmailMessage(
+                subject,
+                html_message,
+                settings.EMAIL_HOST_USER,
+                [user.email]
+            )
+            email_message.content_subtype = 'html'
+            EmailThread(email_message).start()
+        return Response({'details': f'New Product email sent successfully.'}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print("Error sending order email:", e)
+        return Response({'details': 'Error sending new product email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -517,57 +547,6 @@ def updateOrderStatus(request, order_id):
     except Exception as e:
         return Response({'details': f'Error updating order status: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
     
-def send_order_status_email(order, event_type):
-    """Send an email notification based on the event type (dispatch or status update)."""
-    try:
-        # Get the order items
-        order_items = order.order_items.all()
-
-        # Check the event type and render the appropriate template
-        if event_type == 'dispatched':
-            # Event is dispatch
-            subject = f"Your Order #{order.order_id} Has Been Dispatched"
-            html_message = render_to_string(
-                'orderDispatched.html', {
-                    'first_name': order.user.first_name,
-                    'order_id': order.order_id,
-                    'tracking_number': order.tracking_number,
-                    'order_items': order_items,
-                }
-            )
-        elif event_type == 'status_update':
-            # Event is status update
-            subject = f"Your Order #{order.order_id} Status Has Been Updated"
-            html_message = render_to_string(
-                'orderStatusUpdate.html', {
-                    'first_name': order.user.first_name,
-                    'order_id': order.order_id,
-                    'current_status': order.status,
-                    'order_items': order_items.all(),
-                }
-            )
-        else:
-            raise ValueError("Invalid event type")
-
-        # Generate plain text version by stripping the HTML tags
-        # plain_message = strip_tags(html_message)
-
-        # Create the email message
-        email_message = EmailMessage(
-            subject, html_message, settings.EMAIL_HOST_USER, [order.user.email]
-        )
-        email_message.content_subtype = 'html'
-        # email_message.attach_alternative(html_message, "text/html")
-
-        # Send the email in a separate thread to avoid blocking the main thread
-        EmailThread(email_message).start()
-
-        return Response({'details': f'Order email for {event_type} sent successfully.'}, status=status.HTTP_200_OK)
-
-    except Exception as e:
-        print("Error sending order email:", e)
-        return Response({'details': 'Error sending order email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -616,12 +595,59 @@ def cancelOrder(request):
             order_item.save()
 
         serializer = OrderSerializer(order)
+        send_order_status_email(order, 'cancel')
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     except Exception as e:
         print("Error creating cancelled order: ", e)
         return Response({'details': 'Error creating the cancelled order.'}, status=status.HTTP_400_BAD_REQUEST)
     
+
+def send_order_status_email(order, event_type):
+    """Send an email notification based on the event type (dispatch or status update)."""
+    try:
+        order_items = order.order_items.all()
+
+
+        if event_type == 'dispatched':
+            # Event is dispatch
+            subject = f"Your Order #{order.order_id} Has Been Dispatched"
+        elif event_type == 'status_update':
+            # Event is status update
+            subject = f"Your Order #{order.order_id} Status Has Been Updated"
+        elif event_type == 'cancel':
+            # Event is status cancel
+            subject = f"Your Order #{order.order_id} is cancelled."
+        else:
+            raise ValueError("Invalid event type")
+        html_message = render_to_string(
+            'orderStatusUpdate.html', {
+                'first_name': order.user.first_name,
+                'order_id': order.order_id,
+                'current_status': order.status,
+                'order_items': order_items.all(),
+            }
+        )
+
+        # Generate plain text version by stripping the HTML tags
+        # plain_message = strip_tags(html_message)
+
+        # Create the email message
+        email_message = EmailMessage(
+            subject, html_message, settings.EMAIL_HOST_USER, [order.user.email]
+        )
+        email_message.content_subtype = 'html'
+        # email_message.attach_alternative(html_message, "text/html")
+
+        # Send the email in a separate thread to avoid blocking the main thread
+        EmailThread(email_message).start()
+
+        return Response({'details': f'Order email for {event_type} sent successfully.'}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print("Error sending order email:", e)
+        return Response({'details': 'Error sending order email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
