@@ -92,14 +92,20 @@ export const logIn = (email, password) => async (dispatch) => {
         localStorage.setItem("userInfo", JSON.stringify(data));
         toast.success("Login successful!");
     } catch (error) {
+        const message =
+            error.response?.data?.detail ||
+            error.response?.data?.message ||
+            error.message ||
+            "Login failed. Please try again.";
+
+        console.error("Login error caught:", message);
+
         dispatch({
             type: USER_LOGIN_FAIL,
-            payload:
-                error.response && error.response.data.details
-                    ? error.response.data.details
-                    : error.message,
+            payload: message,
         });
-        toast.error(error || "Login failed. Please check your credentials.");
+
+        toast.error(message);
     }
 };
 

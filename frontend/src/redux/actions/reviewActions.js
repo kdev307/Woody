@@ -68,7 +68,7 @@ export const addReview = (productId, reviewFormData) => async (dispatch) => {
         });
         toast.success("Review added!");
         dispatch(listProductDetail(productId));
-        // dispatch(fetchUserReviews());
+        dispatch(fetchUserReviews());
     } catch (error) {
         dispatch({
             type: REVIEW_ADD_FAIL,

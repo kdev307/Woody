@@ -68,7 +68,7 @@ class UserSerializer(serializers.ModelSerializer):
         return obj.id
 
     def get_isAdmin(self, obj):
-        return obj.is_staff or obj.is_superuser
+        return obj.is_staff or obj.is_superuser or False
 
 
 

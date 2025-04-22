@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import Loader from "../components/Loader";
 import Error from "../components/Error";
 import Tags from "../components/Tags";
 import ReviewForm from "../components/ReviewForm";

@@ -10,7 +10,6 @@ import {
 import { Delete, Edit } from "@mui/icons-material";
 import Ratings from "../components/Ratings";
 import ShimmerReviews from "../layouts/ShimmerReviews";
-import { toast } from "react-toastify";
 
 function UserReviews() {
     const dispatch = useDispatch();
@@ -206,7 +205,7 @@ function UserReviews() {
                                             key={review.id}
                                             className="flex items-center justify-start border-2 border-[#014210] rounded-lg w-full bg-[#e4efe4]"
                                         >
-                                            {review.product.productImages.sort(
+                                            {review.product.productImages?.sort(
                                                 (img1, img2) =>
                                                     img1.image.localeCompare(
                                                         img2.image

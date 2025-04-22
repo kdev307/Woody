@@ -394,7 +394,7 @@ function Products({ productsList, loading, error, userInfo = {} }) {
                                 </li>
                             );
                         })}
-                        {userInfo.isAdmin && (
+                        {userInfo?.isAdmin && (
                             <li>
                                 <div
                                     className="product-card cursor-pointer p-2 h-[70rem] flex flex-col items-center justify-center gap-8 rounded-lg shadow-[5px_5px_10px_rgba(83,0,0,0.3)] border-2 border-dashed transition-all ease-in-out duration-1000 bg-[#eee] relative text-[#014210] hover:border-solid border-[#014210] hover:scale-105"
@@ -499,7 +499,7 @@ function ProductCard({ product, userInfo, toggleProductForm }) {
                         </>
                     )}
                 </div>
-                {userInfo.isAdmin && (
+                {userInfo?.isAdmin && (
                     <>
                         <div className="flex self-end items-center justify-center">
                             <button
