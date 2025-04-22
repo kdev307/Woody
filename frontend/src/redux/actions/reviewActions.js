@@ -28,6 +28,10 @@ export const fetchUserReviews = (userId) => async (dispatch) => {
         const { data } = await axios.get(`/api/user/${userId}/reviews`, {
             headers: { Authorization: `Bearer ${access_token}` },
         });
+        if (!userId) {
+            toast.error("Cannot fetch user reviews.");
+            return;
+        }
         dispatch({
             type: USER_REVIEWS_LIST_SUCCESS,
             payload: data,
@@ -143,7 +147,7 @@ export const deleteReview = (reviewId) => async (dispatch) => {
             dispatch({ type: REVIEW_DELETE_SUCCESS });
         }
         toast.success("Review deleted!");
-        // dispatch(fetchUserReviews());
+        dispatch(fetchUserReviews());
     } catch (error) {
         console.error("Delete Review Error: ", error.response || error.message);
         dispatch({

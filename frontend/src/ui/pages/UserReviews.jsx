@@ -205,25 +205,19 @@ function UserReviews() {
                                             key={review.id}
                                             className="flex items-center justify-start border-2 border-[#014210] rounded-lg w-full bg-[#e4efe4]"
                                         >
-                                            {review.product.productImages?.sort(
-                                                (img1, img2) =>
-                                                    img1.image.localeCompare(
-                                                        img2.image
-                                                    )
-                                            )[0] && (
-                                                <img
-                                                    src={
-                                                        review.product
-                                                            .productImages[0]
-                                                            .image
-                                                    }
-                                                    alt={
-                                                        review.product
-                                                            .productName
-                                                    }
-                                                    className="w-[40rem] border-r-2 border-r-[#560000]"
-                                                />
-                                            )}
+                                            {/* ( */}
+                                            <img
+                                                src={review.product_image}
+                                                alt={
+                                                    review.product?.productName
+                                                }
+                                                className="w-[40rem] border-r-2 border-r-[#560000]"
+                                            />
+                                            {/* ) : (
+                                                <p className="text-gray-500">
+                                                    No image available
+                                                </p>
+                                            )} */}
                                             <div className="flex flex-col items-start justify-start px-8 w-full gap-5 h-auto">
                                                 <div className="review-btns flex self-end items-center justify-center gap-8">
                                                     <button
@@ -279,11 +273,14 @@ function UserReviews() {
                                                 <h2 className="font-merriweather text-xl font-semibold w-full text-[#560000]">
                                                     {
                                                         review.product
-                                                            .productBrand
+                                                            ?.productBrand
                                                     }
                                                 </h2>
                                                 <h2 className="font-merriweather text-2xl font-semibold w-full">
-                                                    {review.product.productName}
+                                                    {
+                                                        review.product
+                                                            ?.productName
+                                                    }
                                                 </h2>
 
                                                 {reviewFormState.isVisible &&
