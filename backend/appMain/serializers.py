@@ -137,6 +137,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     # user_name = serializers.CharField(source='user.username', read_only=True)  # Add user name
+    user_id = serializers.IntegerField(source='user.id', read_only=True)  # Add user id
     user_name = serializers.SerializerMethodField() 
     user_profile = serializers.SerializerMethodField()
     # created_at_formatted = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", source='created_at', read_only=True)  # Optional
@@ -147,7 +148,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     product_image = serializers.SerializerMethodField()
     class Meta:
         model = Review
-        fields = ['id','rating','review_title','review_comment','is_verified_purchase','created_at_formatted', 'user_name', 'user_profile', 'product', 'product_image', 'updated_at_formatted']
+        fields = ['id','rating','review_title','review_comment','is_verified_purchase','created_at_formatted', 'user_id', 'user_name', 'user_profile', 'product', 'product_image', 'updated_at_formatted']
 
     def get_user_name(self, obj):
         if obj.user:  # Ensure user exists

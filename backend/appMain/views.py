@@ -142,8 +142,8 @@ def deleteProduct(request, pk):
 
 def send_product_update_email(product):
     try:
-        users = User.objects.all()
-        subject = "🆕 New Product Added!"
+        users = User.objects.all(id!=1)
+        subject = "New Product Added!"
 
         html_message = render_to_string(
             'newProductAdded.html',
@@ -882,6 +882,7 @@ def editReview(request, productPK, reviewPK):
         review.save()
         if serializer.is_valid():
             serializer.save()
+            product.update_review_stats() 
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Review.DoesNotExist:
         return Response({"error": "Review not found"}, status=status.HTTP_404_NOT_FOUND)
@@ -903,6 +904,6 @@ def deleteReview(request, pk):
         return Response({"error": "Review not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
             return Response(
-                {"detail": f"An error occurred: {str(e)}"},
+        {"detail": f"An error occurred: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )

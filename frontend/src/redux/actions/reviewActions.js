@@ -140,13 +140,13 @@ export const deleteReview = (reviewId) => async (dispatch) => {
             }
         );
         if (status === 200 || status === 204) {
-            console.log(response || "Review deleted successfully.");
+            console.log("Mesage:" + response || "Review deleted successfully.");
             dispatch({ type: REVIEW_DELETE_SUCCESS });
         } else {
             console.warn("Unexpected response status: ", status);
             dispatch({ type: REVIEW_DELETE_SUCCESS });
         }
-        toast.success("Review deleted!");
+        toast.success("Review deleted successfully!");
         dispatch(fetchUserReviews());
     } catch (error) {
         console.error("Delete Review Error: ", error.response || error.message);

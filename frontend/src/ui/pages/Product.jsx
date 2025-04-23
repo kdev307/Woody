@@ -21,11 +21,16 @@ import {
     ChevronRight,
     RateReview,
     CheckCircle,
+    Edit,
+    Delete,
 } from "@mui/icons-material";
 import { listProductDetail } from "../../redux/actions/productActions";
 import { addToCart } from "../../redux/actions/cartActions";
 import ShimmerProduct from "../layouts/ShimmerProduct";
-// import Message from "../components/Message";
+import {
+    deleteReview,
+    fetchUserReviews,
+} from "../../redux/actions/reviewActions";
 
 function Product({ params }) {
     const { id } = useParams();
@@ -49,8 +54,9 @@ function Product({ params }) {
     });
 
     useEffect(() => {
+        dispatch(fetchUserReviews(userInfo.id));
         dispatch(listProductDetail(id));
-    }, [dispatch, id]);
+    }, [dispatch, userInfo.id, id]);
 
     useEffect(() => {
         const existingItem = cartItemsList.find(
@@ -82,6 +88,14 @@ function Product({ params }) {
         }));
     };
 
+    const handleDelete = async (reviewId) => {
+        if (window.confirm("Are you sure you want to delete this review?")) {
+            await dispatch(deleteReview(reviewId));
+        }
+        await dispatch(fetchUserReviews(userInfo.id));
+        await dispatch(listProductDetail(id));
+    };
+
     const {
         productImages,
         productName,
@@ -96,6 +110,10 @@ function Product({ params }) {
         productSpecifications,
         productReviews,
     } = product;
+
+    const userReview = productReviews?.find(
+        (review) => review.user_id === userInfo?.id
+    );
 
     const infoBtns = [
         {
@@ -163,6 +181,8 @@ function Product({ params }) {
             );
         });
     };
+
+    console.log("Logged-in user info:", userInfo);
 
     return (
         <>
@@ -333,12 +353,56 @@ function Product({ params }) {
                                                     ) : (
                                                         ""
                                                     )}
+
                                                     <div className="text-2xl text-[#014210] font-medium">
                                                         {review.created_at_formatted ===
                                                         review.updated_at_formatted
                                                             ? review.created_at_formatted
                                                             : review.updated_at_formatted}
                                                     </div>
+                                                    {review.user_id ===
+                                                        userInfo?.id && (
+                                                        <div className="review-btns flex items-center justify-end gap-8">
+                                                            <button
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.preventDefault(); // Prevent the link navigation
+                                                                    handleReviewForm(
+                                                                        product,
+                                                                        review
+                                                                    ); // Toggle the form
+                                                                }}
+                                                            >
+                                                                <Edit
+                                                                    style={{
+                                                                        fontSize:
+                                                                            "3.2rem",
+                                                                        color: "#014210",
+                                                                    }}
+                                                                />
+                                                            </button>
+                                                            <button
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    handleDelete(
+                                                                        review.id
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <Delete
+                                                                    style={{
+                                                                        fontSize:
+                                                                            "3.2rem",
+                                                                        color: "#560000",
+                                                                    }}
+                                                                />
+                                                            </button>
+                                                        </div>
+                                                    )}
                                                 </div>
                                                 <div className="flex flex-col items-start justify-center gap-6 p-4 pl-40 pb-8">
                                                     <h3 className="text-4xl font-semibold text-[#560000] font-playfair">
@@ -388,10 +452,13 @@ function Product({ params }) {
                                 className="add-review-btn flex items-center justify-center gap-8 border-4 rounded-lg shadow-[5px_5px_10px_rgba(86,0,0,0.3)] transition-all ease duration-300 font-semibold text-[2.4rem] lg_tab:text-[2rem] p-4 border-[#560000] text-[#560000] bg-white hover:border-[#014210] hover:text-[#014210] hover:shadow-[5px_5px_10px_rgba(1,66,16,0.3)]"
                                 onClick={(e) => {
                                     e.preventDefault(); // Prevent the link navigation
-                                    handleReviewForm(product); // Toggle the form
+                                    handleReviewForm(
+                                        product,
+                                        userReview || null
+                                    ); // Toggle the form
                                 }}
                             >
-                                Write A Review
+                                {userReview ? "Edit Review" : "Write A Review"}
                                 <RateReview style={{ fontSize: "3rem" }} />
                             </button>
 
@@ -415,17 +482,6 @@ function Product({ params }) {
                                 )}
                             </button>
 
-                            {/* {isAddedToCart ? (
-                                <Message
-                                messageType={"fail"}
-                                message={"Item already added to cart."}
-                                />
-                                ) : (
-                                    ""
-                            )} */}
-                            {/* {isAddedToCart && (
-                                <Message messageType={"success"} message={"Item added to cart!"} />
-                            )} */}
                             <div className="flex items-center justify-center gap-12">
                                 {userInfo &&
                                 !userInfo.isAdmin &&
@@ -453,10 +509,16 @@ function Product({ params }) {
             )}
             {reviewFormState.isVisible && (
                 <ReviewForm
-                    title="Write A Review"
+                    title={
+                        reviewFormState.review
+                            ? "Edit Review"
+                            : "Write A Review"
+                    }
                     toggleReviewForm={handleReviewForm}
-                    method="addReview"
-                    product={product}
+                    method={reviewFormState.review ? "editReview" : "addReview"}
+                    // product={product}
+                    product={reviewFormState.product}
+                    review={reviewFormState.review}
                     userInfo={userInfo}
                 />
             )}

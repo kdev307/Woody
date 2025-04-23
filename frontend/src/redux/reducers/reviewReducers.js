@@ -61,9 +61,15 @@ export const reviewReducers = (state = {}, action) => {
         case REVIEW_DELETE_SUCCESS:
             return {
                 loading: false,
-                reviews: state.reviews.filter(
-                    (review) => review.id !== action.payload
-                ), // Remove deleted review
+                // reviews: state.reviews.filter(
+                //     (review) => review.id !== action.payload
+                // ), // Remove deleted review
+                ...state,
+                userReviews: Array.isArray(state.userReviews)
+                    ? state.userReviews.filter(
+                          (review) => review.id !== action.payload
+                      )
+                    : [],
             };
         case REVIEW_DELETE_FAIL:
             return { loading: false, error: action.payload };
