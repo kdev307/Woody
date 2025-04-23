@@ -6,7 +6,7 @@ from django.utils import timezone
 # Create your models here.
 
 class User(AbstractUser):
-    mobile_number = models.CharField(max_length=15, unique=True, null=True, blank=True)
+    mobile_number = models.CharField(max_length=25, unique=True, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to='user_profiles/', null=True, blank=True)
 

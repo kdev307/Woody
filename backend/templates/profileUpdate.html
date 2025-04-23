@@ -1,0 +1,64 @@
+{% autoescape off %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Profile Update Notification</title>
+    </head>
+    <body
+        style="
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        "
+    >
+        <div
+            style="
+                max-width: 600px;
+                margin: 20px auto;
+                background: #ffffff;
+                border: 1px solid #e5e5e5;
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            "
+        >
+            <h2
+                style="
+                    color: #4caf50;
+                    font-size: 24px;
+                    margin-bottom: 20px;
+                    text-align: center;
+                "
+            >
+                Hello {{ user.first_name }},
+            </h2>
+
+            <p style="font-size: 16px; color: #555; margin-bottom: 20px">
+                {{ message }}
+            </p>
+
+            <p style="font-size: 14px; color: #777">
+                If this wasn't you, please secure your account immediately or
+                contact support.
+            </p>
+
+            <p
+                style="
+                    font-size: 14px;
+                    color: #555;
+                    margin-top: 30px;
+                    border-top: 1px solid #eee;
+                    padding-top: 20px;
+                "
+            >
+                Thanks,<br />
+                <strong style="color: #014210">The Woody Team</strong>
+            </p>
+        </div>
+    </body>
+</html>
+{% endautoescape %}

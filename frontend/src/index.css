@@ -138,3 +138,27 @@ button:hover {
     width: 0;
     background: transparent;
 }
+
+.Toastify__toast {
+    font-size: 1.8rem;
+    font-weight: 600;
+    background-color: #ffffff;
+}
+.Toastify__toast--success {
+    color: #014210;
+}
+.Toastify__toast--error {
+    color: #560000;
+}
+.Toastify__toast--info {
+    color: #014221;
+}
+.Toastify__toast--warning {
+    color: #560000;
+}
+.Toastify__toast--default {
+    color: #560000;
+}
+.Toastify__close-button {
+    color: #000;
+}

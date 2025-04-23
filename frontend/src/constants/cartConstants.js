@@ -1,4 +1,0 @@
-export const CART_ADD_ITEM = "CARD_ADD_ITEM";
-export const CART_REMOVE_ITEM = "CART_REMOVE_ITEM";
-export const CART_UPDATE_QUANTITY = "CART_UPDATE_QUANTITY";
-export const CLEAR_CART = "CLEAR_CART";

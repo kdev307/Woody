@@ -2,7 +2,6 @@ from typing import Any, Dict
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-# from .products import products
 from .models import Products, ProductImages, User, UserAddresses, Orders, OrderItems, Review
 from .serializers import ProductSerializer, UserSerializer, UserSerializerWithToken, UserAddressSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer
 from rest_framework import serializers
@@ -15,7 +14,6 @@ from rest_framework import status
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
-# for sending mail and generate token
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
 from .utils import TokenGenerator,generate_token
@@ -73,16 +71,6 @@ def getProduct(request, pk):
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
-# def addProduct(request):
-#         if not request.user.is_authenticated:
-#             print(f"Received data: {request.data}")
-#             parser_classes = [MultiPartParser, FormParser]
-#             serializer = ProductSerializer(data=request.data)
-#             if serializer.is_valid:
-#                 serializer.save()
-#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-#             else:
-#                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 def addProduct(request):
     try:
         print(f"Received data: {request.data}")
@@ -92,11 +80,9 @@ def addProduct(request):
         
         parser_classes = [MultiPartParser, FormParser]
 
-        request.data._mutable = True  # Make data mutable (if QueryDict)
-        request.data['user'] = request.user.id  # Set the user ID
+        request.data._mutable = True 
+        request.data['user'] = request.user.id
         request.data._mutable = False
-        # data = deepcopy(request.data)  # Copy data to a mutable dictionary
-        # data['user'] = request.user.id  # Add user to the data
 
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid(): 
@@ -104,6 +90,7 @@ def addProduct(request):
             images = request.FILES.getlist("productImages")
             for image in images:
                 ProductImages.objects.create(product=product, image=image)
+            send_product_update_email(product)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -120,22 +107,22 @@ def editProduct(request, pk):
     except Products.DoesNotExist:
         return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    print("Incoming data:", request.data)  # Logs form data
-    print("Incoming files:", request.FILES)  # Logs uploaded files
+    print("Incoming data:", request.data)
+    print("Incoming files:", request.FILES)
 
-    serializer = ProductSerializer(product, data=request.data, partial=True)  # `partial=True` allows partial updates
+    serializer = ProductSerializer(product, data=request.data, partial=True)
     if serializer.is_valid():
         product = serializer.save()
-        new_images = request.FILES.getlist("productImages")  # Fetch new uploaded files
+        new_images = request.FILES.getlist("productImages")
         for image in new_images:
             ProductImages.objects.create(product=product, image=image)
 
-        images_to_delete = request.data.getlist("deleteImages", [])  # IDs of images to delete
+        images_to_delete = request.data.getlist("deleteImages", [])
         ProductImages.objects.filter(id__in=images_to_delete, product=product).delete()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
-        print("Serializer errors:", serializer.errors)  # Logs validation errors
+        print("Serializer errors:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
@@ -153,6 +140,35 @@ def deleteProduct(request, pk):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
+def send_product_update_email(product):
+    try:
+        users = User.objects.all(id!=1)
+        subject = "New Product Added!"
+
+        html_message = render_to_string(
+            'newProductAdded.html',
+            {
+                'product_name': product.productName,
+                'product_price': product.productPrice,
+                'product_description': product.productDescription,
+                'product_image': product.productImages.first().image.url if product.productImages.exists() else '',
+            }
+        )
+
+        for user in users:
+            email_message = EmailMessage(
+                subject,
+                html_message,
+                settings.EMAIL_HOST_USER,
+                [user.email]
+            )
+            email_message.content_subtype = 'html'
+            EmailThread(email_message).start()
+        return Response({'details': f'New Product email sent successfully.'}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print("Error sending new product email:", e)
+        return Response({'details': 'Error sending new product email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -192,9 +208,15 @@ def registerUser(request):
     profile_picture = request.FILES.get('profilePicture', None)
     print(data)
     try:
-        # user = User.objects.create(first_name=data['firstName'], last_name=data['lastName'], username=data['email'], email=data['email'], password=make_password(data['password']))
         if User.objects.filter(email=data['email']).exists():
             return Response({'details': 'Try another email, this email is already registered.'}, status=status.HTTP_400_BAD_REQUEST)
+        if User.objects.filter(mobile_number=data['mobileNumber']).exists():
+            return Response({'details': 'Try another number, this number is already registered.'}, status=status.HTTP_400_BAD_REQUEST)
+        if data['password'] != data['confirmPassword']:
+            return Response(
+                {'details': "Passwords do not match."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         user = User.objects.create(
             first_name=data['firstName'], 
             last_name=data['lastName'], 
@@ -276,17 +298,28 @@ def updateProfile(request):
 
     try:
         if "mobileNumber" in data:
-            user.mobile_number = data['mobileNumber']
+            if user.mobile_number == data["mobileNumber"]:
+                return Response(
+                    {'details': "Cannot update the mobile number with the existing one."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            if User.objects.filter(mobile_number=data['mobileNumber']).exists():
+                return Response(
+                    {'details': 'This mobile number is already registered. Please enter a different number.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            else:
+                user.mobile_number = data['mobileNumber']
+
 
         if "oldPassword" in data and "newPassword" in data and "confirmPassword" in data:
             old_password = data['oldPassword']
             new_password = data['newPassword']
             confirm_password = data['confirmPassword']
 
-            # Check if the old password is correct
             if not user.check_password(old_password):
                 return Response(
-                    {'details': "Old password is incorrect."},
+                    {'details': "Current password is incorrect."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             
@@ -297,18 +330,15 @@ def updateProfile(request):
                 )
 
 
-            # Check if new password and confirm password match
             if new_password != confirm_password:
                 return Response(
                     {'details': "New password and confirm password do not match."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            # Validate new password
             try:
-                # Check if old password is correct
                 if not user.check_password(old_password):
-                    return Response({'message': 'Old password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'message': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
 
             except ValidationError as e:
                 return Response(
@@ -316,13 +346,12 @@ def updateProfile(request):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            # Set the new password
             user.set_password(new_password)
 
-        # Save user changes
         user.save()
 
         update_session_auth_hash(request, user)
+        send_profile_update_email(user, update_type='both' if 'mobileNumber' in data and 'oldPassword' in data else 'mobile' if 'mobileNumber' in data else 'password')
         
         return Response({'details': "Profile updated successfully!"}, status=status.HTTP_200_OK)
     except Exception as e:
@@ -356,6 +385,7 @@ def manageAddresses(request):
                 pincode=data['pincode'],
             )
             serializer = UserAddressSerializer(new_address)
+            send_address_update_email(user, 'add', new_address)
             return Response({'details': 'New Address added successfully!',"address": serializer.data}, status=status.HTTP_201_CREATED)
         except Exception as e:
             print('Error occured: ', e)
@@ -384,6 +414,7 @@ def manageAddresses(request):
         try:
             address_id = request.data.get('id')
             address = UserAddresses.objects.get(id=address_id, user=user)
+            send_address_update_email(user, 'delete', address)
             address.delete()
             return Response({'details': 'User Address deleted.'}, status=status.HTTP_200_OK)
         except UserAddresses.DoesNotExist:
@@ -393,7 +424,88 @@ def manageAddresses(request):
             return Response({'details': 'Unable to delete the Address at the moment.'}, status=status.HTTP_400_BAD_REQUEST)
         
 
+def send_profile_update_email(user, update_type):
+    try:
+        subject_map = {
+            'mobile': "Mobile Number Updated",
+            'password': "Password Changed",
+            'both': "Profile Updated",
+        }
 
+        message_map = {
+            'mobile': "Your mobile number has been successfully updated.",
+            'password': "Your password has been successfully changed.",
+            'both': "Your mobile number and password have both been successfully updated.",
+        }
+
+        subject = subject_map.get(update_type, "Profile Update Notification")
+        message = message_map.get(update_type, "Your profile has been updated.")
+
+        html_message = render_to_string(
+            'profileUpdate.html',
+            {
+                'user': user,
+                'email': user.email,
+                'message': message,
+            }
+        )
+
+        email_message = EmailMessage(
+            subject,
+            html_message,
+            settings.EMAIL_HOST_USER,
+            [user.email],
+        )
+        email_message.content_subtype = 'html'
+        EmailThread(email_message).start()
+
+    except Exception as e:
+        print("Error sending profile update email:", e)
+        return Response({'details': 'Error sending profile update email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def send_address_update_email(user, update_type, address):
+    try:
+        # Mapping for different update types (add, update, delete)
+        subject_map = {
+            'add': "New Address Added",
+            'delete': "Address Deleted",
+        }
+
+        message_map = {
+            'add': "Your address has been successfully added.",
+            'delete': "Your address has been successfully deleted.",
+        }
+
+        subject = subject_map.get(update_type, "Address Update Notification")
+        message = message_map.get(update_type, "Your address has been updated.")
+
+        html_message = render_to_string(
+            'addressUpdate.html',
+            {
+                'user': user,
+                'email': user.email,
+                'action_message': message,
+                'address_line_1': address.address_line_1,
+                'address_line_2': address.address_line_2,
+                'city': address.city,
+                'state': address.state,
+                'country': address.country,
+                'pincode': address.pincode,
+            }
+        )
+
+        email_message = EmailMessage(
+            subject,
+            html_message,
+            settings.EMAIL_HOST_USER,
+            [user.email],
+        )
+        email_message.content_subtype = 'html' 
+        EmailThread(email_message).start()
+
+    except Exception as e:
+        print("Error sending address update email:", e)
+        return Response({'details': 'Error sending address update email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -524,57 +636,6 @@ def updateOrderStatus(request, order_id):
     except Exception as e:
         return Response({'details': f'Error updating order status: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
     
-def send_order_status_email(order, event_type):
-    """Send an email notification based on the event type (dispatch or status update)."""
-    try:
-        # Get the order items
-        order_items = order.order_items.all()
-
-        # Check the event type and render the appropriate template
-        if event_type == 'dispatched':
-            # Event is dispatch
-            subject = f"Your Order #{order.order_id} Has Been Dispatched"
-            html_message = render_to_string(
-                'orderDispatched.html', {
-                    'first_name': order.user.first_name,
-                    'order_id': order.order_id,
-                    'tracking_number': order.tracking_number,
-                    'order_items': order_items,
-                }
-            )
-        elif event_type == 'status_update':
-            # Event is status update
-            subject = f"Your Order #{order.order_id} Status Has Been Updated"
-            html_message = render_to_string(
-                'orderStatusUpdate.html', {
-                    'first_name': order.user.first_name,
-                    'order_id': order.order_id,
-                    'current_status': order.status,
-                    'order_items': order_items.all(),
-                }
-            )
-        else:
-            raise ValueError("Invalid event type")
-
-        # Generate plain text version by stripping the HTML tags
-        # plain_message = strip_tags(html_message)
-
-        # Create the email message
-        email_message = EmailMessage(
-            subject, html_message, settings.EMAIL_HOST_USER, [order.user.email]
-        )
-        email_message.content_subtype = 'html'
-        # email_message.attach_alternative(html_message, "text/html")
-
-        # Send the email in a separate thread to avoid blocking the main thread
-        EmailThread(email_message).start()
-
-        return Response({'details': f'Order email for {event_type} sent successfully.'}, status=status.HTTP_200_OK)
-
-    except Exception as e:
-        print("Error sending order email:", e)
-        return Response({'details': 'Error sending order email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -623,12 +684,59 @@ def cancelOrder(request):
             order_item.save()
 
         serializer = OrderSerializer(order)
+        send_order_status_email(order, 'cancel')
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     except Exception as e:
         print("Error creating cancelled order: ", e)
         return Response({'details': 'Error creating the cancelled order.'}, status=status.HTTP_400_BAD_REQUEST)
     
+
+def send_order_status_email(order, event_type):
+    """Send an email notification based on the event type (dispatch or status update)."""
+    try:
+        order_items = order.order_items.all()
+
+
+        if event_type == 'dispatched':
+            # Event is dispatch
+            subject = f"Your Order #{order.order_id} Has Been Dispatched"
+        elif event_type == 'status_update':
+            # Event is status update
+            subject = f"Your Order #{order.order_id} Status Has Been Updated"
+        elif event_type == 'cancel':
+            # Event is status cancel
+            subject = f"Your Order #{order.order_id} is cancelled."
+        else:
+            raise ValueError("Invalid event type")
+        html_message = render_to_string(
+            'orderStatusUpdate.html', {
+                'first_name': order.user.first_name,
+                'order_id': order.order_id,
+                'current_status': order.status,
+                'order_items': order_items.all(),
+            }
+        )
+
+        # Generate plain text version by stripping the HTML tags
+        # plain_message = strip_tags(html_message)
+
+        # Create the email message
+        email_message = EmailMessage(
+            subject, html_message, settings.EMAIL_HOST_USER, [order.user.email]
+        )
+        email_message.content_subtype = 'html'
+        # email_message.attach_alternative(html_message, "text/html")
+
+        # Send the email in a separate thread to avoid blocking the main thread
+        EmailThread(email_message).start()
+
+        return Response({'details': f'Order email for {event_type} sent successfully.'}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        print("Error sending order email:", e)
+        return Response({'details': 'Error sending order email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
@@ -774,6 +882,7 @@ def editReview(request, productPK, reviewPK):
         review.save()
         if serializer.is_valid():
             serializer.save()
+            product.update_review_stats() 
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Review.DoesNotExist:
         return Response({"error": "Review not found"}, status=status.HTTP_404_NOT_FOUND)
@@ -795,6 +904,6 @@ def deleteReview(request, pk):
         return Response({"error": "Review not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
             return Response(
-                {"detail": f"An error occurred: {str(e)}"},
+        {"detail": f"An error occurred: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
