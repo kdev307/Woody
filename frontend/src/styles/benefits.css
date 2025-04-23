@@ -1,0 +1,28 @@
+.benefits-section {
+    padding: 2rem;
+    margin: auto;
+    background-color: #c2daba;
+}
+
+.benefits {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    justify-content: center;
+    row-gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.benefit {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.icon {
+    text-align: center;
+}
+
+.benefit-title {
+    font-size: 1.4rem;
+}
